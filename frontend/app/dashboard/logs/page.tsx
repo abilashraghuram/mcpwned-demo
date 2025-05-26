@@ -11,7 +11,7 @@ export default function LogsPage() {
     status: "all",
     server: "all",
     tool: "all",
-    dateRange: { from: null, to: null }
+    dateRange: { from: undefined, to: undefined }
   });
 
   return (

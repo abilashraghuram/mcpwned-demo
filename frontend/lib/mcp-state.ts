@@ -56,7 +56,12 @@ export const useMcpStore = create<McpState>((set, get) => ({
     set({ isLoading: true, error: null })
     try {
       const response = await getAllMcpServers()
-      set({ servers: response, isLoading: false })
+      type ApiMcpServer = Omit<McpServer, 'number_of_tools'> & { number_of_tools: number | null }
+      const servers = (response as ApiMcpServer[]).map((server) => ({
+        ...server,
+        number_of_tools: server.number_of_tools === null ? undefined : server.number_of_tools,
+      }))
+      set({ servers, isLoading: false })
     } catch (error) {
       set({ 
         error: error instanceof Error ? error.message : 'Failed to fetch servers',

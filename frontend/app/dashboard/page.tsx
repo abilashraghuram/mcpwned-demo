@@ -1,6 +1,5 @@
 import { KpiCards } from "@/components/kpi-cards"
 import { TopPerformersList } from "@/components/top-performers-list"
-import { SystemHealthWidget } from "@/components/system-health-widget"
 import { DashboardShell } from "@/components/dashboard-shell"
 import { RecentActivity } from "@/components/recent-activity"
 import { ServerStats } from "@/components/server-stats"

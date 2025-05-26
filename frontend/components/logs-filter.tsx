@@ -8,13 +8,14 @@ import { DatePickerWithRange } from "@/components/date-range-picker"
 import { Search, SlidersHorizontal } from "lucide-react"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { useMcpStore } from "@/lib/mcp-state"
+import type { DateRange } from "react-day-picker"
 
 export interface LogsFilterState {
   search: string
   status: string
   server: string
   tool: string
-  dateRange: { from: Date | null, to: Date | null }
+  dateRange: DateRange
 }
 
 export function LogsFilter({ onChange }: { onChange: (filters: LogsFilterState) => void }) {
@@ -24,7 +25,7 @@ export function LogsFilter({ onChange }: { onChange: (filters: LogsFilterState) 
     status: "all",
     server: "all",
     tool: "all",
-    dateRange: { from: null, to: null }
+    dateRange: { from: undefined, to: undefined }
   });
 
   // Get servers and tools for dynamic options
@@ -107,7 +108,14 @@ export function LogsFilter({ onChange }: { onChange: (filters: LogsFilterState) 
                 <h4 className="font-medium">Date Range</h4>
                 <DatePickerWithRange
                   value={filters.dateRange}
-                  onChange={dateRange => setFilters(f => ({ ...f, dateRange }))}
+                  onChange={dateRange => {
+                    if (
+                      dateRange === undefined ||
+                      (typeof dateRange === 'object' && 'from' in dateRange && 'to' in dateRange)
+                    ) {
+                      setFilters(f => ({ ...f, dateRange: dateRange || { from: undefined, to: undefined } }))
+                    }
+                  }}
                 />
               </div>
               <Button onClick={() => setOpen(false)}>Apply Filters</Button>
@@ -152,7 +160,14 @@ export function LogsFilter({ onChange }: { onChange: (filters: LogsFilterState) 
         </Select>
         <DatePickerWithRange
           value={filters.dateRange}
-          onChange={dateRange => setFilters(f => ({ ...f, dateRange }))}
+          onChange={dateRange => {
+            if (
+              dateRange === undefined ||
+              (typeof dateRange === 'object' && 'from' in dateRange && 'to' in dateRange)
+            ) {
+              setFilters(f => ({ ...f, dateRange: dateRange || { from: undefined, to: undefined } }))
+            }
+          }}
         />
       </div>
     </div>

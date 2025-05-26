@@ -10,7 +10,7 @@ import { useMcpStore } from "@/lib/mcp-state"
 export function RecentActivity() {
   const { tools, toolsLoading, toolsError, fetchAllTools } = useMcpStore();
 
-  const toolsArray = Array.isArray(tools?.data) ? tools.data : Array.isArray(tools) ? tools : [];
+  const toolsArray = Array.isArray(tools) ? tools : [];
 
   useEffect(() => {
     fetchAllTools();
@@ -21,6 +21,8 @@ export function RecentActivity() {
     id: tool.id,
     tool: tool.name,
     status: "success", // Since status isn't in the tool data, defaulting to success
+    time: "N/A",      // or a real value if you have it
+    duration: "N/A",  // or a real value if you have it
   })) || [];
 
   if (toolsLoading) {
