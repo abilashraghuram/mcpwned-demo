@@ -3,7 +3,7 @@ import type { Tables, TablesInsert, TablesUpdate } from "../../backend/types/dat
 import axios from 'axios';
 
 // --- Configuration ---
-const API_BASE_URL = "https://backend-old-morning-5541.fly.dev/api";
+const API_BASE_URL = "https://backend-cold-dawn-201.fly.dev/api";
 
 // Create axios instance with default config
 const api = axios.create({

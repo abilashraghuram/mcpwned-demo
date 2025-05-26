@@ -18,7 +18,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'https://backend-old-morning-5541.fly.dev/api/:path*',
+        destination: 'https://backend-cold-dawn-201.fly.dev/api/:path*',
       },
     ]
   },

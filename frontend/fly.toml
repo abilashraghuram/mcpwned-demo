@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for frontend-cool-night-2010 on 2025-05-26T15:12:19-07:00
+# fly.toml app configuration file generated for frontend-twilight-pine-8698 on 2025-05-26T15:31:53-07:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'frontend-cool-night-2010'
+app = 'frontend-twilight-pine-8698'
 primary_region = 'sjc'
 
 [build]
