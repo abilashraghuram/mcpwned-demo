@@ -1,0 +1,1 @@
+alter table mcp_servers add column number_of_tools integer default 1;
