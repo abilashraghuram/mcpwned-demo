@@ -18,7 +18,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'https://backend-cold-dawn-201.fly.dev/api/:path*',
+        destination: 'https://backend-app-mcp-codeintegrity-0f806c567758.herokuapp.com/api/:path*',
       },
     ]
   },
