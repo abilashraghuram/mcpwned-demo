@@ -9,12 +9,13 @@
   "dependencies": {
     "@hono/node-server": "^1.14.1",
     "@supabase/supabase-js": "^2.49.4",
+    "@types/node": "^20.17.47",
     "dotenv": "^16.5.0",
     "hono": "^4.7.10",
-    "uuid": "^11.1.0",
-    "@types/node": "^20.17.47"
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.7.10",
     "tsx": "^4.7.1",
     "typescript": "^5.8.3"
   }
