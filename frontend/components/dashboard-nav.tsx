@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { Home, List } from "lucide-react"
+import { Home, SlidersHorizontal, FileText, Info } from "lucide-react"
 
 interface NavProps {
   isCollapsed?: boolean
@@ -19,19 +19,19 @@ export function DashboardNav({ isCollapsed }: NavProps) {
       icon: Home,
     },
     {
-      title: "Explore Logs",
-      href: "/dashboard/logs",
-      icon: List,
-    },
-    {
       title: "Configure Rules",
       href: "/dashboard/rules",
-      icon: List,
+      icon: SlidersHorizontal,
+    },
+    {
+      title: "Explore Logs",
+      href: "/dashboard/logs",
+      icon: FileText,
     },
     {
       title: "About Us",
       href: "/dashboard/about",
-      icon: List,
+      icon: Info,
     },
   ]
 
