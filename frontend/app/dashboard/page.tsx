@@ -47,10 +47,10 @@ export default function DashboardPage() {
       <div className="max-w-6xl mx-auto px-4 py-8">
         <header className="flex flex-col md:flex-row items-center justify-center py-8 mb-8 border-b border-muted/40 gap-8 md:gap-16">
           <div className="flex flex-col items-center md:items-start text-center md:text-left">
-            <img src="/Mlogo.svg" alt="CodeIntegrity Logo" className="w-20 h-20 mb-4" />
+            <img src="/Mlogo.svg" alt="CodeIntegrity Logo" className="w-32 h-32 mb-4" />
             <p className="text-lg text-muted-foreground">MCP observability and security</p>
           </div>
-          <form onSubmit={handleWaitlistSubmit} className="mt-6 md:mt-0 w-full max-w-md bg-black border-2 border-primary rounded-xl p-5 flex flex-col items-center gap-3 shadow-lg transition-transform duration-200 hover:scale-105 hover:shadow-2xl">
+          <form onSubmit={handleWaitlistSubmit} className="mt-6 md:mt-0 w-full max-w-md bg-black/90 border-2 border-primary rounded-xl p-8 flex flex-col items-center gap-3 shadow-2xl transition-transform duration-200 hover:scale-105 hover:shadow-2xl">
             <Label htmlFor="waitlist-email" className="w-full text-center text-lg font-semibold text-white flex items-center justify-center gap-2">Welcome to Mcpwned — Early access preview. Join our launch waitlist.</Label>
             <Input
               id="waitlist-email"
