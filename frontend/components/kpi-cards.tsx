@@ -6,7 +6,7 @@ export function KpiCards() {
     { label: "Total MCPs", value: 1200, color: "text-green-600" },
     { label: "MCP Uptime", value: "92.98%", color: "text-orange-500" },
     { label: "MCP Tool Calls", value: 8734, color: "text-green-600" },
-    { label: "Guardrails Enabled", value: 34 },
+    { label: "Guardrails Enabled", value: 34, color: "text-green-600" },
   ];
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">

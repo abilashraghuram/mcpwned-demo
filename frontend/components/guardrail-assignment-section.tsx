@@ -76,12 +76,12 @@ const rules: Rule[] = [
 ]
 
 const servers = [
-  { id: "bloomberg-mcp", name: "Bloomberg MCP" },
-  { id: "gmail-mcp", name: "Gmail MCP" },
-  { id: "outlook-mcp", name: "Outlook MCP" },
-  { id: "slack-mcp", name: "Slack MCP" },
-  { id: "dropbox-mcp", name: "Dropbox MCP" },
-  { id: "salesforce-mcp", name: "Salesforce MCP" },
+  { id: "financial_datasets_mcp", name: "financial_datasets mcp" },
+  { id: "bloomberg_mcp", name: "bloomberg_mcp" },
+  { id: "postgresql_mcp", name: "postgresql_mcp" },
+  { id: "slack_mcp", name: "slack_mcp" },
+  { id: "grafana_mcp", name: "grafana_mcp" },
+  { id: "kagi_search_mcp", name: "kagi_search_mcp" },
 ]
 
 function groupBySection(rules: Rule[]): Record<string, Rule[]> {
