@@ -18,7 +18,8 @@ export default function AboutPage() {
           <p className="mb-4 text-base text-center">
             Our platform proxies all communication to MCP and enforces highly specific guardrails. This approach ensures robust security against malicious behavior while preserving the usability developers expect.
           </p>
-          <p className="text-base text-center text-muted-foreground">More information coming soon.</p>
+          <p className="mb-4 text-base text-center text-muted-foreground">More information coming soon.</p>
+          <p className="text-base text-center font-semibold mt-6">Contact: <a href="mailto:abi@codeintegrity.ai" className="underline">abi@codeintegrity.ai</a></p>
         </div>
       </div>
     </DashboardShell>
