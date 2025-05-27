@@ -5,8 +5,8 @@ export function KpiCards() {
   const kpis = [
     { label: "Total MCPs", value: 12 },
     { label: "Uptime %", value: "99.98%" },
-    { label: "Active Users", value: 87 },
-    { label: "Errors Today", value: 2 },
+    { label: "MCP Tool Calls today", value: 8734 },
+    { label: "Guardrail Violations Today", value: 34 },
   ];
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
