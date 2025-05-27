@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 
 export function KpiCards() {
   const kpis = [
-    { label: "Total MCPs", value: 1200, color: "text-green-600" },
+    { label: "Total MCPs", value: 1342, color: "text-green-600" },
     { label: "MCP Uptime", value: "92.98%", color: "text-orange-500" },
     { label: "MCP Tool Calls", value: 8734, color: "text-green-600" },
     { label: "Guardrails Enabled", value: 34, color: "text-green-600" },

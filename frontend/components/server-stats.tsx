@@ -69,7 +69,7 @@ export function ServerStats() {
           <div className="text-2xl font-bold">{serverCount}</div>
           <div className="flex items-center text-sm text-muted-foreground">
             <ArrowUpRight className="mr-1 h-4 w-4 text-green-500" />
-            All online
+            Online
           </div>
         </div>
         <div className="mt-4 grid grid-cols-2 gap-2">
