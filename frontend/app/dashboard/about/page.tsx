@@ -1,13 +1,21 @@
-import { DashboardHeader } from "@/components/dashboard-header"
 import { DashboardShell } from "@/components/dashboard-shell"
 
 export default function AboutPage() {
   return (
     <DashboardShell>
-      <DashboardHeader heading="About Us" text="Learn more about our team and mission." />
-      <div className="grid gap-4 md:grid-cols-1">
-        <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
-          <p>This is the About Us page. More information coming soon.</p>
+      <div className="flex justify-center items-start min-h-[60vh] pt-12">
+        <div className="bg-card text-card-foreground rounded-xl shadow-lg p-10 max-w-2xl w-full">
+          <h1 className="text-3xl font-bold mb-4 text-center">About Us</h1>
+          <p className="mb-4 text-lg text-center">
+            We are the founders of <span className="font-semibold">testcode.ai</span>, a company specializing in unit testing and mutation testing.
+          </p>
+          <p className="mb-4 text-base text-center">
+            As adoption of the Model Context Protocol (MCP) accelerates, it becomes crucial to defend against all forms of MCP hijacks—from simple prompt injection to advanced data-flow and control-flow exploits.
+          </p>
+          <p className="mb-4 text-base text-center">
+            Our platform proxies all communication to MCP and enforces highly specific guardrails. This approach ensures robust security against malicious behavior while preserving the usability developers expect.
+          </p>
+          <p className="text-base text-center text-muted-foreground">More information coming soon.</p>
         </div>
       </div>
     </DashboardShell>

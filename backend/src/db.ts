@@ -147,3 +147,12 @@ export const clearLogs = async () => {
   }
   return { success: true };
 };
+
+export const createWaitlistEmail = async (waitlist: Omit<Database["public"]["Tables"]["waitlist_emails"]["Insert"], "id" | "created_at">) => {
+  const { data, error } = await supabaseClient().from("waitlist_emails").insert({ ...waitlist });
+  if (error) {
+    console.log(error);
+    return { error };
+  }
+  return { data };
+};

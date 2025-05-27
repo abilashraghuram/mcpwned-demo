@@ -106,6 +106,24 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      },
+      waitlist_emails: {
+        Row: {
+          id: number
+          created_at: string
+          email: string
+        }
+        Insert: {
+          id?: number
+          created_at?: string
+          email: string
+        }
+        Update: {
+          id?: number
+          created_at?: string
+          email?: string
+        }
+        Relationships: []
       }
     }
     Views: {

@@ -1,6 +1,6 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
-import { createLog, createMcpServer, createTool, getToolByNameAndMcpServerId, listMcpServers, getMcpServer, getLog, listLogsByMcpServer, listAllTools, getMcpServerTools, listAllLogs, clearLogs } from './db.js'
+import { createLog, createMcpServer, createTool, getToolByNameAndMcpServerId, listMcpServers, getMcpServer, getLog, listLogsByMcpServer, listAllTools, getMcpServerTools, listAllLogs, clearLogs, createWaitlistEmail } from './db.js'
 import type { Database } from '../types/database.types.js'
 import { cors } from 'hono/cors'
 import fs from 'fs/promises'
@@ -105,7 +105,7 @@ app.get('/api/logs/list/all', async (c) => {
   // Run the populate_api logic first
   // Clear logs table first
   // await clearLogs();
-  // const logFilePath = 'mcp_gateway_logs';
+  // const logFilePath = '/Users/abilashraghuram/CodeIntegrity/mcp-gateway-logs';
   // let fileContent;
   // try {
   //   fileContent = await fs.readFile(logFilePath, 'utf-8');
@@ -205,7 +205,7 @@ app.get('/api/logs/list/:mcpServerId', async (c) => {
 app.post('/api/populate_api', async (c) => {
   // Clear logs table first
   await clearLogs();
-  const logFilePath = 'mcp_gateway_logs';
+  const logFilePath = '/Users/abilashraghuram/CodeIntegrity/mcp-gateway-logs';
   let fileContent;
   try {
     fileContent = await fs.readFile(logFilePath, 'utf-8');
@@ -283,6 +283,16 @@ app.post('/api/populate_api', async (c) => {
     inserted.push({ toolName, tool_id: tool.id, toolInput, toolResponse });
   }
   return c.json({ insertedCount: inserted.length, inserted });
+});
+
+app.post('/api/waitlist_add', async (c) => {
+  const body = await c.req.json();
+  const email = body.email;
+  if (!email || typeof email !== 'string') {
+    return c.json({ error: 'Invalid email' }, 400);
+  }
+  const result = await createWaitlistEmail({ email });
+  return c.json(result);
 });
 
 serve({

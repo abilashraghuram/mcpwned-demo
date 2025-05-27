@@ -8,22 +8,66 @@ import { CheckCircle, Clock, XCircle } from "lucide-react"
 import { useMcpStore } from "@/lib/mcp-state"
 
 export function RecentActivity() {
-  const { tools, toolsLoading, toolsError, fetchAllTools } = useMcpStore();
-
-  const toolsArray = Array.isArray(tools) ? tools : [];
+  const { toolsLoading, toolsError, fetchAllTools } = useMcpStore();
 
   useEffect(() => {
     fetchAllTools();
   }, [fetchAllTools]);
 
+  const mockRecentTools = [
+    {
+      id: "1",
+      tool: "Bloomberg Price Fetcher",
+      status: "success",
+      time: "2024-06-01 10:15",
+      duration: "2s",
+    },
+    {
+      id: "2",
+      tool: "Kubernetes Pod Inspector",
+      status: "error",
+      time: "2024-06-01 09:50",
+      duration: "1s",
+    },
+    {
+      id: "3",
+      tool: "Bloomberg News Aggregator",
+      status: "pending",
+      time: "2024-06-01 09:30",
+      duration: "N/A",
+    },
+    {
+      id: "4",
+      tool: "Kubernetes Cluster Health Check",
+      status: "success",
+      time: "2024-05-31 18:22",
+      duration: "3s",
+    },
+    {
+      id: "5",
+      tool: "Bloomberg Earnings Calendar",
+      status: "success",
+      time: "2024-05-31 17:10",
+      duration: "4s",
+    },
+    {
+      id: "6",
+      tool: "Kubernetes Deployment Manager",
+      status: "success",
+      time: "2024-05-31 16:45",
+      duration: "5s",
+    },
+  ];
+
   // Get the 6 most recent tools, handling the data property
-  const recentTools = toolsArray.slice(0, 6).map((tool: { id: string; name: string }) => ({
-    id: tool.id,
-    tool: tool.name,
-    status: "success", // Since status isn't in the tool data, defaulting to success
-    time: "N/A",      // or a real value if you have it
-    duration: "N/A",  // or a real value if you have it
-  })) || [];
+  // const recentTools = toolsArray.slice(0, 6).map((tool: { id: string; name: string }) => ({
+  //   id: tool.id,
+  //   tool: tool.name,
+  //   status: "success", // Since status isn't in the tool data, defaulting to success
+  //   time: "N/A",      // or a real value if you have it
+  //   duration: "N/A",  // or a real value if you have it
+  // })) || [];
+  const recentTools = mockRecentTools;
 
   if (toolsLoading) {
     return (
