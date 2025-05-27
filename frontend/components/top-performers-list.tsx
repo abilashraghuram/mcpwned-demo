@@ -42,12 +42,15 @@ export function TopPerformersList() {
     if (compliance < 80) return "text-orange-500";
     return "text-green-600";
   }
-
+ 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <div className="space-y-1">
         <CardTitle>Guardrails Compliance</CardTitle>
+        </div>
       </CardHeader>
+      
       <CardContent>
         <ul className="space-y-1">
           {performerData.map((perf, idx) => (
