@@ -34,7 +34,7 @@ export function RecentActivity() {
       tool: "Bloomberg News Aggregator",
       status: "pending",
       time: "2024-06-01 09:30",
-      duration: "N/A",
+      duration: "15s",
     },
     {
       id: "4",
