@@ -51,11 +51,11 @@ export default function DashboardPage() {
             <p className="text-lg text-muted-foreground">MCP observability and security</p>
           </div>
           <form onSubmit={handleWaitlistSubmit} className="mt-6 md:mt-0 w-full max-w-md bg-black border-2 border-primary rounded-xl p-5 flex flex-col items-center gap-3 shadow-lg transition-transform duration-200 hover:scale-105 hover:shadow-2xl">
-            <Label htmlFor="waitlist-email" className="w-full text-center text-lg font-semibold text-white flex items-center justify-center gap-2">🚀 Welcome to the Mcpwned demo. Feel free to explore the dashboard and join our waitlist!</Label>
+            <Label htmlFor="waitlist-email" className="w-full text-center text-lg font-semibold text-white flex items-center justify-center gap-2">Welcome to Mcpwned — Early access preview. Join our launch waitlist.</Label>
             <Input
               id="waitlist-email"
               type="email"
-              placeholder="Enter email to join launch waitlist"
+              placeholder="Enter email"
               className="w-full text-white placeholder-white bg-black border border-white"
               required
               value={email}
