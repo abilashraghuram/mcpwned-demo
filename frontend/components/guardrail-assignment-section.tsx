@@ -3,57 +3,75 @@
 import React from "react"
 import Mlogo from "./Mlogo"
 
-interface Guardrail {
+interface Rule {
   title: string;
   description: string;
   section: string;
-  codeGuardrail?: boolean;
+  codeRule?: boolean;
 }
 
-const guardrails: Guardrail[] = [
-  {
-    title: "Email Restriction",
-    description: "Block emails to anyone except 'Peter' after viewing the inbox.",
-    section: "Access Guardrails",
-  },
-  {
-    title: "RAG Protection",
-    description: "Prevent unauthorized access to your RAG app.",
-    section: "Access Guardrails",
-  },
-  {
-    title: "Prompt Injection Guard",
-    description: "Spot and stop prompt injection in tool responses.",
-    section: "Content Guardrails",
-  },
-  {
-    title: "Link Trust Filter",
-    description: "Block untrusted links from tool outputs.",
-    section: "Content Guardrails",
-  },
-  {
-    title: "Harmful Content Filter",
-    description: "Stop processing of toxic or unsafe messages.",
-    section: "Content Guardrails",
-  },
-  // Code guardrails below
+const rules: Rule[] = [
+  // Code rules first
   {
     title: "No Code After URL Fetch",
     description: "Disallow code execution right after fetching a URL.",
-    codeGuardrail: true,
-    section: "Code Guardrails",
+    codeRule: true,
+    section: "Code Rules",
   },
   {
     title: "Code Vulnerability Scan",
     description: "Scan generated Python/Bash for security issues.",
-    codeGuardrail: true,
-    section: "Code Guardrails",
+    codeRule: true,
+    section: "Code Rules",
   },
   {
     title: "GitHub-to-Pip Safety",
     description: "Detect risky patterns in tool call sequences.",
-    codeGuardrail: true,
-    section: "Code Guardrails",
+    codeRule: true,
+    section: "Code Rules",
+  },
+  {
+    title: "Excessive Code Smells",
+    description: "Check for ill-formed code using static code analysis",
+    codeRule: true,
+    section: "Code Rules",
+  },
+  {
+    title: "Secret leak detection",
+    description: "Make use of Semgrep for deep static code analysis of code",
+    codeRule: true,
+    section: "Code Rules",
+  },
+  // Access and content rules below
+  {
+    title: "Email Restriction",
+    description: "Block emails to anyone except 'Peter' after viewing the inbox.",
+    section: "Access Rules",
+  },
+  {
+    title: "RAG Protection",
+    description: "Prevent unauthorized access to your RAG app.",
+    section: "Access Rules",
+  },
+  {
+    title: "Block PII",
+    description: "Scan for and block PII",
+    section: "PII Rules",
+  },
+  {
+    title: "Prompt Injection Guard",
+    description: "Spot and stop prompt injection in tool responses.",
+    section: "Content Rules",
+  },
+  {
+    title: "Link Trust Filter",
+    description: "Block untrusted links from tool outputs.",
+    section: "Content Rules",
+  },
+  {
+    title: "Harmful Content Filter",
+    description: "Stop processing of toxic or unsafe messages.",
+    section: "Content Rules",
   },
 ]
 
@@ -66,33 +84,33 @@ const servers = [
   { id: "salesforce-mcp", name: "Salesforce MCP" },
 ]
 
-function groupBySection(guardrails: Guardrail[]): Record<string, Guardrail[]> {
-  return guardrails.reduce((acc: Record<string, Guardrail[]>, g: Guardrail) => {
+function groupBySection(rules: Rule[]): Record<string, Rule[]> {
+  return rules.reduce((acc: Record<string, Rule[]>, g: Rule) => {
     if (!acc[g.section]) acc[g.section] = []
     acc[g.section].push(g)
     return acc
   }, {})
 }
 
-function GuardrailAssignmentSection() {
+function RuleAssignmentSection() {
   const [selectedServer, setSelectedServer] = React.useState(servers[0].id);
-  const [selectedGuardrails, setSelectedGuardrails] = React.useState<string[]>([]);
+  const [selectedRules, setSelectedRules] = React.useState<string[]>([]);
 
   const handleToggle = (title: string) => {
-    setSelectedGuardrails((prev) =>
+    setSelectedRules((prev) =>
       prev.includes(title)
         ? prev.filter((t) => t !== title)
         : [...prev, title]
     );
   };
 
-  const grouped = groupBySection(guardrails)
+  const grouped = groupBySection(rules)
 
   return (
     <div className="mt-10 p-8 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black rounded-2xl border border-zinc-800 shadow-2xl max-w-4xl mx-auto">
       <h2 className="text-2xl font-bold mb-6 text-white tracking-tight flex items-center gap-3">
         <span className="inline-block  px-3 py-1 rounded-lg text-lg"><Mlogo style={{ display: 'inline', verticalAlign: 'middle', width: 28, height: 28 }} /></span>
-        Configure Guardrails for MCP Servers
+        Configure Rules for MCP Servers
       </h2>
       <div className="mb-8">
         <label className="block text-zinc-300 mb-2 font-medium text-lg">Select MCP Server:</label>
@@ -118,7 +136,7 @@ function GuardrailAssignmentSection() {
         </div>
       </div>
       <div className="mb-8">
-        <label className="block text-zinc-300 mb-4 font-medium text-lg">Select Guardrails:</label>
+        <label className="block text-zinc-300 mb-4 font-medium text-lg">Select Rules:</label>
         <div className="space-y-8">
           {Object.entries(grouped).map(([section, rails]) => (
             <div key={section}>
@@ -131,12 +149,12 @@ function GuardrailAssignmentSection() {
                   >
                     <input
                       type="checkbox"
-                      checked={selectedGuardrails.includes(g.title)}
+                      checked={selectedRules.includes(g.title)}
                       onChange={() => handleToggle(g.title)}
                       className="peer appearance-none w-5 h-5 border-2 border-zinc-500 rounded-md checked:bg-blue-600 checked:border-blue-500 transition mr-2 mb-2 focus:ring-2 focus:ring-blue-400 outline-none"
                       style={{ boxShadow: '0 0 0 2px rgba(59,130,246,0.2)' }}
                     />
-                    <span className="absolute top-4 right-4 text-xs px-2 py-0.5 rounded bg-blue-900/40 text-blue-300 font-semibold uppercase tracking-wider" style={{display: g.codeGuardrail ? 'block' : 'none'}}>Code</span>
+                    <span className="absolute top-4 right-4 text-xs px-2 py-0.5 rounded bg-blue-900/40 text-blue-300 font-semibold uppercase tracking-wider" style={{display: g.codeRule ? 'block' : 'none'}}>Code</span>
                     <span className="text-white font-semibold text-base mb-1 transition">{g.title}</span>
                     <span className="text-zinc-400 text-sm leading-snug">{g.description}</span>
                   </label>
@@ -148,12 +166,12 @@ function GuardrailAssignmentSection() {
       </div>
       <button
         className="mt-2 px-6 py-3 bg-black text-white rounded-xl shadow-2xl border border-zinc-700 hover:scale-105 hover:shadow-zinc-900/40 focus:ring-2 focus:ring-zinc-400 transition text-lg font-semibold w-full max-w-xs mx-auto block"
-        onClick={() => alert(`Attached guardrails to ${selectedServer}`)}
+        onClick={() => alert(`Attached rules to ${selectedServer}`)}
       >
-        Attach Selected Guardrails
+        Attach Selected Rules
       </button>
     </div>
   );
 }
 
-export default GuardrailAssignmentSection; 
+export default RuleAssignmentSection; 

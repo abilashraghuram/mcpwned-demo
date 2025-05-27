@@ -19,13 +19,13 @@ export function DashboardNav({ isCollapsed }: NavProps) {
       icon: Home,
     },
     {
-      title: "Logs",
+      title: "Explore Logs",
       href: "/dashboard/logs",
       icon: List,
     },
     {
-      title: "Guardrails",
-      href: "/dashboard/guardrails",
+      title: "Configure Rules",
+      href: "/dashboard/rules",
       icon: List,
     },
     {
