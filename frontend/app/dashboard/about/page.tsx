@@ -5,7 +5,7 @@ export default function AboutPage() {
     <DashboardShell>
       <div className="flex justify-center items-start min-h-[60vh] pt-12">
         <div className="bg-card text-card-foreground rounded-xl shadow-lg p-10 max-w-2xl w-full">
-          <h1 className="text-3xl font-bold mb-4 text-center">About Us</h1>
+          <h1 className="text-3xl mb-4 text-center">About Us</h1>
           <p className="mb-4 text-lg text-center">
             We are the founders of <span className="font-semibold">testcode.ai</span>, a company based in San Francisco and backed by <span className="font-semibold">Antler VC</span>, <span className="font-semibold">Boost VC</span>, and <span className="font-semibold">NEC VC</span>
           </p>

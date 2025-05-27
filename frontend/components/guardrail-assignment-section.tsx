@@ -108,7 +108,7 @@ function RuleAssignmentSection() {
 
   return (
     <div className="mt-10 p-8 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black rounded-2xl border border-zinc-800 shadow-2xl max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6 text-white tracking-tight flex items-center gap-3">
+      <h2 className="text-2xl mb-6 text-white tracking-tight flex items-center gap-3">
         <span className="inline-block  px-3 py-1 rounded-lg text-lg"><Mlogo style={{ display: 'inline', verticalAlign: 'middle', width: 28, height: 28 }} /></span>
         Configure Rules for MCP Servers
       </h2>
