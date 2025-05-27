@@ -92,11 +92,11 @@ export function LogsTable({ filters }: { filters: LogsFilterState }) {
         <TableHeader>
           <TableRow>
             <TableHead>Tool Name</TableHead>
-            <TableHead>Server ID</TableHead>
-            <TableHead>Input</TableHead>
+            <TableHead>MCP Server ID</TableHead>
+            <TableHead>Input Arguments</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Timestamp</TableHead>
-            <TableHead className="text-right">Details</TableHead>
+            <TableHead className="text-right">Expand Details</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
