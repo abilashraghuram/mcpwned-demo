@@ -13,6 +13,9 @@ export default function AboutPage() {
             As adoption of the Model Context Protocol (MCP) accelerates, it becomes crucial to defend against all forms of MCP hijacks—from simple prompt injection to advanced data-flow and control-flow exploits.
           </p>
           <p className="mb-4 text-base text-center">
+            To address this growing threat landscape, we&#39;re launching <span className="font-semibold">Mcpwned</span>—a platform purpose-built to provide deep observability and granular, configurable security for MCP environments.
+          </p>
+          <p className="mb-4 text-base text-center">
             Our platform proxies all communication to MCP and enforces highly specific guardrails. This approach ensures robust security against malicious behavior while preserving the usability developers expect.
           </p>
           <p className="text-base text-center text-muted-foreground">More information coming soon.</p>
