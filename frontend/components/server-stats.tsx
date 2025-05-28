@@ -65,7 +65,7 @@ export function ServerStats() {
       </CardHeader>
       <CardContent>
         <div className="flex items-baseline space-x-2">
-          <div className="text-2xl font-bold">{serverCount}</div>
+          <div className="text-2xl font-bold  text-green-500">{serverCount}</div>
           <div className="flex items-center text-sm text-muted-foreground">
             <ArrowUpRight className="mr-1 h-4 w-4 text-green-500" />
             Online
@@ -75,8 +75,8 @@ export function ServerStats() {
           {Array.isArray(servers) && servers.map((server) => (
             <div key={server.id} className="rounded-md p-2">
               <div className="text-xs font-medium">{server.name}</div>
-              <div className="text-xs text-muted-foreground">
-                {server.number_of_tools || 0} {server.number_of_tools === 1 ? 'tool' : 'tools'}
+              <div className="text-xs text-muted-foreground ">
+                <span className="text-green-500">{server.number_of_tools || 0}</span> {server.number_of_tools === 1 ? 'tool' : 'tools'}
               </div>
             </div>
           ))}
