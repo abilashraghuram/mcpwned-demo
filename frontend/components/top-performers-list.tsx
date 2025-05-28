@@ -20,17 +20,15 @@ export function TopPerformersList() {
     if (log.status !== "success") logsByServer[sid].violations++;
   });
 
-  // Calculate compliance percentage for each server
-  const performerData = servers.map((server) => {
-    const logStats = logsByServer[server.id] || { total: 0, violations: 0 };
-    const total = logStats.total;
-    const violations = logStats.violations;
-    const compliance = total > 0 ? ((total - violations) / total) * 100 : 100;
+  // MOCK: Assign random compliance percentages for demo purposes
+  const performerData = servers.map((server, i) => {
+    // Generate mock compliance values: 100, 92, 77, 65, 48, 35, etc.
+    const mockCompliance = [100, 92, 77, 65, 48, 35, 85, 60, 99, 73][i % 10];
     return {
       name: server.name,
-      compliance: compliance,
-      total,
-      violations,
+      compliance: mockCompliance,
+      total: 100,
+      violations: 100 - mockCompliance,
     };
   });
 
