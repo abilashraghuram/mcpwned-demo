@@ -19,6 +19,11 @@ export function DashboardNav({ isCollapsed }: NavProps) {
       icon: Home,
     },
     {
+      title: "Investigations",
+      href: "/dashboard/investigations",
+      icon: FileText,
+    },
+    {
       title: "Configure Rules",
       href: "/dashboard/rules",
       icon: SlidersHorizontal,
