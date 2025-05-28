@@ -13,7 +13,7 @@ export function KpiCards() {
       {kpis.map((kpi) => (
         <Card key={kpi.label}>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">{kpi.label}</CardTitle>
+            <CardTitle className="text-lg font-medium text-center">{kpi.label}</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col items-center">
             <span className={`text-2xl font-bold ${kpi.color}`}>{kpi.value}</span>
