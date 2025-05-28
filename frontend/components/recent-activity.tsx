@@ -97,7 +97,7 @@ export function RecentActivity() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>MCP railing violations</CardTitle>
+        <CardTitle className="font-normal">MCP railing violations</CardTitle>
         <CardDescription>Top MCP by rail violations</CardDescription>
       </CardHeader>
       <CardContent>
