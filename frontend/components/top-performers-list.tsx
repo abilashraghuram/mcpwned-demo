@@ -52,9 +52,9 @@ export function TopPerformersList() {
       <CardContent>
         <ul className="space-y-1">
           {performerData.map((perf, idx) => (
-            <li key={idx} className="flex justify-between text-sm">
-              <span>{perf.name}</span>
-              <span className={`font-mono ${getColor(perf.compliance)}`}>
+            <li key={idx} className="flex justify-between items-center text-sm py-2 gap-x-8">
+              <span className="font-mono">{perf.name}</span>
+              <span className={`font-mono ${getColor(perf.compliance)} text-right`}>
                 {perf.compliance.toFixed(1)}% compliant
               </span>
             </li>
