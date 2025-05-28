@@ -4,7 +4,6 @@ import { useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { CheckCircle, Clock, XCircle } from "lucide-react"
 import { useMcpStore } from "@/lib/mcp-state"
 
 export function RecentActivity() {
@@ -18,44 +17,38 @@ export function RecentActivity() {
     {
       id: "1",
       tool: "Bloomberg Price Fetcher",
-      status: "success",
+      violations: 2,
       time: "2024-06-01 10:15",
-      duration: "2s",
     },
     {
       id: "2",
       tool: "Kubernetes Pod Inspector",
-      status: "error",
+      violations: 12,
       time: "2024-06-01 09:50",
-      duration: "1s",
     },
     {
       id: "3",
       tool: "Bloomberg News Aggregator",
-      status: "pending",
+      violations: 0,
       time: "2024-06-01 09:30",
-      duration: "15s",
     },
     {
       id: "4",
       tool: "Kubernetes Cluster Health Check",
-      status: "success",
+      violations: 7,
       time: "2024-05-31 18:22",
-      duration: "3s",
     },
     {
       id: "5",
       tool: "Bloomberg Earnings Calendar",
-      status: "success",
+      violations: 1,
       time: "2024-05-31 17:10",
-      duration: "4s",
     },
     {
       id: "6",
       tool: "Kubernetes Deployment Manager",
-      status: "success",
+      violations: 0,
       time: "2024-05-31 16:45",
-      duration: "5s",
     },
   ];
 
@@ -104,8 +97,8 @@ export function RecentActivity() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Recent Activity</CardTitle>
-        <CardDescription>Top MCP tools by usage</CardDescription>
+        <CardTitle>MCP railing violations</CardTitle>
+        <CardDescription>Top MCP by rail violations</CardDescription>
       </CardHeader>
       <CardContent>
         <ScrollArea className="h-[220px]">
@@ -113,30 +106,23 @@ export function RecentActivity() {
             {recentTools.map((activity) => (
               <div key={activity.id} className="flex items-center justify-between space-x-4">
                 <div className="flex items-center space-x-4">
-                  {activity.status === "success" ? (
-                    <CheckCircle className="h-5 w-5 text-green-500" />
-                  ) : activity.status === "error" ? (
-                    <XCircle className="h-5 w-5 text-red-500" />
-                  ) : (
-                    <Clock className="h-5 w-5 text-yellow-500" />
-                  )}
+                  {/* No icon, just tool name and time */}
                   <div>
                     <p className="text-sm font-medium leading-none">{activity.tool}</p>
                     <p className="text-sm text-muted-foreground">{activity.time}</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <p className="text-sm text-muted-foreground">{activity.duration}</p>
                   <Badge
                     variant={
-                      activity.status === "success"
-                        ? "default"
-                        : activity.status === "error"
-                          ? "destructive"
+                      activity.violations >= 10
+                        ? "destructive"
+                        : activity.violations <= 2
+                          ? "default"
                           : "outline"
                     }
                   >
-                    {activity.status}
+                    {activity.violations} violation{activity.violations !== 1 ? 's' : ''}
                   </Badge>
                 </div>
               </div>

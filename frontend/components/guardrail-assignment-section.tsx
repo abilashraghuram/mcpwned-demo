@@ -8,6 +8,7 @@ interface Rule {
   description: string;
   section: string;
   codeRule?: boolean;
+  code?: string;
 }
 
 const rules: Rule[] = [
@@ -17,61 +18,72 @@ const rules: Rule[] = [
     description: "Disallow code execution right after fetching a URL.",
     codeRule: true,
     section: "Code Rules",
+    code: `response = fetch(url)\n# No code execution should follow directly after fetch!`,
   },
   {
     title: "Code Vulnerability Scan",
     description: "Scan generated Python/Bash for security issues.",
     codeRule: true,
     section: "Code Rules",
+    code: `import bandit\n# Run bandit to scan for vulnerabilities\nbandit -r your_script.py`,
   },
   {
     title: "GitHub-to-Pip Safety",
     description: "Detect risky patterns in tool call sequences.",
     codeRule: true,
     section: "Code Rules",
+    code: `# Detect pip install from GitHub URLs\nif 'pip install' in command and 'github.com' in command: block()`,
   },
   {
     title: "Excessive Code Smells",
     description: "Check for ill-formed code using static code analysis",
     codeRule: true,
     section: "Code Rules",
+    code: `# Use pylint or flake8 for static code analysis\npylint your_script.py`,
   },
   {
     title: "Secret leak detection",
     description: "Make use of Semgrep for deep static code analysis of code",
     codeRule: true,
     section: "Code Rules",
+    code: `# Run Semgrep for secret detection\nsemgrep --config=auto your_code/`,
   },
   // Access and content rules below
   {
     title: "Email Restriction",
     description: "Block emails to anyone except 'Peter' after viewing the inbox.",
     section: "Access Rules",
+    code: `if recipient != 'Peter':\n    block_email()`
   },
   {
     title: "RAG Protection",
     description: "Prevent unauthorized access to your RAG app.",
     section: "Access Rules",
+    code: `# Check user permissions before RAG access\nif not user.is_authorized: deny_access()`
   },
   {
     title: "Block PII",
     description: "Scan for and block PII",
     section: "PII Rules",
+    code: `# Use regex or PII detection library\nif contains_pii(text): block()`
   },
   {
     title: "Prompt Injection Guard",
     description: "Spot and stop prompt injection in tool responses.",
     section: "Content Rules",
+    code: `# Detect suspicious prompt patterns\nif is_prompt_injection(input): block()`
   },
   {
     title: "Link Trust Filter",
     description: "Block untrusted links from tool outputs.",
     section: "Content Rules",
+    code: `# Allow only trusted domains\nif not is_trusted(link): block()`
   },
   {
     title: "Harmful Content Filter",
     description: "Stop processing of toxic or unsafe messages.",
     section: "Content Rules",
+    code: `# Use content moderation API\nif is_toxic(message): block()`
   },
 ]
 
@@ -95,6 +107,7 @@ function groupBySection(rules: Rule[]): Record<string, Rule[]> {
 function RuleAssignmentSection() {
   const [selectedServer, setSelectedServer] = React.useState(servers[0].id);
   const [selectedRules, setSelectedRules] = React.useState<string[]>([]);
+  const [modalRule, setModalRule] = React.useState<Rule | null>(null);
 
   const handleToggle = (title: string) => {
     setSelectedRules((prev) =>
@@ -145,18 +158,26 @@ function RuleAssignmentSection() {
                 {rails.map((g) => (
                   <label
                     key={g.title}
-                    className="flex flex-col items-start bg-zinc-800/80 rounded-xl p-4 border border-zinc-700 shadow hover:shadow-blue-900/30 transition group cursor-pointer min-h-[110px] relative"
+                    className="flex flex-col items-stretch w-full bg-zinc-800/80 rounded-xl p-4 border border-zinc-700 transition group cursor-pointer min-h-[110px] relative"
                   >
-                    <input
-                      type="checkbox"
-                      checked={selectedRules.includes(g.title)}
-                      onChange={() => handleToggle(g.title)}
-                      className="peer appearance-none w-5 h-5 border-2 border-zinc-500 rounded-md checked:bg-blue-600 checked:border-blue-500 transition mr-2 mb-2 focus:ring-2 focus:ring-blue-400 outline-none"
-                      style={{ boxShadow: '0 0 0 2px rgba(59,130,246,0.2)' }}
-                    />
-                    <span className="absolute top-4 right-4 text-xs px-2 py-0.5 rounded bg-blue-900/40 text-blue-300 font-semibold uppercase tracking-wider" style={{display: g.codeRule ? 'block' : 'none'}}>Code</span>
-                    <span className="text-white font-semibold text-base mb-1 transition">{g.title}</span>
-                    <span className="text-zinc-400 text-sm leading-snug">{g.description}</span>
+                    <div className="flex flex-col flex-1">
+                      <input
+                        type="checkbox"
+                        checked={selectedRules.includes(g.title)}
+                        onChange={() => handleToggle(g.title)}
+                        className="peer appearance-none w-5 h-5 border-2 border-zinc-500 rounded-md checked:bg-blue-600 checked:border-blue-500 transition mr-2 mb-2 focus:ring-2 focus:ring-blue-400 outline-none"
+                        style={{ boxShadow: '0 0 0 2px rgba(59,130,246,0.2)' }}
+                      />
+                      <span className="text-white font-semibold text-base mb-1 transition">{g.title}</span>
+                      <span className="text-zinc-400 text-sm leading-snug mb-4">{g.description}</span>
+                      {/* <button
+                        type="button"
+                        className="mt-auto px-3 py-1.5 bg-zinc-900 text-blue-300 border border-zinc-700 rounded-lg shadow hover:bg-zinc-800 hover:text-blue-400 transition text-xs font-semibold"
+                        onClick={(e) => { e.preventDefault(); setModalRule(g); }}
+                      >
+                        Details
+                      </button> */}
+                    </div>
                   </label>
                 ))}
               </div>
@@ -170,6 +191,30 @@ function RuleAssignmentSection() {
       >
         Attach Selected Rules
       </button>
+      {/* Modal for code snippet */}
+      {modalRule && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70" onClick={() => setModalRule(null)}>
+          <div
+            className="bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-700 max-w-md w-full mx-4 p-8 relative animate-fadeIn"
+            onClick={e => e.stopPropagation()}
+          >
+            <button
+              className="absolute top-4 right-4 text-zinc-400 hover:text-red-400 focus:outline-none"
+              onClick={() => setModalRule(null)}
+              aria-label="Close"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <h4 className="text-xl font-bold text-white mb-2">{modalRule.title}</h4>
+            <p className="text-zinc-400 mb-4">{modalRule.description}</p>
+            <div className="bg-zinc-800 rounded-lg p-4 overflow-x-auto border border-zinc-700">
+              <pre className="text-blue-200 text-sm whitespace-pre-wrap"><code>{modalRule.code || 'No code snippet available.'}</code></pre>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
