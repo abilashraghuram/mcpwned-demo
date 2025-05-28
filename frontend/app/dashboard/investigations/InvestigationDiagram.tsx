@@ -88,7 +88,7 @@ export default function InvestigationDiagram({ investigationKey }: Investigation
           fitView
         >
           <Background color="#222222" />
-          <Controls />
+          {/* <Controls /> */}
         </ReactFlow>
       </div>
     </>
