@@ -107,7 +107,7 @@ function RuleAssignmentSection() {
   const grouped = groupBySection(rules)
 
   return (
-    <div className="mt-10 p-8 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black rounded-2xl border border-zinc-800 shadow-2xl max-w-4xl mx-auto">
+    <div className="mt-10 p-8 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black rounded-2xl border border-zinc-800 shadow-2xl max-w-7xl mx-auto">
       <h2 className="text-2xl mb-6 text-white tracking-tight flex items-center gap-3">
         <span className="inline-block  px-3 py-1 rounded-lg text-lg"><Mlogo style={{ display: 'inline', verticalAlign: 'middle', width: 28, height: 28 }} /></span>
         Configure Rules for MCP Servers
@@ -141,7 +141,7 @@ function RuleAssignmentSection() {
           {Object.entries(grouped).map(([section, rails]) => (
             <div key={section}>
               <h3 className="text-lg font-semibold mb-3 tracking-wide uppercase">{section}</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-5">
                 {rails.map((g) => (
                   <label
                     key={g.title}

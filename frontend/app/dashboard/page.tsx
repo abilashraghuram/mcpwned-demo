@@ -44,7 +44,7 @@ export default function DashboardPage() {
 
   return (
     <DashboardShell>
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="w-full px-8 py-8">
         <header className="flex flex-col md:flex-row items-center justify-center py-8 mb-8 border-b border-muted/40 gap-8 md:gap-16">
           <div className="flex flex-col items-center md:items-start text-center md:text-left">
             <img src="/Mlogo.svg" alt="CodeIntegrity Logo" className="w-32 h-32 mb-4" />
