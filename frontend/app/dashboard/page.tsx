@@ -53,7 +53,7 @@ export default function DashboardPage() {
             </p>
           </div>
           <form onSubmit={handleWaitlistSubmit} className="mt-6 md:mt-0 w-full max-w-md bg-black/90 border-2 border-primary rounded-xl p-8 flex flex-col items-center gap-3 shadow-2xl transition-transform duration-200 hover:scale-105 hover:shadow-2xl">
-            <Label htmlFor="waitlist-email" className="w-full text-center text-lg font-semibold text-white flex items-center justify-center gap-2">Welcome to Mcpwned — Early access preview. Join our launch waitlist.</Label>
+            <Label htmlFor="waitlist-email" className="w-full text-center text-lg font-semibold text-white flex items-center justify-center gap-2 text-green-500">Welcome to Mcpwned — Early access preview. Join our launch waitlist.</Label>
             <Input
               id="waitlist-email"
               type="email"
