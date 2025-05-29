@@ -26,7 +26,6 @@ export default function InvestigationsPage() {
           <InvestigationDiagram investigationKey={selected} />
           <div className="mt-8 flex flex-col md:flex-row gap-6 md:gap-0 md:space-x-6 items-stretch">
             <AffectedMcp affectedMcp={config.affectedMcp} />
-            <div className="hidden md:block w-px bg-border mx-2" />
             <RecommendedGuardrails guardrails={config.recommendedGuardrails} />
           </div>
         </main>
