@@ -40,6 +40,26 @@ export const investigations: Record<string, InvestigationDiagramConfig> = {
         "Block exec, get, and log actions on pods outside the active namespace context."
       ]
   },
+  code_execution_chain: {
+    label: "Unsafe pip install and execution",
+    nodes: [
+      { id: "read_web", type: "colored", position: { x: 500, y: 200 }, data: { label: "read_web", color: "#6EE7B7" } },
+      { id: "bash_pip_install", type: "colored", position: { x: 900, y: 200 }, data: { label: "bash and/or pip install", color: "#FDE68A" } },
+      { id: "bash_python_exec", type: "colored", position: { x: 1300, y: 200 }, data: { label: "bash python execution", color: "#A5B4FC" } },
+    ],
+    edges: [
+      { id: "e1", source: "read_web", target: "bash_pip_install", animated: true, style: { stroke: '#22c55e', strokeWidth: 2 } },
+      { id: "e2", source: "bash_pip_install", target: "bash_python_exec", animated: true, style: { stroke: '#ef4444', strokeWidth: 2, strokeDasharray: '4 2' } },
+    ],
+    affectedMcp: {
+      name: "code_mcp",
+      tools: ["install_pip", "run_bash"]
+    },
+    recommendedGuardrails: [
+      "Restrict pip installs to approved packages only.",
+      "Limit bash execution to non-destructive commands."
+    ]
+  },
   email_exfiltration: {
     label: "Email data exfiltration",
     nodes: [
@@ -62,31 +82,5 @@ export const investigations: Record<string, InvestigationDiagramConfig> = {
     recommendedGuardrails: [
       "Restrict send_email tool to only allow replies to known contacts.",
     ]
-  }
-//   alt: {
-//     label: "Insider Threat Data Exfiltration",
-//     nodes: [
-//       { id: "insider", type: "colored", position: { x: 0, y: 200 }, data: { label: "Insider", color: "#F87171" } },
-//       { id: "internal", type: "colored", position: { x: 300, y: 200 }, data: { label: "Internal System", color: "#6EE7B7" } },
-//       { id: "data", type: "colored", position: { x: 650, y: 200 }, data: { label: "Sensitive Data", color: "#E9D5FF" } },
-//       { id: "exfil", type: "colored", position: { x: 1000, y: 200 }, data: { label: "Exfiltration Channel", color: "#FDE68A" } },
-//       { id: "external", type: "colored", position: { x: 1350, y: 200 }, data: { label: "External Entity", color: "#A5B4FC" } },
-//     ],
-//     edges: [
-//       { id: "a1", source: "insider", target: "internal", animated: true, style: { stroke: '#222', strokeWidth: 2 } },
-//       { id: "a2", source: "internal", target: "data", animated: true, style: { stroke: '#222', strokeWidth: 2 } },
-//       { id: "a3", source: "data", target: "exfil", animated: true, style: { stroke: '#222', strokeWidth: 2 } },
-//       { id: "a4", source: "exfil", target: "external", animated: true, style: { stroke: '#222', strokeWidth: 2 } },
-//     ],
-//     affectedMcp: {
-//       name: "Internal Data MCP",
-//       tools: ["Data Export", "File Transfer"]
-//     },
-//     recommendedGuardrails: [
-//       "Restrict data export permissions to trusted users only.",
-//       "Enable anomaly detection for large or unusual data transfers.",
-//       "Log and review all file transfer activities.",
-//       "Implement multi-factor authentication for sensitive operations."
-//     ]
-//   },
+  },
 }; 
