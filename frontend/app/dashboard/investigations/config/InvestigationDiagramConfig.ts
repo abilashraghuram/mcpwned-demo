@@ -69,7 +69,7 @@ export const investigations: Record<string, InvestigationDiagramConfig> = {
       { id: "e10", source: "extract_email", target: "send_conf", animated: true, style: { stroke: '#ef4444', strokeWidth: 2, strokeDasharray: '4 2' } },
     ],
     affectedMcp: {
-      name: "meeting_summarizer_mcp",
+      name: "meeting summarizer mcp",
       tools: ["summarize_meeting", "read_drive", "send_email"]
     },
     recommendedGuardrails: [
@@ -89,7 +89,7 @@ export const investigations: Record<string, InvestigationDiagramConfig> = {
       { id: "e2", source: "bash_pip_install", target: "bash_python_exec", animated: true, style: { stroke: '#ef4444', strokeWidth: 2, strokeDasharray: '4 2' } },
     ],
     affectedMcp: {
-      name: "code_mcp",
+      name: "code assist mcp",
       tools: ["install_pip", "run_bash"]
     },
     recommendedGuardrails: [
@@ -133,7 +133,7 @@ export const investigations: Record<string, InvestigationDiagramConfig> = {
       { id: "e4", source: "send_email", target: "private_data", animated: true, style: { stroke: '#ef4444', strokeWidth: 2 } },
     ],
     affectedMcp: {
-      name: "email_mcp",
+      name: "email mcp",
       tools: ["read_inbox", "send_email"]
     },
     recommendedGuardrails: [
@@ -152,7 +152,7 @@ export const investigations: Record<string, InvestigationDiagramConfig> = {
       { id: "e2", source: "send_email", target: "pii_exfil", animated: true, style: { stroke: '#ef4444', strokeWidth: 2, strokeDasharray: '4 2' } },
     ],
     affectedMcp: {
-      name: "email_mcp",
+      name: "email mcp",
       tools: ["send_email"]
     },
     recommendedGuardrails: [
