@@ -1,8 +1,19 @@
 import { DashboardShell } from "@/components/dashboard-shell"
+import MCPArchitectureDiagram from "@/components/MCPArchitectureDiagram"
+import Mlogo from "@/components/Mlogo"
 
 export default function AboutPage() {
   return (
     <DashboardShell>
+      <div className="flex justify-center items-start min-h-[40vh] pt-8">
+        <div className="bg-card text-card-foreground rounded-xl shadow-lg p-8 max-w-2xl w-full">
+          <h2 className="text-2xl mb-4 text-center flex items-center justify-center gap-3">
+            <Mlogo style={{ fontSize: 36 }} />
+            <span>Look under the hood</span>
+          </h2>
+          <MCPArchitectureDiagram height={500} />
+        </div>
+      </div>
       <div className="flex justify-center items-start min-h-[60vh] pt-12">
         <div className="bg-card text-card-foreground rounded-xl shadow-lg p-10 max-w-2xl w-full">
           <h1 className="text-3xl mb-4 text-center">About Us</h1>
