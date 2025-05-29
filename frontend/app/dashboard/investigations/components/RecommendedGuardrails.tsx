@@ -7,7 +7,7 @@ export function RecommendedGuardrails({ guardrails }: { guardrails: string[] }) 
       <div className="text-sm text-muted-foreground mb-2 font-medium text-left">Build guardrails that enforce the following</div>
       <ul className="list-none ml-0 space-y-2">
         {guardrails.map((g, i) => (
-          <li key={i} className="flex items-center text-sm text-foreground pl-1 text-left font-normal">
+          <li key={i} className="flex items-center text-sm text-foreground text-left font-normal">
             <span className="inline-block h-2 w-2 rounded-full bg-green-500 mr-2 animate-pulse-dot"></span>
             {g}
           </li>
