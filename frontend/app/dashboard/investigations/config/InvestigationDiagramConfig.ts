@@ -60,6 +60,26 @@ export const investigations: Record<string, InvestigationDiagramConfig> = {
       "Limit bash execution to non-destructive commands."
     ]
   },
+  browserbase_click_loop: {
+    label: "Browserbase Click Loop",
+    nodes: [
+      { id: "click1", type: "colored", position: { x: 700, y: 100 }, data: { label: "browserbase-click", color: "#FDE68A" } },
+      { id: "click2", type: "colored", position: { x: 1100, y: 100 }, data: { label: "browserbase-click", color: "#FDE68A" } },
+      { id: "click3", type: "colored", position: { x: 900, y: 350 }, data: { label: "browserbase-click", color: "#FDE68A" } },
+    ],
+    edges: [
+      { id: "e1", source: "click1", target: "click2", animated: true, style: { stroke: '#ef4444', strokeWidth: 2, strokeDasharray: '4 2' } },
+      { id: "e2", source: "click2", target: "click3", animated: true, style: { stroke: '#ef4444', strokeWidth: 2, strokeDasharray: '4 2' } },
+      { id: "e3", source: "click3", target: "click1", animated: true, style: { stroke: '#ef4444', strokeWidth: 2, strokeDasharray: '4 2' } },
+    ],
+    affectedMcp: {
+      name: "browserbase mcp",
+      tools: ["browserbase_click"]
+    },
+    recommendedGuardrails: [
+      "Limit the number of consecutive browserbase_click actions to prevent infinite loops."
+    ]
+  },
   email_exfiltration: {
     label: "Email data exfiltration",
     nodes: [
