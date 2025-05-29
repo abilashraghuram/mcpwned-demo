@@ -143,7 +143,7 @@ function RuleAssignmentSection() {
         </div>
       </div>
       <div className="mb-8">
-        <label className="block text-zinc-300 mb-4 font-medium text-lg">Select Rules:</label>
+        {/* <label className="block text-zinc-300 mb-4 font-medium text-lg">Select Rules:</label> */}
         <div className="space-y-4">
           {Object.entries(grouped).map(([section, rails]) => (
             <div key={section}>
