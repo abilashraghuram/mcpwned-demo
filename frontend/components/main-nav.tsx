@@ -1,7 +1,6 @@
 "use client"
 import Link from "next/link"
 import Image from "next/image"
-import { ThemeToggle } from "./theme-toggle"
 
 export function MainNav() {
 
@@ -13,7 +12,6 @@ export function MainNav() {
           <span className="hidden sm:inline-block">Mcpwned - Early Access Preview</span>
         </Link>
       </div>
-      <ThemeToggle />
     </div>
   )
 }
