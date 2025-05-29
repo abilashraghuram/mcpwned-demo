@@ -1,7 +1,13 @@
 "use client"
 
 import React from "react"
-import Mlogo from "./Mlogo"
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem
+} from "@/components/ui/select"
 
 interface Rule {
   title: string;
@@ -120,55 +126,54 @@ function RuleAssignmentSection() {
   const grouped = groupBySection(rules)
 
   return (
-    <div className="mt-10 p-8 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black rounded-2xl border border-zinc-800 shadow-2xl max-w-7xl mx-auto">
-      <h2 className="text-2xl mb-6 text-white tracking-tight flex items-center gap-3">
-        <span className="inline-block  px-3 py-1 rounded-lg text-lg"><Mlogo style={{ display: 'inline', verticalAlign: 'middle', width: 28, height: 28 }} /></span>
-        Configure Rules for MCP Servers
-      </h2>
+    <div className="mt-8 max-w-7xl mx-auto px-2">
       <div className="mb-8">
         <label className="block text-zinc-300 mb-2 font-medium text-lg">Select MCP Server:</label>
         <div className="relative w-full max-w-xs">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none select-none" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-zinc-500">
-              <rect x="2" y="3" width="16" height="5" rx="1.5" fill="currentColor"/>
-              <rect x="2" y="12" width="16" height="5" rx="1.5" fill="currentColor"/>
-              <rect x="2" y="7.5" width="16" height="5" rx="1.5" fill="currentColor" fillOpacity="0.7"/>
-              <circle cx="5.5" cy="5.5" r="0.8" fill="#3B82F6"/>
-              <circle cx="5.5" cy="14.5" r="0.8" fill="#3B82F6"/>
-            </svg>
-          </span>
-          <select
-            className="pl-10 pr-4 py-2 rounded-lg bg-zinc-900 text-white border border-zinc-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full appearance-none transition"
-            value={selectedServer}
-            onChange={(e) => setSelectedServer(e.target.value)}
-          >
-            {servers.map((s) => (
-              <option key={s.id} value={s.id}>{s.name}</option>
-            ))}
-          </select>
+          <Select value={selectedServer} onValueChange={setSelectedServer}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select MCP Server" />
+            </SelectTrigger>
+            <SelectContent>
+              {servers.map((s) => (
+                <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
       <div className="mb-8">
         <label className="block text-zinc-300 mb-4 font-medium text-lg">Select Rules:</label>
-        <div className="space-y-8">
+        <div className="space-y-4">
           {Object.entries(grouped).map(([section, rails]) => (
             <div key={section}>
-              <h3 className="text-lg font-semibold mb-3 tracking-wide uppercase">{section}</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-5">
+              <h3 className="text-lg font-semibold mb-2 tracking-wide uppercase">{section}</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
                 {rails.map((g) => (
                   <label
                     key={g.title}
-                    className="flex flex-col items-stretch w-full bg-zinc-800/80 rounded-xl p-4 border border-zinc-700 transition group cursor-pointer min-h-[110px] relative"
+                    className="flex flex-col items-stretch w-full bg-zinc-800/80 rounded-xl p-3 border border-zinc-700 transition group cursor-pointer min-h-[90px] relative"
                   >
                     <div className="flex flex-col flex-1">
-                      <input
-                        type="checkbox"
-                        checked={selectedRules.includes(g.title)}
-                        onChange={() => handleToggle(g.title)}
-                        className="peer appearance-none w-5 h-5 border-2 border-zinc-500 rounded-md checked:bg-blue-600 checked:border-blue-500 transition mr-2 mb-2 focus:ring-2 focus:ring-blue-400 outline-none"
-                        style={{ boxShadow: '0 0 0 2px rgba(59,130,246,0.2)' }}
-                      />
-                      <span className="text-white font-semibold text-base mb-1 transition">{g.title}</span>
+                      <div className="flex items-center mb-2">
+                        <button
+                          type="button"
+                          aria-pressed={selectedRules.includes(g.title)}
+                          onClick={() => handleToggle(g.title)}
+                          className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-colors duration-150 mr-2
+                            ${selectedRules.includes(g.title)
+                              ? 'border-green-500 bg-green-600'
+                              : 'border-zinc-500 bg-zinc-900 hover:border-green-400'}
+                          `}
+                        >
+                          {selectedRules.includes(g.title) && (
+                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                          )}
+                        </button>
+                        <span className="text-white text-xl md:text-2xl mb-1 transition">{g.title}</span>
+                      </div>
                       <span className="text-zinc-400 text-sm leading-snug mb-4">{g.description}</span>
                       {/* <button
                         type="button"
@@ -185,12 +190,14 @@ function RuleAssignmentSection() {
           ))}
         </div>
       </div>
-      <button
-        className="mt-2 px-6 py-3 bg-black text-white rounded-xl shadow-2xl border border-zinc-700 hover:scale-105 hover:shadow-zinc-900/40 focus:ring-2 focus:ring-zinc-400 transition text-lg font-semibold w-full max-w-xs mx-auto block"
-        onClick={() => alert(`Attached rules to ${selectedServer}`)}
-      >
-        Attach Selected Rules
-      </button>
+      <div className="flex justify-center mt-8">
+        <button
+          className="px-8 py-3 bg-zinc-900/80 text-white border border-zinc-600 rounded-xl shadow-lg font-bold text-lg backdrop-blur-md transition-all duration-150 hover:shadow-xl hover:border-cyan-400 hover:bg-zinc-800/90 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
+          onClick={() => alert(`Attached rules to ${selectedServer}`)}
+        >
+          Attach Selected Rules
+        </button>
+      </div>
       {/* Modal for code snippet */}
       {modalRule && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70" onClick={() => setModalRule(null)}>

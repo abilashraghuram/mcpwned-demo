@@ -33,7 +33,6 @@ export function LogsTable({ filters }: { filters: LogsFilterState }) {
     logsLoading,
     logsError,
     fetchAllLogs,
-    getServerById,
   } = useMcpStore();
   const [selectedLog, setSelectedLog] = useState<LogWithTools | null>(null)
 
@@ -93,7 +92,7 @@ export function LogsTable({ filters }: { filters: LogsFilterState }) {
         <TableHeader>
           <TableRow>
             <TableHead>Tool Name</TableHead>
-            <TableHead>MCP Server Name</TableHead>
+            {/* <TableHead>MCP Server Name</TableHead> */}
             <TableHead>Input Arguments</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Timestamp</TableHead>
@@ -106,9 +105,9 @@ export function LogsTable({ filters }: { filters: LogsFilterState }) {
               <TableCell className="font-medium truncate max-w-[150px]" title={log.tools?.name || 'N/A'}>
                 {log.tools?.name || 'N/A'}
               </TableCell>
-              <TableCell className="truncate max-w-[150px]" title={getServerById(log.mcp_server_id)?.name || 'N/A'}>
+              {/* <TableCell className="truncate max-w-[150px]" title={getServerById(log.mcp_server_id)?.name || 'N/A'}>
                 {getServerById(log.mcp_server_id)?.name || 'N/A'}
-              </TableCell>
+              </TableCell> */}
               <TableCell className="max-w-[200px] truncate" title={log.tool_input || 'N/A'}>
                 {log.tool_input || 'N/A'}
               </TableCell>
@@ -152,10 +151,10 @@ export function LogsTable({ filters }: { filters: LogsFilterState }) {
                           <span className="text-sm font-medium">Tool Name:</span>
                           <span className="col-span-3">{selectedLog.tools?.name || 'N/A'}</span>
                         </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
+                        {/* <div className="grid grid-cols-4 items-center gap-4">
                           <span className="text-sm font-medium">Server Name:</span>
                           <span className="col-span-3">{getServerById(selectedLog.mcp_server_id)?.name || 'N/A'}</span>
-                        </div>
+                        </div> */}
                         <div className="grid grid-cols-4 items-center gap-4">
                           <span className="text-sm font-medium">Status:</span>
                           <span className="col-span-3">
