@@ -146,32 +146,17 @@ function RuleAssignmentSection() {
         {/* <label className="block text-zinc-300 mb-4 font-medium text-lg">Select Rules:</label> */}
         <div className="space-y-4">
           {Object.entries(grouped).map(([section, rails]) => (
-            <div key={section}>
-              <h3 className="text-lg font-semibold mb-2 tracking-wide uppercase">{section}</h3>
+            <div key={section} className="mb-8 p-6 border border-zinc-700 shadow-md rounded-lg bg-zinc-900/30">
+              <h3 className="text-2xl mb-4 tracking-wide">{section}</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
                 {rails.map((g) => (
                   <label
                     key={g.title}
-                    className="flex flex-col items-stretch w-full bg-zinc-800/80 rounded-xl p-3 border border-zinc-700 transition group cursor-pointer min-h-[90px] relative"
+                    className={`flex flex-col items-stretch w-full min-w-[220px] p-3 border-2 shadow-sm transition group cursor-pointer min-h-[90px] relative hover:scale-[1.025] hover:shadow-lg hover:border-cyan-400 ${selectedRules.includes(g.title) ? 'border-green-500' : 'border-zinc-600'}`}
+                    onClick={() => handleToggle(g.title)}
                   >
                     <div className="flex flex-col flex-1">
                       <div className="flex items-center mb-2">
-                        <button
-                          type="button"
-                          aria-pressed={selectedRules.includes(g.title)}
-                          onClick={() => handleToggle(g.title)}
-                          className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-colors duration-150 mr-2
-                            ${selectedRules.includes(g.title)
-                              ? 'border-green-500 bg-green-600'
-                              : 'border-zinc-500 bg-zinc-900 hover:border-green-400'}
-                          `}
-                        >
-                          {selectedRules.includes(g.title) && (
-                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                            </svg>
-                          )}
-                        </button>
                         <span className="text-white text-xl md:text-2xl mb-1 transition">{g.title}</span>
                       </div>
                       <span className="text-zinc-400 text-sm leading-snug mb-4">{g.description}</span>

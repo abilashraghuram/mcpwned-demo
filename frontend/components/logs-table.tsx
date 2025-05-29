@@ -94,8 +94,8 @@ export function LogsTable({ filters }: { filters: LogsFilterState }) {
             <TableHead>Tool Name</TableHead>
             {/* <TableHead>MCP Server Name</TableHead> */}
             <TableHead>Input Arguments</TableHead>
-            <TableHead>Status</TableHead>
             <TableHead>Timestamp</TableHead>
+            <TableHead>Status</TableHead>
             <TableHead className="text-right">Expand Details</TableHead>
           </TableRow>
         </TableHeader>
@@ -111,6 +111,7 @@ export function LogsTable({ filters }: { filters: LogsFilterState }) {
               <TableCell className="max-w-[200px] truncate" title={log.tool_input || 'N/A'}>
                 {log.tool_input || 'N/A'}
               </TableCell>
+              <TableCell>{new Date(log.created_at).toLocaleString()}</TableCell>
               <TableCell>
                 <Badge
                   variant={log.status === "success" ? "default" : log.status === "error" ? "destructive" : "outline"}
@@ -127,7 +128,6 @@ export function LogsTable({ filters }: { filters: LogsFilterState }) {
                   {log.status || 'N/A'}
                 </Badge>
               </TableCell>
-              <TableCell>{new Date(log.created_at).toLocaleString()}</TableCell>
               <TableCell className="text-right">
                 <Dialog>
                   <DialogTrigger asChild>
