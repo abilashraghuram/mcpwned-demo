@@ -8,7 +8,7 @@ export function AffectedMcp({ affectedMcp }: { affectedMcp: { name: string; tool
       <ul className="list-none ml-0 space-y-1">
         {affectedMcp.tools.map(tool => (
           <li key={tool} className="flex items-center text-sm text-foreground pl-1 text-left font-normal">
-            <span className="inline-block h-2 w-2 rounded-full bg-green-500 mr-2"></span>
+            <span className="inline-block h-2 w-2 rounded-full bg-green-500 mr-2 animate-pulse-dot"></span>
             {tool}
           </li>
         ))}
