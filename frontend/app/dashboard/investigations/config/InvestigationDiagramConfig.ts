@@ -117,6 +117,28 @@ export const investigations: Record<string, InvestigationDiagramConfig> = {
       "Limit the number of consecutive browserbase_click actions to prevent infinite loops."
     ]
   },
+  browserbase_multi_tool_loop: {
+    label: "Browserbase Multi-Tool Action Loop",
+    nodes: [
+      { id: "click", type: "colored", position: { x: 900, y: 100 }, data: { label: "browserbase_click", color: "#FDE68A" } },
+      { id: "type", type: "colored", position: { x: 1050, y: 200 }, data: { label: "browserbase_type", color: "#FDE68A" } },
+      { id: "wait", type: "colored", position: { x: 900, y: 300 }, data: { label: "browserbase_wait", color: "#FDE68A" } },
+      { id: "screenshot", type: "colored", position: { x: 750, y: 200 }, data: { label: "browserbase_take_screenshot", color: "#FDE68A" } },
+    ],
+    edges: [
+      { id: "e1", source: "click", target: "type", animated: true, style: { stroke: '#ef4444', strokeWidth: 2 } },
+      { id: "e2", source: "type", target: "wait", animated: true, style: { stroke: '#ef4444', strokeWidth: 2 } },
+      { id: "e3", source: "wait", target: "screenshot", animated: true, style: { stroke: '#ef4444', strokeWidth: 2 } },
+      { id: "e4", source: "screenshot", target: "click", animated: true, style: { stroke: '#ef4444', strokeWidth: 2, strokeDasharray: '4 2' } },
+    ],
+    affectedMcp: {
+      name: "browserbase mcp",
+      tools: ["browserbase_click", "browserbase_type", "browserbase_wait", "browserbase_take_screenshot"]
+    },
+    recommendedGuardrails: [
+      "Block repeated multi-tool action patterns that do not progress the workflow."
+    ]
+  },
   email_exfiltration: {
     label: "Email data exfiltration",
     nodes: [
