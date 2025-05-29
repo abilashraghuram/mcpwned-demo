@@ -8,6 +8,7 @@ import {
   SelectContent,
   SelectItem
 } from "@/components/ui/select"
+import { Card } from "@/components/ui/card"
 
 interface Rule {
   title: string;
@@ -146,13 +147,13 @@ function RuleAssignmentSection() {
         {/* <label className="block text-zinc-300 mb-4 font-medium text-lg">Select Rules:</label> */}
         <div className="space-y-4">
           {Object.entries(grouped).map(([section, rails]) => (
-            <div key={section} className="mb-8 p-6 border border-zinc-700 shadow-md rounded-lg bg-zinc-900/30">
+            <div key={section} className="mb-8">
               <h3 className="text-2xl mb-4 tracking-wide">{section}</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
                 {rails.map((g) => (
-                  <label
+                  <Card
                     key={g.title}
-                    className={`flex flex-col items-stretch w-full min-w-[220px] p-3 border-2 shadow-sm transition group cursor-pointer min-h-[90px] relative hover:scale-[1.025] hover:shadow-lg hover:border-cyan-400 ${selectedRules.includes(g.title) ? 'border-green-500' : 'border-zinc-600'}`}
+                    className={`flex flex-col items-stretch w-full min-w-[220px] p-3 shadow-sm transition group cursor-pointer min-h-[90px] relative hover:scale-[1.025] hover:shadow-lg hover:border-cyan-400 ${selectedRules.includes(g.title) ? 'border-green-500' : 'border-zinc-600'}`}
                     onClick={() => handleToggle(g.title)}
                   >
                     <div className="flex flex-col flex-1">
@@ -160,15 +161,8 @@ function RuleAssignmentSection() {
                         <span className="text-white text-xl md:text-2xl mb-1 transition">{g.title}</span>
                       </div>
                       <span className="text-zinc-400 text-sm leading-snug mb-4">{g.description}</span>
-                      {/* <button
-                        type="button"
-                        className="mt-auto px-3 py-1.5 bg-zinc-900 text-blue-300 border border-zinc-700 rounded-lg shadow hover:bg-zinc-800 hover:text-blue-400 transition text-xs font-semibold"
-                        onClick={(e) => { e.preventDefault(); setModalRule(g); }}
-                      >
-                        Details
-                      </button> */}
                     </div>
-                  </label>
+                  </Card>
                 ))}
               </div>
             </div>
