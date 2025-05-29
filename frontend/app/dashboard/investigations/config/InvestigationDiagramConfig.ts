@@ -40,6 +40,43 @@ export const investigations: Record<string, InvestigationDiagramConfig> = {
         "Block exec, get, and log actions on pods outside the active namespace context."
       ]
   },
+  complex_meeting_notes_exploit: {
+    label: "Complex meeting notes exploit",
+    nodes: [
+      { id: "user", type: "colored", position: { x: 200, y: 200 }, data: { label: "User", color: "#22c55e" } },
+      { id: "find_notes", type: "colored", position: { x: 550, y: 120 }, data: { label: "Find recent meeting notes", color: "#6EE7B7" } },
+      { id: "extract_conf", type: "colored", position: { x: 850, y: 100 }, data: { label: "Extract confidential.txt from drive", color: "#FDE68A" } },
+      { id: "drive", type: "colored", position: { x: 1150, y: 60 }, data: { label: "internal drive", color: "#E9D5FF" } },
+      { id: "poison_note", type: "colored", position: { x: 550, y: 300 }, data: { label: "poisoned note", color: "#FDE68A" } },
+      { id: "hacker", type: "colored", position: { x: 300, y: 400 }, data: { label: "Hacker", color: "#F87171" } },
+      { id: "extract_email", type: "colored", position: { x: 700, y: 400 }, data: { label: "Extract attacker email address", color: "#F87171" } },
+      { id: "agent", type: "colored", position: { x: 900, y: 200 }, data: { label: "Agent", color: "#A5B4FC" } },
+      { id: "fetch_conf", type: "colored", position: { x: 1300, y: 250 }, data: { label: "Fetch confidential.txt by name", color: "#6EE7B7" } },
+      { id: "send_conf", type: "colored", position: { x: 1100, y: 400 }, data: { label: "Send confidential.txt to attacker@evil.com", color: "#F87171" } },
+    ],
+    edges: [
+      // Green (normal) edges
+      { id: "e1", source: "user", target: "find_notes", animated: true, style: { stroke: '#22c55e', strokeWidth: 2, strokeDasharray: '4 2' } },
+      { id: "e2", source: "find_notes", target: "extract_conf", animated: true, style: { stroke: '#ef4444', strokeWidth: 2, strokeDasharray: '4 2' } },
+      { id: "e4", source: "find_notes", target: "poison_note", animated: true, style: { stroke: '#22c55e', strokeWidth: 2, strokeDasharray: '4 2' } },
+      { id: "e5", source: "hacker", target: "poison_note", animated: true, style: { stroke: '#ef4444', strokeWidth: 2, strokeDasharray: '4 2' } },
+      { id: "e6", source: "poison_note", target: "extract_email", animated: true, style: { stroke: '#ef4444', strokeWidth: 2, strokeDasharray: '4 2' } },
+      // Exploit path (red)
+      { id: "e3", source: "drive", target: "extract_conf", animated: true, style: { stroke: '#ef4444', strokeWidth: 2, strokeDasharray: '4 2' } },
+      { id: "e7", source: "extract_conf", target: "agent", animated: true, style: { stroke: '#ef4444', strokeWidth: 2, strokeDasharray: '4 2' } },
+      { id: "e8", source: "agent", target: "fetch_conf", animated: true, style: { stroke: '#ef4444', strokeWidth: 2, strokeDasharray: '4 2' } },
+      { id: "e9", source: "fetch_conf", target: "send_conf", animated: true, style: { stroke: '#ef4444', strokeWidth: 2, strokeDasharray: '4 2' } },
+      { id: "e10", source: "extract_email", target: "send_conf", animated: true, style: { stroke: '#ef4444', strokeWidth: 2, strokeDasharray: '4 2' } },
+    ],
+    affectedMcp: {
+      name: "meeting_summarizer_mcp",
+      tools: ["summarize_meeting", "read_drive", "send_email"]
+    },
+    recommendedGuardrails: [
+      "Restrict reads to drive, sanitize reads from meeting notes.",
+      "Restrict outgoing email to subset cases"
+    ]
+  },
   code_execution_chain: {
     label: "Unsafe pip install and execution",
     nodes: [
@@ -101,6 +138,25 @@ export const investigations: Record<string, InvestigationDiagramConfig> = {
     },
     recommendedGuardrails: [
       "Restrict send_email tool to only allow replies to known contacts.",
+    ]
+  },
+  pii_exfiltration: {
+    label: "PII exfiltration",
+    nodes: [
+      { id: "user", type: "colored", position: { x: 500, y: 150 }, data: { label: "User", color: "#F87171" } },
+      { id: "send_email", type: "colored", position: { x: 920, y: 150 }, data: { label: "Send_email", color: "#6EE7B7" } },
+      { id: "pii_exfil", type: "colored", position: { x: 1300, y: 150 }, data: { label: "PII exfiltrated", color: "#E9D5FF" } },
+    ],
+    edges: [
+      { id: "e1", source: "user", target: "send_email", animated: true, style: { stroke: '#22c55e', strokeWidth: 2, strokeDasharray: '4 2' } },
+      { id: "e2", source: "send_email", target: "pii_exfil", animated: true, style: { stroke: '#ef4444', strokeWidth: 2, strokeDasharray: '4 2' } },
+    ],
+    affectedMcp: {
+      name: "email_mcp",
+      tools: ["send_email"]
+    },
+    recommendedGuardrails: [
+      "Auto redact PII from outgoing email"
     ]
   },
 }; 
