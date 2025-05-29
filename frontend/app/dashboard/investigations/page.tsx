@@ -14,8 +14,8 @@ export default function InvestigationsPage() {
   return (
     <DashboardShell>
       <DashboardHeader
-        heading="Investigations"
-        text="Visualize attack chains"
+        heading="Insights"
+        text="Visualize complete attack chains and see how they can be mitigated"
       />
       <div className="flex flex-col md:flex-row gap-0 md:gap-8 mt-4">
         <SidebarInvestigationList selected={selected} setSelected={setSelected} />

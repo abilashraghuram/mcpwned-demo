@@ -14,7 +14,7 @@ function SidebarInvestigationList({ selected, setSelected }: { selected: string;
       <div className="p-4 border-b">
         <input
           type="text"
-          placeholder="Search investigations..."
+          placeholder="Search"
           value={search}
           onChange={e => setSearch(e.target.value)}
           className="w-full px-3 py-2 rounded-md border border-muted bg-background text-base focus:outline-none focus:ring-2 focus:ring-primary"

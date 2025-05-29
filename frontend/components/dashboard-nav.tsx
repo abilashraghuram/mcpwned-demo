@@ -19,7 +19,7 @@ export function DashboardNav({ isCollapsed }: NavProps) {
       icon: Home,
     },
     {
-      title: "Investigations",
+      title: "Insights",
       href: "/dashboard/investigations",
       icon: FileText,
     },

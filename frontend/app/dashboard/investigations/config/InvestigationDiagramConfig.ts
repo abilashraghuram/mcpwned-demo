@@ -32,13 +32,36 @@ export const investigations: Record<string, InvestigationDiagramConfig> = {
       { id: "e6", source: "mcp2", target: "public", animated: true, style: { stroke: '#fff', strokeWidth: 2 } },
     ],
     affectedMcp: {
-      name: "K8s MCP",
+      name: "k8s MCP",
       tools: ["namespaces_list", "pods_exec", "pods_get", "pods_list", "pods_list_in_namespace","pods_log","pods_run"]
     },
     recommendedGuardrails: [
         "Enforce single-namespace access per agent session to prevent cross-namespace data leakage.",
         "Block exec, get, and log actions on pods outside the active namespace context."
       ]
+  },
+  email_exfiltration: {
+    label: "Email data exfiltration",
+    nodes: [
+      { id: "user", type: "colored", position: { x: 500, y: 150 }, data: { label: "User replies to email", color: "#F87171" } },
+      { id: "read_inbox", type: "colored", position: { x: 720, y: 150 }, data: { label: "read-inbox-tool", color: "#6EE7B7" } },
+      { id: "hacker_prompt", type: "colored", position: { x: 720, y: 300 }, data: { label: "A Hacker Prompt injected email", color: "#FDE68A" } },
+      { id: "send_email", type: "colored", position: { x: 1020, y: 150 }, data: { label: "send-email-tool", color: "#6EE7B7" } },
+      { id: "private_data", type: "colored", position: { x: 1320, y: 150 }, data: { label: "Private_data_exfiltrated", color: "#E9D5FF" } },
+    ],
+    edges: [
+      { id: "e1", source: "user", target: "read_inbox", animated: true, style: { stroke: '#fff', strokeWidth: 2 } },
+      { id: "e2", source: "read_inbox", target: "send_email", animated: true, style: { stroke: '#fff', strokeWidth: 2 } },
+      { id: "e3", source: "read_inbox", target: "hacker_prompt", animated: true, style: { stroke: '#fff', strokeWidth: 2, strokeDasharray: '4 2' } },
+      { id: "e4", source: "send_email", target: "private_data", animated: true, style: { stroke: '#fff', strokeWidth: 2 } },
+    ],
+    affectedMcp: {
+      name: "email_mcp",
+      tools: ["read_inbox", "send_email"]
+    },
+    recommendedGuardrails: [
+      "Restrict send_email tool to only allow replies to known contacts.",
+    ]
   }
 //   alt: {
 //     label: "Insider Threat Data Exfiltration",
