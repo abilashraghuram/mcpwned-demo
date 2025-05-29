@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { investigations } from "./config/InvestigationDiagramConfig";
+import { investigations } from "../config/InvestigationDiagramConfig";
 
 function SidebarInvestigationList({ selected, setSelected }: { selected: string; setSelected: (key: string) => void }) {
   const [search, setSearch] = useState("");

@@ -15,7 +15,7 @@ import {
   type NodeProps,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { investigations, type InvestigationDiagramConfig } from "./InvestigationDiagramConfig";
+import { investigations, type InvestigationDiagramConfig } from "../config/InvestigationDiagramConfig";
 
 // Custom node with color
 function ColoredNode({ data }: NodeProps) {
