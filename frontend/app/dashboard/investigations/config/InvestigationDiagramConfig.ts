@@ -24,12 +24,12 @@ export const investigations: Record<string, InvestigationDiagramConfig> = {
       { id: "public", type: "colored", position: { x: 1750, y: 320 }, data: { label: "Private secrets exfiltrated", color: "#FDE68A" } },
     ],
     edges: [
-      { id: "e1", source: "attacker", target: "mcp1", animated: true, style: { stroke: '#fff', strokeWidth: 2 } },
-      { id: "e2", source: "mcp1", target: "issue", animated: true, style: { stroke: '#fff', strokeWidth: 2 } },
-      { id: "e3", source: "issue", target: "ai", animated: true, style: { stroke: '#fff', strokeWidth: 2 } },
-      { id: "e4", source: "ai", target: "mcp2", animated: true, style: { stroke: '#fff', strokeWidth: 2 } },
-      { id: "e5", source: "mcp2", target: "private", animated: true, style: { stroke: '#fff', strokeWidth: 2 } },
-      { id: "e6", source: "mcp2", target: "public", animated: true, style: { stroke: '#fff', strokeWidth: 2 } },
+      { id: "e1", source: "attacker", target: "mcp1", animated: true, style: { stroke: '#22c55e', strokeWidth: 2 } },
+      { id: "e2", source: "mcp1", target: "issue", animated: true, style: { stroke: '#22c55e', strokeWidth: 2 } },
+      { id: "e3", source: "issue", target: "ai", animated: true, style: { stroke: '#ef4444', strokeWidth: 2 } },
+      { id: "e4", source: "ai", target: "mcp2", animated: true, style: { stroke: '#ef4444', strokeWidth: 2 } },
+      { id: "e5", source: "mcp2", target: "private", animated: true, style: { stroke: '#ef4444', strokeWidth: 2 } },
+      { id: "e6", source: "mcp2", target: "public", animated: true, style: { stroke: '#ef4444', strokeWidth: 2 } },
     ],
     affectedMcp: {
       name: "k8s MCP",
@@ -50,10 +50,10 @@ export const investigations: Record<string, InvestigationDiagramConfig> = {
       { id: "private_data", type: "colored", position: { x: 1320, y: 150 }, data: { label: "Private_data_exfiltrated", color: "#E9D5FF" } },
     ],
     edges: [
-      { id: "e1", source: "user", target: "read_inbox", animated: true, style: { stroke: '#fff', strokeWidth: 2 } },
-      { id: "e2", source: "read_inbox", target: "send_email", animated: true, style: { stroke: '#fff', strokeWidth: 2 } },
-      { id: "e3", source: "read_inbox", target: "hacker_prompt", animated: true, style: { stroke: '#fff', strokeWidth: 2, strokeDasharray: '4 2' } },
-      { id: "e4", source: "send_email", target: "private_data", animated: true, style: { stroke: '#fff', strokeWidth: 2 } },
+      { id: "e1", source: "user", target: "read_inbox", animated: true, style: { stroke: '#22c55e', strokeWidth: 2 } },
+      { id: "e2", source: "read_inbox", target: "send_email", animated: true, style: { stroke: '#22c55e', strokeWidth: 2 } },
+      { id: "e3", source: "read_inbox", target: "hacker_prompt", animated: true, style: { stroke: '#ef4444', strokeWidth: 2, strokeDasharray: '4 2' } },
+      { id: "e4", source: "send_email", target: "private_data", animated: true, style: { stroke: '#ef4444', strokeWidth: 2 } },
     ],
     affectedMcp: {
       name: "email_mcp",

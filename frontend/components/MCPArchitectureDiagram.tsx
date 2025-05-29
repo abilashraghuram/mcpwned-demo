@@ -41,10 +41,12 @@ const nodes = [
 ];
 
 const edges = [
-  { id: "e1", source: "agent", target: "proxy", animated: true, style: { stroke: '#fff', strokeWidth: 2, strokeDasharray: '6 3' } },
-  { id: "e2", source: "proxy", target: "llm", animated: true, style: { stroke: '#fff', strokeWidth: 2, strokeDasharray: '6 3' } },
-  { id: "e3", source: "proxy", target: "rules", animated: true, style: { stroke: '#fff', strokeWidth: 2, strokeDasharray: '2 2' } },
-  { id: "e4", source: "rules", target: "proxy", animated: true, style: { stroke: '#fff', strokeWidth: 2, strokeDasharray: '4 2' } },
+  { id: "e1", source: "agent", target: "proxy", animated: true, style: { stroke: '#ef4444', strokeWidth: 2, strokeDasharray: '6 3' } },
+  { id: "e2", source: "proxy", target: "llm", animated: true, style: { stroke: '#ef4444', strokeWidth: 2, strokeDasharray: '6 3' } },
+  { id: "e3", source: "proxy", target: "rules", animated: true, style: { stroke: '#ef4444', strokeWidth: 2, strokeDasharray: '2 2' } },
+  { id: "e4", source: "rules", target: "proxy", animated: true, style: { stroke: '#22c55e', strokeWidth: 2, strokeDasharray: '4 2' } },
+  { id: "e5", source: "llm", target: "proxy", animated: true, style: { stroke: '#22c55e', strokeWidth: 2, strokeDasharray: '6 3' } },
+  { id: "e6", source: "proxy", target: "agent", animated: true, style: { stroke: '#22c55e', strokeWidth: 2, strokeDasharray: '6 3' } },
 ];
 
 export default function MCPArchitectureDiagram({ height = 350 }: { height?: number }) {
