@@ -32,7 +32,7 @@ export const investigations: Record<string, InvestigationDiagramConfig> = {
       { id: "e6", source: "mcp2", target: "public", animated: true, style: { stroke: '#fff', strokeWidth: 2 } },
     ],
     affectedMcp: {
-      name: "K8s MCP Server",
+      name: "K8s MCP",
       tools: ["namespaces_list", "pods_exec", "pods_get", "pods_list", "pods_list_in_namespace","pods_log","pods_run"]
     },
     recommendedGuardrails: [
