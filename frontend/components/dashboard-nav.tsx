@@ -24,17 +24,17 @@ export function DashboardNav({ isCollapsed }: NavProps) {
       icon: FileText,
     },
     {
-      title: "Configure Rules",
+      title: "Rules",
       href: "/dashboard/rules",
       icon: SlidersHorizontal,
     },
     {
-      title: "Explore Logs",
+      title: "Logs",
       href: "/dashboard/logs",
       icon: FileText,
     },
     {
-      title: "About Us",
+      title: "About",
       href: "/dashboard/about",
       icon: Info,
     },

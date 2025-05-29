@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mcpwned dashboard",
+  title: "Mcpwned by CodeIntegrity",
   description: "Built by CodeIntegrity",
 };
 
