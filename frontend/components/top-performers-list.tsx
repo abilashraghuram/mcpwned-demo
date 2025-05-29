@@ -45,7 +45,7 @@ export function TopPerformersList() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 font-medium">
       <div className="space-y-1">
-        <CardTitle>Guardrails Compliance</CardTitle>
+        <CardTitle className="text-xl font-semibold">Guardrails Compliance</CardTitle>
         </div>
       </CardHeader>
       

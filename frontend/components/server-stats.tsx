@@ -54,8 +54,8 @@ export function ServerStats() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <div className="space-y-1">
-            <CardTitle className="text-sm font-medium">Active MCP Servers</CardTitle>
-            <CardDescription>Total servers and status</CardDescription>
+            <CardTitle className="text-xl font-semibold">Active MCP Servers</CardTitle>
+            <CardDescription className="text-base">Total servers and status</CardDescription>
           </div>
           <Server className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
@@ -77,8 +77,8 @@ export function ServerStats() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <div className="space-y-1">
-            <CardTitle className="text-sm font-medium">Active MCP Servers</CardTitle>
-            <CardDescription>Error loading server data</CardDescription>
+            <CardTitle className="text-xl font-semibold">Active MCP Servers</CardTitle>
+            <CardDescription className="text-base">Error loading server data</CardDescription>
           </div>
           <Server className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
@@ -96,7 +96,7 @@ export function ServerStats() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="space-y-1">
-          <CardTitle className="text-sm font-medium">Active MCP Servers</CardTitle>
+          <CardTitle className="text-xl font-semibold">Active MCP Servers</CardTitle>
         </div>
         <Server className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
