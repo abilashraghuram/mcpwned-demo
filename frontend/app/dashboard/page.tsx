@@ -13,7 +13,6 @@ export default function DashboardPage() {
   const [email, setEmail] = useState("")
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
-  const [isEmailFocused, setIsEmailFocused] = useState(false)
 
   const handleWaitlistSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -55,7 +54,7 @@ export default function DashboardPage() {
           </div>
           <form
             onSubmit={handleWaitlistSubmit}
-            className={`${!isEmailFocused ? "bounce-y" : ""} mt-6 md:mt-0 w-full max-w-md bg-black/90 border-2 border-primary rounded-xl p-8 flex flex-col items-center gap-3 shadow-2xl transition-transform duration-200 hover:scale-105 hover:shadow-2xl`}
+            className="mt-6 md:mt-0 w-full max-w-md bg-black/90 border-2 border-primary rounded-xl p-8 flex flex-col items-center gap-3 shadow-2xl transition-transform duration-200 hover:scale-105 hover:shadow-2xl"
           >
             <Label htmlFor="waitlist-email" className="w-full text-center text-lg text-white flex items-center justify-center gap-2 text-green-500">Welcome to Mcpwned — Early access preview. Join our launch waitlist.</Label>
             <Input
@@ -67,8 +66,6 @@ export default function DashboardPage() {
               value={email}
               onChange={e => setEmail(e.target.value)}
               disabled={loading}
-              onFocus={() => setIsEmailFocused(true)}
-              onBlur={() => setIsEmailFocused(false)}
             />
             <Button type="submit" className="w-full mt-2" disabled={loading}>
               {loading ? "Joining..." : "Join Waitlist"}
