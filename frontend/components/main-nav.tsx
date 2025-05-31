@@ -9,7 +9,7 @@ export function MainNav() {
       <div className="flex gap-6 md:gap-10 ml-4">
         <Link href="/" className="flex items-center space-x-2">
           <Image src="/Mlogo.svg" alt="Mcpwned Logo" width={24} height={24} />
-          <span className="hidden sm:inline-block">Mcpwned - Early Access Preview</span>
+          <span className="hidden sm:inline-block text-xl">Mcpwned - Early Access Preview</span>
         </Link>
       </div>
     </div>

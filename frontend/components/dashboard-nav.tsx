@@ -41,7 +41,7 @@ export function DashboardNav({ isCollapsed }: NavProps) {
   ]
 
   return (
-    <div data-collapsed={isCollapsed} className="group flex flex-col gap-4 py-2">
+    <div data-collapsed={isCollapsed} className="group flex flex-col gap-4 py-2 bg-background/80 backdrop-blur border-r border-border shadow-md rounded-xl">
       <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center">
         {items.map((item, index) => {
           const Icon = item.icon
@@ -50,12 +50,12 @@ export function DashboardNav({ isCollapsed }: NavProps) {
               key={index}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors",
                 pathname === item.href ? "bg-accent text-accent-foreground" : "transparent",
               )}
             >
               <Icon className="h-4 w-4" />
-              <span>{item.title}</span>
+              <span className="text-base">{item.title}</span>
             </Link>
           )
         })}
