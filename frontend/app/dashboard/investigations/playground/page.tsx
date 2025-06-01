@@ -111,7 +111,7 @@ export default function PlaygroundPage() {
   return (
     <DashboardShell>
       <DashboardHeader
-        heading="Playground"
+        heading="Scan for control flow, data flow exploits in MCP servers"
         text="You can find the qualified name from the Smithery server page&rsquo;s url: https://smithery.ai/server/&lt;qualifiedName&gt;"
       />
       <div className="flex flex-col md:flex-row gap-0 md:gap-8 mt-4">
