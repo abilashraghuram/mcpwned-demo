@@ -5,6 +5,8 @@
     "strict": true,
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
+    "checkJs": false,
+    "noEmit": false,
     "typeRoots": [
       "./node_modules/@types"
     ],
@@ -15,5 +17,9 @@
     "jsxImportSource": "hono/jsx",
     "outDir": "./dist"
   },
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "scripts": {
+    "baml-generate": "baml-cli generate",
+    "build": "npm run baml-generate && tsc --build"
+  }
 }

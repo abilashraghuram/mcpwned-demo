@@ -3,7 +3,8 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
+    "baml-generate": "baml-cli generate",
+    "build": "npm run baml-generate && tsc --build",
     "start": "node dist/src/index.js",
     "heroku-postbuild": "npm run build"
   },

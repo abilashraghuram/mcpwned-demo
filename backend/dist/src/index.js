@@ -4,7 +4,7 @@ import { createLog, createMcpServer, createTool, getToolByNameAndMcpServerId, li
 import { cors } from 'hono/cors';
 import fs from 'fs/promises';
 import path from 'path';
-import { b } from '../baml_client/index.js';
+import { b } from "../baml_client/index.js";
 import axios from 'axios';
 const app = new Hono();
 app.get('/', (c) => {
@@ -399,7 +399,7 @@ app.patch('/api/report-generation/:id', async (c) => {
 });
 serve({
     fetch: app.fetch,
-    port: Number(process.env.PORT) || 3000
+    port: Number(process.env.PORT) || 3001
 }, (info) => {
     console.log(`Server is running on http://localhost:${info.port}`);
 });
