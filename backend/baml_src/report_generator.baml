@@ -47,7 +47,7 @@ class PlaygroundDiagramMockList {
 
 // Function to generate a mock playground diagram object from raw tools output
 function GeneratePlaygroundDiagramMock(rawToolsInput: PlaygroundToolsInput) -> PlaygroundDiagramMock {
-  client "openai/gpt-4o"
+  client "openai/gpt-4.1-mini"
   prompt #"
     Read each of the tools in the input below. Analyze the control flow and data flow exploits that could occur with a subset of these tools. Specifically, search for tool chain calls that can lead to loop problems. Loops are a common source of bugs and errors in agentic systems. For example, an agent can:
 
