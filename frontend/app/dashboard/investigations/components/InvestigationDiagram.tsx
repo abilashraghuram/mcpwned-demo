@@ -3,6 +3,7 @@ import React, { useCallback, useEffect } from "react";
 import {
   ReactFlow,
   Background,
+  Controls,
   addEdge,
   useNodesState,
   useEdgesState,
@@ -95,7 +96,7 @@ export default function InvestigationDiagram({ investigationKey, nodes: propNode
           fitView
         >
           <Background color="#222222" />
-          {/* <Controls /> */}
+          <Controls />
         </ReactFlow>
       </div>
     </>
