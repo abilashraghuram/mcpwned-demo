@@ -25,6 +25,14 @@ client<llm> CustomGPT41Mini {
     api_key env.OPENAI_API_KEY
   }
 }
+client<llm> CustomGPT41 {
+  provider openai
+  retry_policy Exponential
+  options {
+    model "gpt-4.1"
+    api_key env.OPENAI_API_KEY
+  }
+}
 
 client<llm> CustomSonnet {
   provider anthropic

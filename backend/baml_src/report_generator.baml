@@ -47,7 +47,7 @@ class PlaygroundDiagramMockList {
 
 // Function to generate a mock playground diagram object from raw tools output
 function GeneratePlaygroundDiagramMock(rawToolsInput: PlaygroundToolsInput) -> PlaygroundDiagramMock {
-  client "openai/gpt-4.1-mini"
+  client "openai/gpt-4.1"
   prompt #"
     Read each of the tools in the input below. Analyze the control flow and data flow exploits that could occur with a subset of these tools. Specifically, search for tool chain calls that can lead to loop problems. Loops are a common source of bugs and errors in agentic systems. For example, an agent can:
 
@@ -87,10 +87,13 @@ function GenerateThreePlaygroundDiagramMocks(rawToolsInput: PlaygroundToolsInput
 
     Guardrail suggestions should always be centered around monitoring the chain of execution of tool calls.
 
-    For each scenario, generate React Flow nodes and edges. The nodes and edges of the React Flow diagram must be correctly color coded as green to show safe paths and red to show exploit paths. List affected tools, and propose guardrails to mitigate the exploits, especially those related to loop problems. Return the result as a PlaygroundDiagramMockList containing three PlaygroundDiagramMock objects.
+    For each scenario, generate React Flow nodes and edges. The nodes and edges of the React Flow diagram must be correctly color coded as green to show safe paths and red to show exploit paths. List affected tools, and propose guardrails to mitigate the exploits, especially those related to loop problems. The list of affected tools should exactly match the nodes depicted in the react flow diagram. Return the result as a PlaygroundDiagramMockList containing three PlaygroundDiagramMock objects.
+    
+   {{ ctx.output_format }}
+    
+    {{ _.role('user') }}
+    {{ rawToolsInput }}
 
-    TOOLS INPUT: {{ rawToolsInput }}
-
-    OUTPUT: {{ ctx.output_format }}
+    
   "#
 }
