@@ -5,7 +5,7 @@ import type { Database } from '../types/database.types.js'
 import { cors } from 'hono/cors'
 import fs from 'fs/promises'
 import path from 'path'
-import { b } from "../baml_client/index.js"
+import { b } from "../baml_client"
 import axios from 'axios'
 
 const app = new Hono()
@@ -385,7 +385,6 @@ app.post('/api/mcp-qualified-name', async (c) => {
     console.log('[mcp-qualified-name] Output queryUrl:', queryUrl);
 
     // Make request to Smithery registry
-    const axios = (await import('axios')).default;
     let response;
     try {
       response = await axios.get(queryUrl, {

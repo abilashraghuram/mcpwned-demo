@@ -4,7 +4,7 @@ import { createLog, createMcpServer, createTool, getToolByNameAndMcpServerId, li
 import { cors } from 'hono/cors';
 import fs from 'fs/promises';
 import path from 'path';
-import { b } from "../baml_client/index.js";
+import { b } from "../baml_sdsdlient";
 import axios from 'axios';
 const app = new Hono();
 app.get('/', (c) => {
@@ -350,7 +350,6 @@ app.post('/api/mcp-qualified-name', async (c) => {
         console.log('[mcp-qualified-name] Parsed owner:', owner, 'repo:', repo);
         console.log('[mcp-qualified-name] Output queryUrl:', queryUrl);
         // Make request to Smithery registry
-        const axios = (await import('axios')).default;
         let response;
         try {
             response = await axios.get(queryUrl, {
