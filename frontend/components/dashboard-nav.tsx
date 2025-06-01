@@ -40,7 +40,7 @@ export function DashboardNav({ isCollapsed }: NavProps) {
     },
     {
       title: "Scanner",
-      href: "/dashboard/playground",
+      href: "/dashboard/scanner",
       icon: SlidersHorizontal,
     },
   ]
