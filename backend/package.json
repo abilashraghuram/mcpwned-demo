@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "baml-generate": "baml-cli generate",
-    "build": "tsc",
+    "build": "npm run baml-generate && tsc --build",
     "start": "node dist/src/index.js"
   },
   "dependencies": {
