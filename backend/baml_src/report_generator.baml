@@ -73,7 +73,7 @@ function GeneratePlaygroundDiagramMock(rawToolsInput: PlaygroundToolsInput) -> P
 
 // Function to generate three mock playground diagram objects
 function GenerateThreePlaygroundDiagramMocks(rawToolsInput: PlaygroundToolsInput) -> PlaygroundDiagramMockList {
-  client "openai/gpt-4o"
+  client "openai/gpt-4.1"
   prompt #"
     Read the tools in the input below. Generate three distinct PlaygroundDiagramMock objects, each representing a different scenario of control flow and data flow exploits using subsets of these tools. For each, specifically search for tool chain calls that can lead to loop problems. Loops are a common source of bugs and errors in agentic systems. For example, an agent can:
 
