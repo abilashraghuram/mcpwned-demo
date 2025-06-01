@@ -4,7 +4,7 @@ import { createLog, createMcpServer, createTool, getToolByNameAndMcpServerId, li
 import { cors } from 'hono/cors';
 import fs from 'fs/promises';
 import path from 'path';
-import { b } from "../baml_client/index.js";
+import { b } from "../baml_client";
 import axios from 'axios';
 const app = new Hono();
 app.get('/', (c) => {

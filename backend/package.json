@@ -4,9 +4,9 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "baml-generate": "baml-cli generate",
-    "build": "tsc",
-    "start": "node dist/src/index.js",
-    "heroku-postbuild": "cp -r baml_client dist/baml_client"
+    "copy-baml-client": "cp -r baml_client dist/baml_client",
+    "build": "tsc && npm run copy-baml-client",
+    "start": "node dist/src/index.js"
   },
   "dependencies": {
     "@boundaryml/baml": "^0.89.0",
