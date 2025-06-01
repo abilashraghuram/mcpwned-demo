@@ -10,9 +10,7 @@ import GuardrailsList from "@/components/GuardrailsList";
 import { Clock } from "lucide-react";
 import { DiagramCache, PlaygroundDiagram } from "@/utils/cache";
 import * as EmailValidator from "email-validator";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+
 
 const MOCK_MCP_SERVERS = [
   { id: "mock1", name: "Mock MCP Server 1" },
@@ -35,9 +33,8 @@ export default function PlaygroundPage() {
   const [search, setSearch] = useState("");
 
   // Waitlist state
-  const [waitlistEmail, setWaitlistEmail] = useState("");
-  const [waitlistLoading, setWaitlistLoading] = useState(false);
-  const [waitlistMessage, setWaitlistMessage] = useState("");
+  // const [waitlistEmail, setWaitlistEmail] = useState("");
+
 
   // Restore from cache on mount
   useEffect(() => {
@@ -131,21 +128,21 @@ export default function PlaygroundPage() {
 
   const selectedDiagram = filteredDiagrams[selectedDiagramIdx]?.diagram || null;
 
-  const handleWaitlistSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!EmailValidator.validate(waitlistEmail.trim())) {
-      setWaitlistMessage("Please enter a valid email address.");
-      return;
-    }
-    setWaitlistLoading(true);
-    setWaitlistMessage("");
-    setTimeout(() => {
-      setWaitlistLoading(false);
-      setWaitlistMessage("Thank you! You are on the waitlist.");
-      setWaitlistEmail("");
-    }, 1200);
-    // Here you could add API call to actually submit the email
-  };
+  // const handleWaitlistSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (!EmailValidator.validate(waitlistEmail.trim())) {
+  //     setWaitlistMessage("Please enter a valid email address.");
+  //     return;
+  //   }
+  //   setWaitlistLoading(true);
+  //   setWaitlistMessage("");
+  //   setTimeout(() => {
+  //     setWaitlistLoading(false);
+  //     setWaitlistMessage("Thank you! You are on the waitlist.");
+  //     setWaitlistEmail("");
+  //   }, 1200);
+  //   // Here you could add API call to actually submit the email
+  // };
 
   return (
     <DashboardShell>
