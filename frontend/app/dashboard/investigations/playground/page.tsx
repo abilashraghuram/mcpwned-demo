@@ -7,6 +7,7 @@ import type { Node as XYNode, Edge as XYEdge } from "@xyflow/react";
 import MCPServerSelector from "@/components/MCPServerSelector";
 import MCPToolsList from "@/components/MCPToolsList";
 import GuardrailsList from "@/components/GuardrailsList";
+import { Clock } from "lucide-react";
 
 const MOCK_MCP_SERVERS = [
   { id: "mock1", name: "Mock MCP Server 1" },
@@ -169,7 +170,12 @@ export default function PlaygroundPage() {
               mcpServerError={mcpServerError}
             />
           </div>
-          {loading && <div className="my-8">Loading...</div>}
+          {loading && (
+            <div className="flex items-center justify-center my-8">
+              <Clock className="mr-4 h-12 w-12 animate-spin text-primary" />
+              <p className="text-2xl text-primary">Generating report...</p>
+            </div>
+          )}
           {error && <div className="my-8 text-red-500">{error}</div>}
           {selectedDiagram && (
             <>
