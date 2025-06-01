@@ -4,20 +4,19 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "baml-generate": "baml-cli generate",
-    "copy-baml-client": "cp -r baml_client dist/baml_client",
-    "build": "tsc && npm run copy-baml-client",
+    "build": "tsc",
     "start": "node dist/src/index.js"
   },
   "dependencies": {
     "@boundaryml/baml": "^0.89.0",
     "@hono/node-server": "^1.14.1",
     "@supabase/supabase-js": "^2.49.4",
+    "@types/axios": "0.14.4",
     "@types/node": "^20.17.47",
+    "axios": "^1.6.8",
     "dotenv": "^16.5.0",
     "hono": "^4.7.10",
-    "uuid": "^11.1.0",
-    "axios": "^1.6.8",
-    "@types/axios": "0.14.4"
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.7.10",
@@ -25,6 +24,6 @@
     "typescript": "^5.8.3"
   },
   "engines": {
-    "node": "20.x"
+    "node": ">=18.x <21.0.0"
   }
 }
