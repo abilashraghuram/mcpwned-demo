@@ -1,7 +1,7 @@
 "use client";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { DashboardHeader } from "@/components/dashboard-header";
-import InvestigationDiagram from "../components/InvestigationDiagram";
+import InvestigationDiagram from "../investigations/components/InvestigationDiagram";
 import { useState } from "react";
 import type { Node as XYNode, Edge as XYEdge } from "@xyflow/react";
 import MCPServerSelector from "@/components/MCPServerSelector";
@@ -77,7 +77,7 @@ export default function PlaygroundPage() {
       });
       const diagramData = await diagramRes.json();
       if (diagramRes.status !== 200 || diagramData.error) {
-        setError("Failed to generate diagram");
+        setError("Error encountered, please try again");
         setLoading(false);
         return;
       }
@@ -85,7 +85,7 @@ export default function PlaygroundPage() {
       setSelectedDiagramIdx(0);
       setLoading(false);
     } catch {
-      setError("Failed to fetch diagram");
+      setError("Error encountered, please try again");
       setLoading(false);
     }
   };
