@@ -6,13 +6,14 @@ import {
   addEdge,
   useNodesState,
   useEdgesState,
-  type Edge,
+  type Edge as XYEdge,
   type EdgeTypes,
   type NodeTypes,
   type OnConnect,
   Handle,
   Position,
   type NodeProps,
+  type Node as XYNode,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { investigations, type InvestigationDiagramConfig } from "../config/InvestigationDiagramConfig";
@@ -45,22 +46,29 @@ const nodeTypes: NodeTypes = {
 const edgeTypes: EdgeTypes = {};
 
 type InvestigationDiagramProps = {
-  investigationKey: string;
+  investigationKey?: string;
+  nodes?: XYNode[];
+  edges?: XYEdge[];
 };
 
-export default function InvestigationDiagram({ investigationKey }: InvestigationDiagramProps) {
-  const config: InvestigationDiagramConfig = investigations[investigationKey] || investigations["default"];
-  const [nodes, setNodes, onNodesChange] = useNodesState(config.nodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(config.edges);
+export default function InvestigationDiagram({ investigationKey, nodes: propNodes, edges: propEdges }: InvestigationDiagramProps) {
+  let config: InvestigationDiagramConfig | undefined = undefined;
+  if (investigationKey && !propNodes && !propEdges) {
+    config = investigations[investigationKey] || investigations["default"];
+  }
+  const [nodes, setNodes, onNodesChange] = useNodesState(propNodes ?? config?.nodes ?? []);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(propEdges ?? config?.edges ?? []);
   const onConnect: OnConnect = useCallback(
-    (connection) => setEdges((eds: Edge[]) => addEdge(connection, eds)),
+    (connection) => setEdges((eds: XYEdge[]) => addEdge(connection, eds)),
     [setEdges]
   );
 
   useEffect(() => {
-    setNodes(config.nodes);
-    setEdges(config.edges);
-  }, [investigationKey, setNodes, setEdges, config.nodes, config.edges]);
+    if (propNodes) setNodes(propNodes);
+    else if (config) setNodes(config.nodes);
+    if (propEdges) setEdges(propEdges);
+    else if (config) setEdges(config.edges);
+  }, [investigationKey, propNodes, propEdges, setNodes, setEdges, config?.nodes, config?.edges]);
 
   return (
     <>

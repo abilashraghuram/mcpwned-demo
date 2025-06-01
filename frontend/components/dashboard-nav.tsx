@@ -38,6 +38,11 @@ export function DashboardNav({ isCollapsed }: NavProps) {
       href: "/dashboard/about",
       icon: Info,
     },
+    {
+      title: "Playground",
+      href: "/dashboard/investigations/playground",
+      icon: SlidersHorizontal,
+    },
   ]
 
   return (

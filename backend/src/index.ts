@@ -1,10 +1,12 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
-import { createLog, createMcpServer, createTool, getToolByNameAndMcpServerId, listMcpServers, getMcpServer, getLog, listLogsByMcpServer, listAllTools, getMcpServerTools, listAllLogs, clearLogs, createWaitlistEmail } from './db.js'
+import { createLog, createMcpServer, createTool, getToolByNameAndMcpServerId, listMcpServers, getMcpServer, getLog, listLogsByMcpServer, listAllTools, getMcpServerTools, listAllLogs, clearLogs, createWaitlistEmail, getMcpServerByName, createReportGeneration, getReportGeneration, listReportGenerations, updateReportGeneration, createReportGenerator } from './db.js'
 import type { Database } from '../types/database.types.js'
 import { cors } from 'hono/cors'
 import fs from 'fs/promises'
 import path from 'path'
+import { b } from '../baml_client'
+import axios from 'axios'
 
 const app = new Hono()
 
@@ -292,6 +294,144 @@ app.post('/api/waitlist_add', async (c) => {
     return c.json({ error: 'Invalid email' }, 400);
   }
   const result = await createWaitlistEmail({ email });
+  return c.json(result);
+});
+
+app.post('/api/mcp-tools', async (c) => {
+  // Get MCP server name from frontend
+  const body = await c.req.json();
+  const mcpServerName = body.name || 'exa'; // fallback to 'exa' if not provided
+  console.log('[mcp-tools] Input body:', body);
+  console.log('[mcp-tools] Using mcpServerName:', mcpServerName);
+  let tools = [];
+  try {
+    const response = await axios.get(`https://registry.smithery.ai/servers/${encodeURIComponent(mcpServerName)}`, {
+      headers: {
+        'Authorization': 'Bearer a818dfa8-1b79-4497-9787-4573028c208c',
+        'Accept': 'application/json',
+      },
+    });
+    // Map to array of tool names (strings)
+    tools = (response.data.tools || []).map((tool: any) => typeof tool === 'string' ? tool : tool.name);
+    console.log('[mcp-tools] Output tools:', tools);
+    return c.json({ tools });
+  } catch (err: any) {
+    console.error('Error fetching tools from smithery.ai:', err);
+    console.log('[mcp-tools] Output error:', err?.message || String(err));
+    return c.json({ error: 'Failed to fetch tools from smithery registry', details: err?.message || String(err) }, 500);
+  }
+});
+
+app.post('/api/playground-diagram', async (c) => {
+  // Now expects a list of tools, email, and mcp_qualified_name from the frontend
+  const body = await c.req.json();
+  const tools = Array.isArray(body.tools) ? body.tools : [];
+  const email = typeof body.email === 'string' ? body.email.trim() : '';
+  const mcpQualifiedName = typeof body.mcp_qualified_name === 'string' ? body.mcp_qualified_name.trim() : '';
+  if (!tools.length) {
+    return c.json({ error: 'No tools provided' }, 400);
+  }
+  if (!email || !mcpQualifiedName) {
+    return c.json({ error: 'Missing email or mcp_qualified_name' }, 400);
+  }
+  const playgroundToolsInput = { tools };
+  let mockList;
+  try {
+    mockList = await b.GenerateThreePlaygroundDiagramMocks(playgroundToolsInput);
+  } catch (err) {
+    console.error('Error generating playground diagram mock list:', err);
+    return c.json({ error: 'Failed to generate playground diagram mock list', details: err }, 500);
+  }
+  // Save the diagrams to report_generator
+  let dbResult;
+  try {
+    dbResult = await createReportGenerator({
+      email,
+      report_json: mockList.diagrams,
+      mcp_qualified_name: mcpQualifiedName
+    });
+  } catch (err) {
+    console.error('Error saving playground diagram to report_generator:', err);
+    dbResult = { error: 'Failed to save to report_generator', details: err };
+  }
+  // Return the list of diagrams and DB result
+  return c.json({ diagrams: mockList.diagrams, dbResult });
+});
+
+app.post('/api/mcp-qualified-name', async (c) => {
+  const body = await c.req.json();
+  let githubUrl = body.githubUrl;
+  if (!githubUrl || typeof githubUrl !== 'string') {
+    return c.json({ error: 'Missing or invalid githubUrl' }, 400);
+  }
+
+  // Remove leading '@' if present
+  if (githubUrl.startsWith('@')) {
+    githubUrl = githubUrl.slice(1);
+  }
+
+  // Parse owner and repo from the URL
+  try {
+    console.log('[mcp-qualified-name] Input githubUrl:', githubUrl);
+    const match = githubUrl.match(/github\.com\/([^\/]+)\/([^\/?#]+)/);
+    if (!match) {
+      return c.json({ error: 'Invalid GitHub URL format' }, 400);
+    }
+    const owner = match[1];
+    const repo = match[2];
+    const query = `repo:${repo}+owner:${owner}`;
+    const queryUrl = `https://registry.smithery.ai/servers?q=${query}`;
+    console.log('[mcp-qualified-name] Parsed owner:', owner, 'repo:', repo);
+    console.log('[mcp-qualified-name] Output queryUrl:', queryUrl);
+
+    // Make request to Smithery registry
+    const axios = (await import('axios')).default;
+    let response;
+    try {
+      response = await axios.get(queryUrl, {
+        headers: {
+          'Authorization': 'Bearer a818dfa8-1b79-4497-9787-4573028c208c',
+          'Accept': 'application/json',
+        },
+      });
+    } catch (err: any) {
+      console.error('[mcp-qualified-name] Error fetching from Smithery:', err);
+      return c.json({ error: 'Failed to fetch from Smithery registry', details: err?.message || String(err) }, 500);
+    }
+    const servers = response.data.servers || [];
+    if (!servers.length) {
+      return c.json({ error: 'No qualified server found for this repo' }, 404);
+    }
+    const qualifiedName = servers[0].qualifiedName;
+    console.log('[mcp-qualified-name] Output qualifiedName:', qualifiedName);
+    return c.json({ qualifiedName });
+  } catch (err: any) {
+    return c.json({ error: 'Failed to parse GitHub URL', details: err?.message || String(err) }, 500);
+  }
+});
+
+// Report Generation Endpoints
+app.post('/api/report-generation', async (c) => {
+  const body = await c.req.json();
+  const result = await createReportGeneration(body);
+  return c.json(result);
+});
+
+app.get('/api/report-generation/:id', async (c) => {
+  const id = c.req.param('id');
+  const result = await getReportGeneration(id);
+  return c.json(result);
+});
+
+app.get('/api/report-generation/list', async (c) => {
+  const result = await listReportGenerations();
+  return c.json(result);
+});
+
+app.patch('/api/report-generation/:id', async (c) => {
+  const id = c.req.param('id');
+  const body = await c.req.json();
+  const result = await updateReportGeneration(id, body);
   return c.json(result);
 });
 

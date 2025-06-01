@@ -1,14 +1,21 @@
 import { useState, useMemo } from "react";
-import { investigations } from "../config/InvestigationDiagramConfig";
+import { investigations as defaultInvestigations } from "../config/InvestigationDiagramConfig";
 
-function SidebarInvestigationList({ selected, setSelected }: { selected: string; setSelected: (key: string) => void }) {
+type SidebarInvestigationListProps = {
+  selected: string;
+  setSelected: (key: string) => void;
+  investigations?: Record<string, { label: string }>;
+};
+
+function SidebarInvestigationList({ selected, setSelected, investigations }: SidebarInvestigationListProps) {
   const [search, setSearch] = useState("");
+  const source = investigations || defaultInvestigations;
   const filtered = useMemo(() => {
-    if (!search.trim()) return Object.entries(investigations);
-    return Object.entries(investigations).filter(([, config]) =>
+    if (!search.trim()) return Object.entries(source);
+    return Object.entries(source).filter(([, config]) =>
       config.label.toLowerCase().includes(search.toLowerCase())
     );
-  }, [search]);
+  }, [search, source]);
   return (
     <aside className="w-full md:w-56 border-r bg-background flex flex-col h-full min-h-[500px] max-h-[700px] md:max-h-[calc(100vh-120px)]">
       <div className="p-4 border-b">

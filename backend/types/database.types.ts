@@ -124,7 +124,63 @@ export type Database = {
           email?: string
         }
         Relationships: []
-      }
+      },
+      report_generation: {
+        Row: {
+          id: string
+          mcp_server_id: string
+          report_data: Json
+          created_at: string
+          status: string
+        }
+        Insert: {
+          id: string
+          mcp_server_id: string
+          report_data: Json
+          created_at?: string
+          status: string
+        }
+        Update: {
+          id?: string
+          mcp_server_id?: string
+          report_data?: Json
+          created_at?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "report_generation_mcp_server_id_fkey",
+            columns: ["mcp_server_id"],
+            isOneToOne: false,
+            referencedRelation: "mcp_servers",
+            referencedColumns: ["id"]
+          }
+        ]
+      },
+      report_generator: {
+        Row: {
+          id: number
+          created_at: string
+          email: string
+          report_json: Json
+          mcp_qualified_name: string
+        }
+        Insert: {
+          id?: number
+          created_at?: string
+          email: string
+          report_json: Json
+          mcp_qualified_name: string
+        }
+        Update: {
+          id?: number
+          created_at?: string
+          email?: string
+          report_json?: Json
+          mcp_qualified_name?: string
+        }
+        Relationships: []
+      },
     }
     Views: {
       [_ in never]: never
