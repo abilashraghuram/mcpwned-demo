@@ -10,6 +10,9 @@ import GuardrailsList from "@/components/GuardrailsList";
 import { Clock } from "lucide-react";
 import { DiagramCache, PlaygroundDiagram } from "@/utils/cache";
 import * as EmailValidator from "email-validator";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
 const MOCK_MCP_SERVERS = [
   { id: "mock1", name: "Mock MCP Server 1" },
@@ -30,6 +33,11 @@ export default function PlaygroundPage() {
 
   // Sidebar search state
   const [search, setSearch] = useState("");
+
+  // Waitlist state
+  const [waitlistEmail, setWaitlistEmail] = useState("");
+  const [waitlistLoading, setWaitlistLoading] = useState(false);
+  const [waitlistMessage, setWaitlistMessage] = useState("");
 
   // Restore from cache on mount
   useEffect(() => {
@@ -123,8 +131,49 @@ export default function PlaygroundPage() {
 
   const selectedDiagram = filteredDiagrams[selectedDiagramIdx]?.diagram || null;
 
+  const handleWaitlistSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!EmailValidator.validate(waitlistEmail.trim())) {
+      setWaitlistMessage("Please enter a valid email address.");
+      return;
+    }
+    setWaitlistLoading(true);
+    setWaitlistMessage("");
+    setTimeout(() => {
+      setWaitlistLoading(false);
+      setWaitlistMessage("Thank you! You are on the waitlist.");
+      setWaitlistEmail("");
+    }, 1200);
+    // Here you could add API call to actually submit the email
+  };
+
   return (
     <DashboardShell>
+      {/* Waitlist box fixed top right */}
+      {/* <div style={{ position: "fixed", top: 32, right: 32, zIndex: 100, maxWidth: '16rem' }}>
+        <form
+          onSubmit={handleWaitlistSubmit}
+          className="bg-black border border-white rounded-lg shadow-lg p-4 w-64 flex flex-col items-center gap-2"
+        >
+          <Label htmlFor="waitlist-email" className="w-full text-center text-sm text-white flex items-center justify-center gap-2">
+            Welcome to Mcpwned — Early access preview. Join our official launch waitlist.
+          </Label>
+          <Input
+            id="waitlist-email"
+            type="email"
+            placeholder="Enter email"
+            className="w-full text-white placeholder-white bg-black border border-white"
+            required
+            value={waitlistEmail}
+            onChange={e => setWaitlistEmail(e.target.value)}
+            disabled={waitlistLoading}
+          />
+          <Button type="submit" className="w-full mt-2" disabled={waitlistLoading}>
+            {waitlistLoading ? "Joining..." : "Join Waitlist"}
+          </Button>
+          {waitlistMessage && <div className="w-full text-center text-sm mt-2 text-white">{waitlistMessage}</div>}
+        </form>
+      </div> */}
       <DashboardHeader
         heading="Scan for control flow, data flow exploits in MCP servers"
         text="You can find the qualified name from the Smithery server page&rsquo;s url: https://smithery.ai/server/&lt;qualifiedName&gt;"
