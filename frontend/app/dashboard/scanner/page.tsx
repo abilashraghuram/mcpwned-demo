@@ -9,6 +9,7 @@ import MCPToolsList from "@/components/MCPToolsList";
 import GuardrailsList from "@/components/GuardrailsList";
 import { Clock } from "lucide-react";
 import { DiagramCache, PlaygroundDiagram } from "@/utils/cache";
+import * as EmailValidator from "email-validator";
 
 const MOCK_MCP_SERVERS = [
   { id: "mock1", name: "Mock MCP Server 1" },
@@ -49,7 +50,7 @@ export default function PlaygroundPage() {
 
   // New handler for Generate button
   const handleGenerate = async () => {
-    if (!email.trim()) {
+    if (!email.trim() || !EmailValidator.validate(email.trim())) {
       setEmailError(true);
       return;
     }
@@ -187,7 +188,7 @@ export default function PlaygroundPage() {
           {loading && (
             <div className="flex items-center justify-center my-8">
               <Clock className="mr-4 h-12 w-12 animate-spin text-primary" />
-              <p className="text-2xl text-primary">Generating report...</p>
+              <p className="text-2xl text-primary">Scanning for control flow, data flow exploit paths...</p>
             </div>
           )}
           {error && <div className="my-8 text-red-500">{error}</div>}
