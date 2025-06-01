@@ -2,25 +2,19 @@
 import { DashboardShell } from "@/components/dashboard-shell";
 import { DashboardHeader } from "@/components/dashboard-header";
 import InvestigationDiagram from "../investigations/components/InvestigationDiagram";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { Node as XYNode, Edge as XYEdge } from "@xyflow/react";
 import MCPServerSelector from "@/components/MCPServerSelector";
 import MCPToolsList from "@/components/MCPToolsList";
 import GuardrailsList from "@/components/GuardrailsList";
 import { Clock } from "lucide-react";
+import { DiagramCache, PlaygroundDiagram } from "@/utils/cache";
 
 const MOCK_MCP_SERVERS = [
   { id: "mock1", name: "Mock MCP Server 1" },
   { id: "mock2", name: "Mock MCP Server 2" },
   { id: "mock3", name: "Mock MCP Server 3" },
 ];
-
-type PlaygroundDiagram = {
-  nodes: XYNode[];
-  edges: XYEdge[];
-  guardrails: string[];
-  mcpTools: string[];
-};
 
 export default function PlaygroundPage() {
   const [selectedMcp, setSelectedMcp] = useState(MOCK_MCP_SERVERS[0].name);
@@ -35,6 +29,23 @@ export default function PlaygroundPage() {
 
   // Sidebar search state
   const [search, setSearch] = useState("");
+
+  // Restore from cache on mount
+  useEffect(() => {
+    const cached = DiagramCache.load();
+    if (cached && Array.isArray(cached.diagrams) && cached.diagrams.length > 0) {
+      // Cast nodes and edges to XYNode and XYEdge for type compatibility
+      const diagramsTyped = cached.diagrams.map(d => ({
+        ...d,
+        nodes: d.nodes as XYNode[],
+        edges: d.edges as XYEdge[],
+      }));
+      setDiagrams(diagramsTyped);
+      setEmail(cached.email || "");
+      setCustomMcp(cached.mcpQualifiedName || "");
+      setSelectedDiagramIdx(0);
+    }
+  }, []);
 
   // New handler for Generate button
   const handleGenerate = async () => {
@@ -81,9 +92,12 @@ export default function PlaygroundPage() {
         setLoading(false);
         return;
       }
-      setDiagrams(Array.isArray(diagramData.diagrams) ? diagramData.diagrams : []);
+      const diagramsArr = Array.isArray(diagramData.diagrams) ? diagramData.diagrams : [];
+      setDiagrams(diagramsArr);
       setSelectedDiagramIdx(0);
       setLoading(false);
+      // Save to cache
+      DiagramCache.save(diagramsArr, email.trim(), qualifiedName);
     } catch {
       setError("Error encountered, please try again");
       setLoading(false);
