@@ -5,7 +5,7 @@ import type { Database } from '../types/database.types.js'
 import { cors } from 'hono/cors'
 import fs from 'fs/promises'
 import path from 'path'
-import { b } from '../baml_client'
+import { b } from '../baml_client/index.js'
 import axios from 'axios'
 
 const app = new Hono()

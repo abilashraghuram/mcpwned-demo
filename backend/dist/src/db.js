@@ -2,8 +2,8 @@ import { createClient } from "@supabase/supabase-js";
 import { v4 as uuid } from "uuid";
 import dotenv from "dotenv";
 dotenv.config();
-const SUPABASE_URL = "https://uyyzitmoozgywikrbbtg.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5eXppdG1vb3pneXdpa3JiYnRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc1OTA1MTcsImV4cCI6MjA2MzE2NjUxN30.Oy8bzQAsi0ySvM_ckg9lllsE-VZ3E---op3uNH5_Jw0";
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const supabaseClient = () => {
     if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
         throw new Error("Missing environment variables");
@@ -127,4 +127,64 @@ export const clearLogs = async () => {
         return { error };
     }
     return { success: true };
+};
+export const createWaitlistEmail = async (waitlist) => {
+    const { data, error } = await supabaseClient().from("waitlist_emails").insert({ ...waitlist });
+    if (error) {
+        console.log(error);
+        return { error };
+    }
+    return { data };
+};
+export const getMcpServerByName = async (name) => {
+    const { data, error } = await supabaseClient().from("mcp_servers").select().eq("name", name).single();
+    if (error) {
+        console.log(error);
+        return { error };
+    }
+    return { data };
+};
+// Report Generation functions
+export const createReportGeneration = async (report) => {
+    const { data, error } = await supabaseClient().from("report_generation").insert({ ...report });
+    if (error) {
+        console.log(error);
+        return { error };
+    }
+    return { data };
+};
+export const getReportGeneration = async (id) => {
+    const { data, error } = await supabaseClient().from("report_generation").select().eq("id", id).single();
+    if (error) {
+        console.log(error);
+        return { error };
+    }
+    return { data };
+};
+export const listReportGenerations = async () => {
+    const { data, error } = await supabaseClient().from("report_generation").select();
+    if (error) {
+        console.log(error);
+        return { error };
+    }
+    return { data };
+};
+export const updateReportGeneration = async (id, report) => {
+    const { data, error } = await supabaseClient().from("report_generation").update({ ...report }).eq("id", id);
+    if (error) {
+        console.log(error);
+        return { error };
+    }
+    return { data };
+};
+// Report Generator functions
+export const createReportGenerator = async (entry) => {
+    // Direct insert since this table is not in the Database type
+    const client = supabaseClient();
+    const { data, error } = await client.from('report_generator').insert([{ ...entry }]);
+    if (error) {
+        console.log(error);
+        return { error };
+    }
+    return { data };
 };
