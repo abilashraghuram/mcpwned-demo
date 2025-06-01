@@ -6,7 +6,7 @@
     "baml-generate": "baml-cli generate",
     "build": "tsc",
     "start": "node dist/src/index.js",
-    "heroku-postbuild": "cp -r backend/baml_client backend/dist/baml_client"
+    "heroku-postbuild": "cp -r baml_client dist/baml_client"
   },
   "dependencies": {
     "@boundaryml/baml": "^0.89.0",
