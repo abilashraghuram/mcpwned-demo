@@ -50,7 +50,7 @@ export default function PlaygroundPage() {
       setEmail(cached.email || "");
       setCustomMcp(cached.mcpQualifiedName || "");
       setSelectedDiagramIdx(0);
-      setSearch(diagramsTyped[0]?.scan_description || ""); // Set search bar to first scan_description
+      // setSearch(diagramsTyped[0]?.scan_description || ""); // Removed: Do not auto-populate search bar
     }
   }, []);
 
@@ -106,7 +106,7 @@ export default function PlaygroundPage() {
       // Save to cache
       DiagramCache.save(diagramsArr, email.trim(), qualifiedName);
       DiagramCache.saveByScanDescription(diagramsArr); // Save each by scan_description
-      setSearch(diagramsArr[0]?.scan_description || ""); // Set search bar to first scan_description
+      // setSearch(diagramsArr[0]?.scan_description || ""); // Removed: Do not auto-populate search bar
     } catch {
       setError("Error encountered, please try again");
       setLoading(false);
