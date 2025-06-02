@@ -103,7 +103,7 @@ function GenerateThreePlaygroundDiagramMocks(rawToolsInput: PlaygroundToolsInput
 function GenerateSixPlaygroundDiagramMocks(rawToolsInput: PlaygroundToolsInput) -> PlaygroundDiagramMockList {
   client "openai/gpt-4.1"
   prompt #"
-  Create one scenario for each theme below (exactly six in total).
+  Create three scenarios for each theme below (exactly 18 in total).
   Describe them in your diagrams and also include the numbered list below verbatim in your prompt output so the downstream AI clearly understands what to look for:
     1.	Control Flow Hijack 
     A control flow hijack happens when malicious input actually alters the sequence of steps the agent executes, causing it to perform extra or unintended actions. For instance, an attacker could insert a prompt that causes the agent to first delete all files in a directory before carrying out its intended task, effectively hijacking the program’s execution path.
