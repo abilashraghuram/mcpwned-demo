@@ -1,7 +1,7 @@
 "use client";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { DashboardHeader } from "@/components/dashboard-header";
-import InvestigationDiagram from "../investigations/components/InvestigationDiagram";
+import InvestigationDiagramScan from "./components/InvestigationDiagramScan";
 import { useState, useEffect } from "react";
 import type { Node as XYNode, Edge as XYEdge } from "@xyflow/react";
 import MCPServerSelector from "@/components/MCPServerSelector";
@@ -247,7 +247,7 @@ export default function PlaygroundPage() {
           {error && <div className="my-8 text-red-500">{error}</div>}
           {selectedDiagram && (
             <>
-              <InvestigationDiagram nodes={selectedDiagram.nodes} edges={selectedDiagram.edges} />
+              <InvestigationDiagramScan nodes={selectedDiagram.nodes} edges={selectedDiagram.edges} />
               <div className="mt-8 flex flex-col md:flex-row gap-6 md:gap-0 md:space-x-6 items-stretch">
                 <MCPToolsList tools={selectedDiagram.mcpTools} />
                 <GuardrailsList guardrails={selectedDiagram.guardrails} />
