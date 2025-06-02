@@ -120,6 +120,10 @@ function GenerateSixPlaygroundDiagramMocks(rawToolsInput: PlaygroundToolsInput) 
 
   What Each PlaygroundDiagramMock Must Contain:
   Correct react_flow_nodes and react_flow_edges where you make hijack visually obvious. Color all edges/nodes green for safe paths and red for exploit paths.
+  The color of the node should be a string hex code like #F87171
+  The stroke of the edge shoulkd be a string hex code like #22c55e
+  The strokeWidth of the edge should be an int like 2
+ 
   Intuitive playground_positions that visually emphasize the loop or the data‑leak path (e.g., circular layout for loops, forked graph for exfiltration)
   Exact and precise list of affected_tools that are depicted in the graph, in the order they appear.
   Exact and precise guardrail_suggestions that have Concrete, actionable mitigations that focus on monitoring the chain of execution, plus input/output validation, rate‑limiting, and role‑based authorization as relevant to the theme.
