@@ -33,7 +33,7 @@ const MCPServerSelector: React.FC<MCPServerSelectorProps> = ({
         <input
           type="text"
           className="rounded-md border px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-primary bg-background w-full"
-          placeholder="exa"
+          placeholder="eg. @smithery/notion"
           value={custom}
           onChange={e => onCustomChange(e.target.value)}
         />
