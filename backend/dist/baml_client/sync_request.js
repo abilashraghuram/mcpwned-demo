@@ -35,6 +35,16 @@ export class HttpRequest {
             throw toBamlError(error);
         }
     }
+    GenerateSixPlaygroundDiagramMocks(rawToolsInput, __baml_options__) {
+        try {
+            return this.runtime.buildRequestSync("GenerateSixPlaygroundDiagramMocks", {
+                "rawToolsInput": rawToolsInput
+            }, this.ctxManager.cloneContext(), __baml_options__?.tb?.__tb(), __baml_options__?.clientRegistry, false);
+        }
+        catch (error) {
+            throw toBamlError(error);
+        }
+    }
     GenerateThreePlaygroundDiagramMocks(rawToolsInput, __baml_options__) {
         try {
             return this.runtime.buildRequestSync("GenerateThreePlaygroundDiagramMocks", {
@@ -66,6 +76,16 @@ export class HttpStreamRequest {
     GeneratePlaygroundDiagramMock(rawToolsInput, __baml_options__) {
         try {
             return this.runtime.buildRequestSync("GeneratePlaygroundDiagramMock", {
+                "rawToolsInput": rawToolsInput
+            }, this.ctxManager.cloneContext(), __baml_options__?.tb?.__tb(), __baml_options__?.clientRegistry, true);
+        }
+        catch (error) {
+            throw toBamlError(error);
+        }
+    }
+    GenerateSixPlaygroundDiagramMocks(rawToolsInput, __baml_options__) {
+        try {
+            return this.runtime.buildRequestSync("GenerateSixPlaygroundDiagramMocks", {
                 "rawToolsInput": rawToolsInput
             }, this.ctxManager.cloneContext(), __baml_options__?.tb?.__tb(), __baml_options__?.clientRegistry, true);
         }

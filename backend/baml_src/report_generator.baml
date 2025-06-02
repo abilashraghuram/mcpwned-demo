@@ -96,3 +96,43 @@ function GenerateThreePlaygroundDiagramMocks(rawToolsInput: PlaygroundToolsInput
     {{ rawToolsInput }}
   "#
 }
+
+
+
+// Function to generate three mock playground diagram objects
+function GenerateSixPlaygroundDiagramMocks(rawToolsInput: PlaygroundToolsInput) -> PlaygroundDiagramMockList {
+  client "openai/gpt-4.1"
+  prompt #"
+  Create one scenario for each theme below (exactly six in total).
+  Describe them in your diagrams and also include the numbered list below verbatim in your prompt output so the downstream AI clearly understands what to look for:
+    1.	Infinite‑Loop Resource Exhaustion
+  Agent repeatedly calls tools in a cycle, consuming CPU / memory until crash.
+    2.	Irreversible‑Action Loop
+  Loop triggers a non‑idempotent tool (e.g., send_email, make_payment) many times.
+    3.	Token‑Drain Loop
+  Loop issues expensive LLM/tool calls, quickly burning through token limits or money.
+    4.	Sensitive‑Data Exfiltration
+  Data from an internal source is routed—intentionally or accidentally—to an external sink (e.g., http_post, send_email).
+    5.	Prompt‑Injection Hijack
+  External service injects malicious content that tricks the agent into executing unintended tool calls.
+    6.	Privilege‑Escalation / Destructive‑Action
+  Agent chain ends in a dangerous tool (delete_file, bash rm -rf, wire_funds) without verifying authorization.
+
+  What Each PlaygroundDiagramMock Must Contain:
+  Correct react_flow_nodes and react_flow_edges where you make hijack visually obvious. Color all edges/nodes green for safe paths and red for exploit paths.
+  Intuitive playground_positions that visually emphasize the loop or the data‑leak path (e.g., circular layout for loops, forked graph for exfiltration)
+  Exact and precise list of affected_tools that are depicted in the graph, in the order they appear.
+  Exact and precise guardrail_suggestions that have Concrete, actionable mitigations that focus on monitoring the chain of execution, plus input/output validation, rate‑limiting, and role‑based authorization as relevant to the theme.
+  Exact and precise scan_description that is a always a Five‑word summary of the exploit (e.g., "Infinite LLM call token drain").
+
+  General Instructions
+	•	Search the tool list for combinations that naturally demonstrate each exploit theme.
+	•	Always form at least one cycle to highlight loop problems.
+	•	Keep descriptions concise but precise.
+
+   {{ ctx.output_format }}
+    
+    {{ _.role('user') }}
+    {{ rawToolsInput }}
+  "#
+}

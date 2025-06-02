@@ -131,6 +131,29 @@ export class BamlSyncClient {
     }
   }
   
+  GenerateSixPlaygroundDiagramMocks(
+      rawToolsInput: PlaygroundToolsInput,
+      __baml_options__?: BamlCallOptions
+  ): PlaygroundDiagramMockList {
+    try {
+      const options = { ...this.bamlOptions, ...(__baml_options__ || {}) }
+      const collector = options.collector ? (Array.isArray(options.collector) ? options.collector : [options.collector]) : [];
+      const raw = this.runtime.callFunctionSync(
+        "GenerateSixPlaygroundDiagramMocks",
+        {
+          "rawToolsInput": rawToolsInput
+        },
+        this.ctxManager.cloneContext(),
+        options.tb?.__tb(),
+        options.clientRegistry,
+        collector,
+      )
+      return raw.parsed(false) as PlaygroundDiagramMockList
+    } catch (error: any) {
+      throw toBamlError(error);
+    }
+  }
+  
   GenerateThreePlaygroundDiagramMocks(
       rawToolsInput: PlaygroundToolsInput,
       __baml_options__?: BamlCallOptions

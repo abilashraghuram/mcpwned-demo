@@ -63,6 +63,24 @@ export class LlmResponseParser {
     }
   }
   
+  GenerateSixPlaygroundDiagramMocks(
+      llmResponse: string,
+      __baml_options__?: { tb?: TypeBuilder, clientRegistry?: ClientRegistry }
+  ): PlaygroundDiagramMockList {
+    try {
+      return this.runtime.parseLlmResponse(
+        "GenerateSixPlaygroundDiagramMocks",
+        llmResponse,
+        false,
+        this.ctxManager.cloneContext(),
+        __baml_options__?.tb?.__tb(),
+        __baml_options__?.clientRegistry,
+      ) as PlaygroundDiagramMockList
+    } catch (error) {
+      throw toBamlError(error);
+    }
+  }
+  
   GenerateThreePlaygroundDiagramMocks(
       llmResponse: string,
       __baml_options__?: { tb?: TypeBuilder, clientRegistry?: ClientRegistry }
@@ -118,6 +136,24 @@ export class LlmStreamParser {
         __baml_options__?.tb?.__tb(),
         __baml_options__?.clientRegistry,
       ) as partial_types.PlaygroundDiagramMock
+    } catch (error) {
+      throw toBamlError(error);
+    }
+  }
+  
+  GenerateSixPlaygroundDiagramMocks(
+      llmResponse: string,
+      __baml_options__?: { tb?: TypeBuilder, clientRegistry?: ClientRegistry }
+  ): partial_types.PlaygroundDiagramMockList {
+    try {
+      return this.runtime.parseLlmResponse(
+        "GenerateSixPlaygroundDiagramMocks",
+        llmResponse,
+        true,
+        this.ctxManager.cloneContext(),
+        __baml_options__?.tb?.__tb(),
+        __baml_options__?.clientRegistry,
+      ) as partial_types.PlaygroundDiagramMockList
     } catch (error) {
       throw toBamlError(error);
     }

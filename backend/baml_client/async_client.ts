@@ -129,6 +129,29 @@ export class BamlAsyncClient {
     }
   }
   
+  async GenerateSixPlaygroundDiagramMocks(
+      rawToolsInput: PlaygroundToolsInput,
+      __baml_options__?: BamlCallOptions
+  ): Promise<PlaygroundDiagramMockList> {
+    try {
+      const options = { ...this.bamlOptions, ...(__baml_options__ || {}) }
+      const collector = options.collector ? (Array.isArray(options.collector) ? options.collector : [options.collector]) : [];
+      const raw = await this.runtime.callFunction(
+        "GenerateSixPlaygroundDiagramMocks",
+        {
+          "rawToolsInput": rawToolsInput
+        },
+        this.ctxManager.cloneContext(),
+        options.tb?.__tb(),
+        options.clientRegistry,
+        collector,
+      )
+      return raw.parsed(false) as PlaygroundDiagramMockList
+    } catch (error) {
+      throw toBamlError(error);
+    }
+  }
+  
   async GenerateThreePlaygroundDiagramMocks(
       rawToolsInput: PlaygroundToolsInput,
       __baml_options__?: BamlCallOptions
@@ -217,6 +240,35 @@ class BamlStreamClient {
         raw,
         (a): partial_types.PlaygroundDiagramMock => a,
         (a): PlaygroundDiagramMock => a,
+        this.ctxManager.cloneContext(),
+      )
+    } catch (error) {
+      throw toBamlError(error);
+    }
+  }
+  
+  GenerateSixPlaygroundDiagramMocks(
+      rawToolsInput: PlaygroundToolsInput,
+      __baml_options__?: { tb?: TypeBuilder, clientRegistry?: ClientRegistry, collector?: Collector | Collector[] }
+  ): BamlStream<partial_types.PlaygroundDiagramMockList, PlaygroundDiagramMockList> {
+    try {
+      const options = { ...this.bamlOptions, ...(__baml_options__ || {}) }
+      const collector = options.collector ? (Array.isArray(options.collector) ? options.collector : [options.collector]) : [];
+      const raw = this.runtime.streamFunction(
+        "GenerateSixPlaygroundDiagramMocks",
+        {
+          "rawToolsInput": rawToolsInput
+        },
+        undefined,
+        this.ctxManager.cloneContext(),
+        options.tb?.__tb(),
+        options.clientRegistry,
+        collector,
+      )
+      return new BamlStream<partial_types.PlaygroundDiagramMockList, PlaygroundDiagramMockList>(
+        raw,
+        (a): partial_types.PlaygroundDiagramMockList => a,
+        (a): PlaygroundDiagramMockList => a,
         this.ctxManager.cloneContext(),
       )
     } catch (error) {
