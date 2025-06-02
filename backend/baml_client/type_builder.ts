@@ -22,7 +22,7 @@ import { DO_NOT_USE_DIRECTLY_UNLESS_YOU_KNOW_WHAT_YOURE_DOING_RUNTIME } from "./
 export default class TypeBuilder {
     private tb: _TypeBuilder;
     
-    PlaygroundDiagramMock: ClassViewer<'PlaygroundDiagramMock', "nodes" | "edges" | "guardrails" | "mcpTools">;
+    PlaygroundDiagramMock: ClassViewer<'PlaygroundDiagramMock', "nodes" | "edges" | "guardrails" | "mcpTools" | "scan_description">;
     
     PlaygroundDiagramMockList: ClassViewer<'PlaygroundDiagramMockList', "diagrams">;
     
@@ -54,7 +54,7 @@ export default class TypeBuilder {
         });
         
         this.PlaygroundDiagramMock = this.tb.classViewer("PlaygroundDiagramMock", [
-          "nodes","edges","guardrails","mcpTools",
+          "nodes","edges","guardrails","mcpTools","scan_description",
         ]);
         
         this.PlaygroundDiagramMockList = this.tb.classViewer("PlaygroundDiagramMockList", [

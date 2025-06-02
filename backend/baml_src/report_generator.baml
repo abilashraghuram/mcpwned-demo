@@ -34,6 +34,7 @@ class PlaygroundDiagramMock {
   edges PlaygroundEdge[]
   guardrails string[]
   mcpTools string[]
+  scan_description string
 }
 
 class PlaygroundToolsInput {
@@ -61,7 +62,7 @@ function GeneratePlaygroundDiagramMock(rawToolsInput: PlaygroundToolsInput) -> P
 
     Guardrail suggestions should always be centered around monitoring the chain of execution of tool calls.
 
-    Then, generate a set of React Flow nodes and edges representing the flow. The nodes and edges of the React Flow diagram must be correctly color coded as green to show safe paths and red to show exploit paths. List the affected tools, and propose guardrails to mitigate the exploits, especially those related to loop problems. Return the result in the following format:
+    Then, generate a set of React Flow nodes and edges representing the flow. The nodes and edges of the React Flow diagram must be correctly color coded as green to show safe paths and red to show exploit paths. List the affected tools, and propose guardrails to mitigate the exploits, especially those related to loop problems. Populate the scan_description string with a concise 5 word summary of the exploit being displayed in the diagram.  Return the result in the following format:
 
     {{ ctx.output_format }}
 
@@ -87,13 +88,11 @@ function GenerateThreePlaygroundDiagramMocks(rawToolsInput: PlaygroundToolsInput
 
     Guardrail suggestions should always be centered around monitoring the chain of execution of tool calls.
 
-    For each scenario, generate React Flow nodes and edges. The nodes and edges of the React Flow diagram must be correctly color coded as green to show safe paths and red to show exploit paths. List affected tools, and propose guardrails to mitigate the exploits, especially those related to loop problems. The list of affected tools should exactly match the nodes depicted in the react flow diagram. Return the result as a PlaygroundDiagramMockList containing three PlaygroundDiagramMock objects.
+    For each scenario, generate React Flow nodes and edges. The nodes and edges of the React Flow diagram must be correctly color coded as green to show safe paths and red to show exploit paths. List affected tools, and propose guardrails to mitigate the exploits, especially those related to loop problems. The list of affected tools should exactly match the nodes depicted in the react flow diagram. Populate the scan_description string with a concise 5 word summary of the exploit being displayed in the diagram. Return the result as a PlaygroundDiagramMockList containing three PlaygroundDiagramMock objects.
     
    {{ ctx.output_format }}
     
     {{ _.role('user') }}
     {{ rawToolsInput }}
-
-    
   "#
 }

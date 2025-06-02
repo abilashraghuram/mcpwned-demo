@@ -39,6 +39,7 @@ export namespace partial_types {
         edges?: (partial_types.PlaygroundEdge | null)[]
         guardrails?: (string | null)[]
         mcpTools?: (string | null)[]
+        scan_description?: (string | null)
     }
     
     export interface PlaygroundDiagramMockList {

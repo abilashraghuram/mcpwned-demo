@@ -5,6 +5,7 @@ export type PlaygroundDiagram = {
   edges: XYEdge[];
   guardrails: string[];
   mcpTools: string[];
+  scan_description: string;
 };
 
 export class DiagramCache {
@@ -44,5 +45,28 @@ export class DiagramCache {
     try {
       localStorage.removeItem(DiagramCache.STORAGE_KEY);
     } catch {}
+  }
+
+  static saveByScanDescription(diagrams: PlaygroundDiagram[]) {
+    try {
+      diagrams.forEach(diagram => {
+        if (diagram.scan_description) {
+          localStorage.setItem(
+            `diagram_${diagram.scan_description}`,
+            JSON.stringify(diagram)
+          );
+        }
+      });
+    } catch {}
+  }
+
+  static loadByScanDescription(scanDescription: string): PlaygroundDiagram | null {
+    try {
+      const raw = localStorage.getItem(`diagram_${scanDescription}`);
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch {
+      return null;
+    }
   }
 } 

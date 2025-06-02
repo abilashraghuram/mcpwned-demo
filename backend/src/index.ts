@@ -338,6 +338,7 @@ app.post('/api/playground-diagram', async (c) => {
   let mockList;
   try {
     mockList = await b.GenerateThreePlaygroundDiagramMocks(playgroundToolsInput);
+    console.log( 'scan_description', mockList.diagrams[0].scan_description);
   } catch (err) {
     console.error('Error generating playground diagram mock list:', err);
     return c.json({ error: 'Failed to generate playground diagram mock list', details: err }, 500);

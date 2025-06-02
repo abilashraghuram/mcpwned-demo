@@ -51,6 +51,7 @@ export interface PlaygroundDiagramMock {
   edges: PlaygroundEdge[]
   guardrails: string[]
   mcpTools: string[]
+  scan_description: string
   
 }
 

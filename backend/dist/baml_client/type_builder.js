@@ -37,7 +37,7 @@ export default class TypeBuilder {
             runtime: DO_NOT_USE_DIRECTLY_UNLESS_YOU_KNOW_WHAT_YOURE_DOING_RUNTIME
         });
         this.PlaygroundDiagramMock = this.tb.classViewer("PlaygroundDiagramMock", [
-            "nodes", "edges", "guardrails", "mcpTools",
+            "nodes", "edges", "guardrails", "mcpTools", "scan_description",
         ]);
         this.PlaygroundDiagramMockList = this.tb.classViewer("PlaygroundDiagramMockList", [
             "diagrams",

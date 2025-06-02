@@ -50,6 +50,7 @@ export default function PlaygroundPage() {
       setEmail(cached.email || "");
       setCustomMcp(cached.mcpQualifiedName || "");
       setSelectedDiagramIdx(0);
+      setSearch(diagramsTyped[0]?.scan_description || ""); // Set search bar to first scan_description
     }
   }, []);
 
@@ -104,6 +105,8 @@ export default function PlaygroundPage() {
       setLoading(false);
       // Save to cache
       DiagramCache.save(diagramsArr, email.trim(), qualifiedName);
+      DiagramCache.saveByScanDescription(diagramsArr); // Save each by scan_description
+      setSearch(diagramsArr[0]?.scan_description || ""); // Set search bar to first scan_description
     } catch {
       setError("Error encountered, please try again");
       setLoading(false);
@@ -115,14 +118,16 @@ export default function PlaygroundPage() {
     .map((diagram, idx) => ({ diagram, idx }))
     .filter(({ diagram }) => {
       if (!search.trim()) return true;
-      // Search in guardrails, mcpTools, and node labels
+      // Search in guardrails, mcpTools, node labels, and scan_description
       const guardrails = (diagram.guardrails || []).join(" ").toLowerCase();
       const mcpTools = (diagram.mcpTools || []).join(" ").toLowerCase();
       const nodeLabels = (diagram.nodes || []).map(n => n.data?.label || "").join(" ").toLowerCase();
+      const scanDescription = (diagram.scan_description || "").toLowerCase();
       return (
         guardrails.includes(search.toLowerCase()) ||
         mcpTools.includes(search.toLowerCase()) ||
-        nodeLabels.includes(search.toLowerCase())
+        nodeLabels.includes(search.toLowerCase()) ||
+        scanDescription.includes(search.toLowerCase())
       );
     });
 
@@ -196,12 +201,14 @@ export default function PlaygroundPage() {
                 {filteredDiagrams.map(({ diagram, idx }) => (
                   <li key={idx}>
                     <button
-                      onClick={() => setSelectedDiagramIdx(idx)}
+                      onClick={() => {
+                        setSelectedDiagramIdx(idx);
+                      }}
                       className={`w-full text-left px-4 py-3 transition-all flex flex-col gap-1 hover:bg-primary/10 focus:bg-primary/10 focus:outline-none
                         ${selectedDiagramIdx === idx ? "bg-primary/10 border-l-4 border-primary" : ""}`}
                     >
                       <span className="font-medium text-base text-primary">
-                        {diagram.guardrails[0] || `Diagram ${idx + 1}`}
+                        {diagram.scan_description || diagram.guardrails[0] || `Diagram ${idx + 1}`}
                       </span>
                     </button>
                   </li>
