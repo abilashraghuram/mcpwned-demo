@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/select"
 import { Card } from "@/components/ui/card"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { Check } from "lucide-react"
 
 interface Rule {
   title: string;
@@ -191,10 +192,12 @@ function RuleAssignmentSection() {
       </div>
       <div className="flex justify-center mt-8">
         <button
-          className="w-72 px-8 py-3 bg-zinc-900/80 text-white border border-zinc-600 rounded-xl shadow-lg text-2xl backdrop-blur-md transition-all duration-150 hover:shadow-xl hover:border-cyan-400 hover:bg-zinc-800/90 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
+          className="w-96 px-8 py-3 bg-zinc-900/80 text-white border border-zinc-600 rounded-xl shadow-lg text-2xl backdrop-blur-md transition-all duration-150 hover:shadow-xl hover:border-cyan-400 hover:bg-zinc-800/90 focus:ring-2 focus:ring-cyan-400 focus:outline-none flex items-center justify-center"
           onClick={handleAttach}
+          aria-label="Attach selected rules"
         >
-          Attach Selected Rules
+          <Check className="w-8 h-8 mr-3" />
+          <span>Add rules to proxy</span>
         </button>
       </div>
       <Dialog open={showAttachModal} onOpenChange={setShowAttachModal}>
@@ -205,7 +208,7 @@ function RuleAssignmentSection() {
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
               </svg>
-              <div className="text-lg font-medium text-center">Adding rules to MCP server...</div>
+              <div className="text-lg font-medium text-center">Adding new rules to proxy...</div>
             </>
           ) : (
             <>
@@ -214,7 +217,7 @@ function RuleAssignmentSection() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <div className="text-lg font-semibold text-green-500 text-center">Added Successfully</div>
+              <div className="text-lg font-semibold text-green-500 text-center">Proxy successfully configured</div>
             </>
           )}
         </DialogContent>

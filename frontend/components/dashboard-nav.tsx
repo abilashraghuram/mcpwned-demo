@@ -24,7 +24,7 @@ export function DashboardNav({ isCollapsed }: NavProps) {
       icon: FileText,
     },
     {
-      title: "Rules",
+      title: "Configure proxy rules",
       href: "/dashboard/rules",
       icon: SlidersHorizontal,
     },
