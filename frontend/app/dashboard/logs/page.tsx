@@ -16,7 +16,7 @@ export default function LogsPage() {
 
   return (
     <DashboardShell>
-      <DashboardHeader heading="Logs Explorer" text="View and analyze logs from your MCP servers and tools." />
+      <DashboardHeader heading="Traces Explorer" text="View and analyze control flow, data flow traces from your agentic interactions." />
       <LogsFilter onChange={setFilters} />
       <LogsTable filters={filters} />
     </DashboardShell>

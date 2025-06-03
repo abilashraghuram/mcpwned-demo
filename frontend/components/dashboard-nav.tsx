@@ -29,7 +29,7 @@ export function DashboardNav({ isCollapsed }: NavProps) {
       icon: SlidersHorizontal,
     },
     {
-      title: "Logs",
+      title: "Detailed Traces",
       href: "/dashboard/logs",
       icon: FileText,
     },
