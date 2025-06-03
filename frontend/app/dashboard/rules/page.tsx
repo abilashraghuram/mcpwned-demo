@@ -9,7 +9,7 @@ import { DashboardShell } from "@/components/dashboard-shell"
 export default function GuardrailsPage() {
   return (
     <DashboardShell>
-      <DashboardHeader heading="Configure Rules" text="Attach guardrails to your MCP servers" />
+      <DashboardHeader heading="Configure granular control flow and data flow rules" text="Attach guardrails to your agenticatic control and dataflows" />
       <GuardrailAssignmentSection />
     </DashboardShell>
   )

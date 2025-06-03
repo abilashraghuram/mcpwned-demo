@@ -9,6 +9,7 @@ import {
   SelectItem
 } from "@/components/ui/select"
 import { Card } from "@/components/ui/card"
+import { Dialog, DialogContent } from "@/components/ui/dialog"
 
 interface Rule {
   title: string;
@@ -115,6 +116,17 @@ function RuleAssignmentSection() {
   const [selectedServer, setSelectedServer] = React.useState(servers[0].id);
   const [selectedRules, setSelectedRules] = React.useState<string[]>([]);
   const [modalRule, setModalRule] = React.useState<Rule | null>(null);
+  const [showAttachModal, setShowAttachModal] = React.useState(false);
+  const [attachState, setAttachState] = React.useState<'loading' | 'success'>('loading');
+
+  React.useEffect(() => {
+    if (attachState === 'success' && showAttachModal) {
+      const timer = setTimeout(() => {
+        setShowAttachModal(false);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [attachState, showAttachModal]);
 
   const handleToggle = (title: string) => {
     setSelectedRules((prev) =>
@@ -124,16 +136,24 @@ function RuleAssignmentSection() {
     );
   };
 
+  const handleAttach = () => {
+    setShowAttachModal(true);
+    setAttachState('loading');
+    setTimeout(() => {
+      setAttachState('success');
+    }, 2000);
+  };
+
   const grouped = groupBySection(rules)
 
   return (
     <div className="mt-8 max-w-7xl mx-auto px-2">
       <div className="mb-8">
-        <label className="block text-zinc-300 mb-2 font-medium text-lg">Select MCP Server:</label>
+        <label className="block text-zinc-300 mb-2 font-medium text-lg">Select LLM agent:</label>
         <div className="relative w-full max-w-xs">
           <Select value={selectedServer} onValueChange={setSelectedServer}>
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select MCP Server" />
+              <SelectValue placeholder="Select MCP server or LLM interaction" />
             </SelectTrigger>
             <SelectContent>
               {servers.map((s) => (
@@ -149,18 +169,18 @@ function RuleAssignmentSection() {
           {Object.entries(grouped).map(([section, rails]) => (
             <div key={section} className="mb-8">
               <h3 className="text-2xl mb-4 tracking-wide">{section}</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+              <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                 {rails.map((g) => (
                   <Card
                     key={g.title}
-                    className={`flex flex-col items-stretch w-full min-w-[220px] p-3 shadow-sm transition group cursor-pointer min-h-[90px] relative hover:scale-[1.025] hover:shadow-lg hover:border-cyan-400 ${selectedRules.includes(g.title) ? 'border-green-500' : 'border-zinc-600'}`}
+                    className={`flex flex-col items-stretch w-full min-w-0 p-3 shadow-sm transition group cursor-pointer min-h-[90px] relative hover:scale-[1.025] hover:shadow-lg hover:border-cyan-400 ${selectedRules.includes(g.title) ? 'border-green-500' : 'border-zinc-600'}`}
                     onClick={() => handleToggle(g.title)}
                   >
-                    <div className="flex flex-col flex-1">
+                    <div className="flex flex-col flex-1 break-words">
                       <div className="flex items-center mb-2">
-                        <span className="text-white text-xl md:text-2xl mb-1 transition">{g.title}</span>
+                        <span className="text-white text-xl md:text-2xl mb-1 transition break-words">{g.title}</span>
                       </div>
-                      <span className="text-zinc-400 text-sm leading-snug mb-4">{g.description}</span>
+                      <span className="text-zinc-400 text-sm leading-snug mb-4 break-words">{g.description}</span>
                     </div>
                   </Card>
                 ))}
@@ -171,12 +191,34 @@ function RuleAssignmentSection() {
       </div>
       <div className="flex justify-center mt-8">
         <button
-          className="px-8 py-3 bg-zinc-900/80 text-white border border-zinc-600 rounded-xl shadow-lg font-bold text-lg backdrop-blur-md transition-all duration-150 hover:shadow-xl hover:border-cyan-400 hover:bg-zinc-800/90 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
-          onClick={() => alert(`Attached rules to ${selectedServer}`)}
+          className="w-72 px-8 py-3 bg-zinc-900/80 text-white border border-zinc-600 rounded-xl shadow-lg text-2xl backdrop-blur-md transition-all duration-150 hover:shadow-xl hover:border-cyan-400 hover:bg-zinc-800/90 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
+          onClick={handleAttach}
         >
           Attach Selected Rules
         </button>
       </div>
+      <Dialog open={showAttachModal} onOpenChange={setShowAttachModal}>
+        <DialogContent className="flex flex-col items-center justify-center gap-4">
+          {attachState === 'loading' ? (
+            <>
+              <svg className="animate-spin w-12 h-12 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+              </svg>
+              <div className="text-lg font-medium text-center">Adding rules to MCP server...</div>
+            </>
+          ) : (
+            <>
+              <div className="w-12 h-12 flex items-center justify-center">
+                <svg className="w-12 h-12 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div className="text-lg font-semibold text-green-500 text-center">Added Successfully</div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
       {/* Modal for code snippet */}
       {modalRule && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70" onClick={() => setModalRule(null)}>

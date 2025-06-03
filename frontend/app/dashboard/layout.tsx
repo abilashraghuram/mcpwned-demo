@@ -15,7 +15,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </div>
       </header>
       <div className="container grid flex-1 gap-6 md:grid-cols-[200px_1fr] lg:grid-cols-[240px_1fr]">
-        <aside className="hidden w-[200px] flex-col md:flex lg:w-[240px]">
+        <aside className="hidden w-[140px] flex-col md:flex lg:w-[180px]">
           <DashboardNav />
         </aside>
         <main className="flex w-full flex-1 flex-col overflow-hidden">{children}</main>
