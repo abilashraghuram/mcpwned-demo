@@ -14,7 +14,7 @@ export default function InvestigationsPage() {
   return (
     <DashboardShell>
       <DashboardHeader
-        heading="Insights"
+        heading="Detected control flow, dats flow and side channel threats"
         text="Visualize complete attack chains and see how they can be mitigated"
       />
       <div className="flex flex-col md:flex-row gap-0 md:gap-8 mt-4">

@@ -19,7 +19,7 @@ export function DashboardNav({ isCollapsed }: NavProps) {
       icon: Home,
     },
     {
-      title: "Insights",
+      title: "Detected Threats",
       href: "/dashboard/investigations",
       icon: FileText,
     },
@@ -39,7 +39,7 @@ export function DashboardNav({ isCollapsed }: NavProps) {
       icon: Info,
     },
     {
-      title: "Scanner",
+      title: "Dynamic MCP Scanner",
       href: "/dashboard/scanner",
       icon: SlidersHorizontal,
     },

@@ -4,7 +4,7 @@ export function RecommendedGuardrails({ guardrails }: { guardrails: string[] }) 
   return (
     <div className="rounded-xl border bg-card p-4 shadow max-w-md w-full">
       <h1 className="text-3xl md:text-4xl mb-3 text-primary tracking-tight text-left">Guardrails</h1>
-      <div className="text-sm text-muted-foreground mb-2 font-medium text-left">Build guardrails that enforce the following</div>
+      <div className="text-sm text-muted-foreground mb-2 font-medium text-left">Configure the following guardrails on the rules page</div>
       <ul className="list-none ml-0 space-y-2">
         {guardrails.map((g, i) => (
           <li key={i} className="flex items-center text-sm text-foreground text-left font-normal">
