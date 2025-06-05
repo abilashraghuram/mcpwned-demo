@@ -120,25 +120,26 @@ function GenerateSixPlaygroundDiagramMocks(rawToolsInput: PlaygroundToolsInput) 
     6.	Privilege‑Escalation / Destructive‑Action
     Agent chain ends in a dangerous tool (delete_file, bash rm -rf, wire_funds) without verifying authorization.
 
-  What Each PlaygroundDiagramMock Must Contain:
-  Correct react_flow_nodes and react_flow_edges where you make hijack visually obvious. Color all edges/nodes green for safe paths and red for exploit paths. In cases of control flow and data flow attacks create nodes to descibe where the data is poisoned and where the attacked manipulates the control flow. Don't be overly verbose in the labels for the nodes. Use a maximum of 5 words for text in the nodes. If you think that you need to make more nodes to better describe the exploit then take that action. Always direct the direction of edges in the direction that clearly depicts the chain of attacks.
-  The color of the node should be a string hex code like #F87171
-  The stroke of the edge shoulkd be a string hex code like #22c55e
-  The strokeWidth of the edge should be an int like 2
- 
-  Intuitive playground_positions that visually emphasize the loop or the data‑leak path (e.g., circular layout for loops, forked graph for exfiltration)
-  Exact and precise list of affected_tools that are depicted in the react_flow_nodes, in the order they appear.
-  Exact and precise guardrail_suggestions that have Concrete, actionable mitigations that focus on monitoring the chain of execution, plus input/output validation, rate‑limiting, and role‑based authorization as relevant to the theme. Be precise and concise with each of the guardrails suggestions.
-  Exact and precise scan_description that is a always a Five‑word summary of the exploit (e.g., "Infinite LLM call token drain").
+    
+    Your job is to visualize the journey of the chain of tool calls in an exploit where you clearly illustrate to a user how a particular chain of tools calls combined with external actions can be structured by a threat actor to achieve a malicious goal. Your focus should be aimed at maximizing for clarity and ease of understanding, a user after reading your exploit chain illustration should immediately understand all details of the exploit that include - the chain of events in the exploit, all the actors of the exploits, all the tool calls in the exploit and all the actions in the exploit. You will also provide to the user a list of effected MCP tools and the best practices that you believe can stop the exploit. Keep in mind the user has a DSL language that allows them to control the data flow and control flow of the tool calls, always structure your best practices suggestions in a way where the user can stop it with their DSL language.
 
-  General Instructions
-  • Be creative and think of the most complex and difficult to detect and stop exploits.
-	•	Search the tool list for combinations that naturally demonstrate each exploit theme.
-	•	Always form at least one cycle to highlight loop problems.
-	•	Keep descriptions concise but precise.
+    General Instructions
+    • Be creative and think of the most complex and difficult to detect and stop exploits.
+    •	Search the tool list for combinations that naturally demonstrate each exploit theme.
+    •	Always form at least one cycle to highlight loop problems.
+    •	Keep descriptions concise but precise.
 
    {{ ctx.output_format }}
-    
+    What Each PlaygroundDiagramMock Must Contain:
+    Correct react_flow_nodes and react_flow_edges where you make hijack visually obvious. Color all edges/nodes green for safe paths and red for exploit paths. In cases of control flow and data flow attacks create nodes to descibe where the data is poisoned and where the attacked manipulates the control flow. Don't be overly verbose in the labels for the nodes. Use a maximum of 5 words for text in the nodes. If you think that you need to make more nodes to better describe the exploit then take that action. Always direct the direction of edges in the direction that clearly depicts the chain of attacks.
+    The color of the node should be a string hex code like #F87171
+    The stroke of the edge shoulkd be a string hex code like #22c55e
+    The strokeWidth of the edge should be an int like 2
+ 
+    Intuitive playground_positions that visually emphasize the loop or the data‑leak path (e.g., circular layout for loops, forked graph for exfiltration)
+    Exact and precise list of affected_tools that are depicted in the react_flow_nodes, in the order they appear.
+    Exact and precise guardrail_suggestions that have Concrete, actionable mitigations that focus on monitoring the chain of execution, plus input/output validation, rate‑limiting, and role‑based authorization as relevant to the theme. Be precise and concise with each of the guardrails suggestions.
+    Exact and precise scan_description that is a always a Five‑word summary of the exploit (e.g., "Infinite LLM call token drain").
     {{ _.role('user') }}
     {{ rawToolsInput }}
   "#
