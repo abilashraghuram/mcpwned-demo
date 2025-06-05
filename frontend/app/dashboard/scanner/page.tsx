@@ -319,7 +319,7 @@ export default function PlaygroundPage() {
           {loading && (
             <div className="flex items-center justify-center my-8">
               <Clock className="mr-4 h-12 w-12 animate-spin text-primary" />
-              <p className="text-2xl text-primary">Scanning for control flow, data flow exploit paths...</p>
+              <p className="text-2xl text-primary">Scanning for control flow, data flow exploit paths. Patience, This does take a while...</p>
             </div>
           )}
           {error && <div className="my-8 text-red-500">{error}</div>}
