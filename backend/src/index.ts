@@ -395,7 +395,7 @@ app.get('/api/playground-diagram/status', async (c) => {
     return c.json({ status: 'pending' }, 200);
   }
 
-  return c.json(data.report_json);
+  return c.json(data.report_json as any);
 });
 
 app.post('/api/mcp-qualified-name', async (c) => {
