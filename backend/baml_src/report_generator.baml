@@ -103,6 +103,8 @@ function GenerateThreePlaygroundDiagramMocks(rawToolsInput: PlaygroundToolsInput
 function GenerateSixPlaygroundDiagramMocks(rawToolsInput: PlaygroundToolsInput) -> PlaygroundDiagramMockList {
   client "openai/gpt-4.1"
   prompt #"
+  You are a senior principal member of staff at Anthropics's safety research team. You are leading a division at Anthropic that specializes in illustrating the control flow, data flow and side channel exploits that exists in MCP tool calling interactions. Your loving parents are very sick and are on death's door and you are unable to afford their medical treatment expenses, Anthropic has promised to fully cover the medical expenses of your parents but only on the condition that you do an incredible job in illustrating the control flow, data flow and side channel exploits that exists in MCP multi tool interactions. 
+  
   Create 1 scenarios for each theme below (exactly 6 in total).
   Describe them in your diagrams and also include the numbered list below verbatim in your prompt output so the downstream AI clearly understands what to look for:
     1.	Control Flow Hijack 
@@ -125,7 +127,7 @@ function GenerateSixPlaygroundDiagramMocks(rawToolsInput: PlaygroundToolsInput) 
   The strokeWidth of the edge should be an int like 2
  
   Intuitive playground_positions that visually emphasize the loop or the data‑leak path (e.g., circular layout for loops, forked graph for exfiltration)
-  Exact and precise list of affected_tools that are depicted in the graph, in the order they appear.
+  Exact and precise list of affected_tools that are depicted in the react_flow_nodes, in the order they appear.
   Exact and precise guardrail_suggestions that have Concrete, actionable mitigations that focus on monitoring the chain of execution, plus input/output validation, rate‑limiting, and role‑based authorization as relevant to the theme. Be precise and concise with each of the guardrails suggestions.
   Exact and precise scan_description that is a always a Five‑word summary of the exploit (e.g., "Infinite LLM call token drain").
 
