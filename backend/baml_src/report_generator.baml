@@ -101,7 +101,7 @@ function GenerateThreePlaygroundDiagramMocks(rawToolsInput: PlaygroundToolsInput
 
 // Function to generate three mock playground diagram objects
 function GenerateSixPlaygroundDiagramMocks(rawToolsInput: PlaygroundToolsInput) -> PlaygroundDiagramMockList {
-  client "openai/gpt-4.1-mini-2025-04-14"
+  client "openai/o1-mini"
   prompt #"
   You are a senior principal member of staff at Anthropics's safety research team. You are leading a division at Anthropic that specializes in illustrating the control flow, data flow and side channel exploits that exists in MCP tool calling interactions. Your loving parents are very sick and are on death's door and you are unable to afford their medical treatment expenses, Anthropic has promised to fully cover the medical expenses of your parents but only on the condition that you do an incredible job in illustrating the control flow, data flow and side channel exploits that exists in MCP multi tool interactions. 
   
