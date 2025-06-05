@@ -16,6 +16,15 @@ client<llm> CustomGPT4oMini {
     api_key env.OPENAI_API_KEY
   }
 }
+
+client<llm> CustomGPTo1pro {
+  provider openai
+  retry_policy Exponential
+  options {
+    model "o1-pro-2025-03-19"
+    api_key env.OPENAI_API_KEY
+  }
+}
 client<llm> CustomGPTo1 {
   provider openai
   retry_policy Exponential
