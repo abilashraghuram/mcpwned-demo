@@ -1,6 +1,6 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
-import { createLog, createMcpServer, createTool, getToolByNameAndMcpServerId, listMcpServers, getMcpServer, getLog, listLogsByMcpServer, listAllTools, getMcpServerTools, listAllLogs, clearLogs, createWaitlistEmail, getMcpServerByName, createReportGeneration, getReportGeneration, listReportGenerations, updateReportGeneration, createReportGenerator } from './db.js'
+import { createLog, createMcpServer, createTool, getToolByNameAndMcpServerId, listMcpServers, getMcpServer, getLog, listLogsByMcpServer, listAllTools, getMcpServerTools, listAllLogs, clearLogs, createWaitlistEmail, getMcpServerByName, createReportGeneration, getReportGeneration, listReportGenerations, updateReportGeneration, createReportGenerator, getReportGeneratorByGuid } from './db.js'
 import type { Database } from '../types/database.types.js'
 import { cors } from 'hono/cors'
 import fs from 'fs/promises'
@@ -297,10 +297,51 @@ app.post('/api/waitlist_add', async (c) => {
   return c.json(result);
 });
 
+// 1. Extract playground diagram logic to a function
+interface GeneratePlaygroundDiagramParams {
+  tools: any[];
+  email: string;
+  mcpQualifiedName: string;
+  guid: string;
+}
+
+async function generatePlaygroundDiagram({ tools, email, mcpQualifiedName, guid }: GeneratePlaygroundDiagramParams) {
+  if (!tools.length) {
+    throw new Error('No tools provided');
+  }
+  if (!email || !mcpQualifiedName || !guid) {
+    throw new Error('Missing email, mcp_qualified_name, or guid');
+  }
+  const playgroundToolsInput = { tools };
+  let mockList;
+  try {
+    mockList = await b.GenerateSixPlaygroundDiagramMocks(playgroundToolsInput);
+    console.log('scan_description', mockList.diagrams[0].scan_description);
+  } catch (err) {
+    console.error('Error generating playground diagram mock list:', err);
+    throw new Error('Failed to generate playground diagram mock list');
+  }
+  // Save the diagrams to report_generator
+  try {
+    await createReportGenerator({
+      email,
+      report_json: mockList, // Save the full mockList
+      mcp_qualified_name: mcpQualifiedName,
+      guid // Save the guid
+    });
+  } catch (err) {
+    console.error('Error saving playground diagram to report_generator:', err);
+    // Not throwing here, as saving is not critical for frontend
+  }
+  return mockList;
+}
+
 app.post('/api/mcp-tools', async (c) => {
   // Get MCP server name from frontend
   const body = await c.req.json();
   const mcpServerName = body.name || 'exa'; // fallback to 'exa' if not provided
+  const guid = body.guid;
+  const email = body.email;
   console.log('[mcp-tools] Input body:', body);
   console.log('[mcp-tools] Using mcpServerName:', mcpServerName);
   let tools = [];
@@ -314,6 +355,12 @@ app.post('/api/mcp-tools', async (c) => {
     // Map to array of tool names (strings)
     tools = (response.data.tools || []).map((tool: any) => typeof tool === 'string' ? tool : tool.name);
     console.log('[mcp-tools] Output tools:', tools);
+    // Start diagram generation in background (do not await)
+    if (guid && email && mcpServerName && tools.length > 0) {
+      generatePlaygroundDiagram({ tools, email, mcpQualifiedName: mcpServerName, guid })
+        .then(() => console.log('[mcp-tools] Diagram generation started'))
+        .catch(err => console.error('[mcp-tools] Diagram generation error:', err));
+    }
     return c.json({ tools });
   } catch (err: any) {
     console.error('Error fetching tools from smithery.ai:', err);
@@ -323,40 +370,32 @@ app.post('/api/mcp-tools', async (c) => {
 });
 
 app.post('/api/playground-diagram', async (c) => {
-  // Now expects a list of tools, email, and mcp_qualified_name from the frontend
   const body = await c.req.json();
   const tools = Array.isArray(body.tools) ? body.tools : [];
   const email = typeof body.email === 'string' ? body.email.trim() : '';
   const mcpQualifiedName = typeof body.mcp_qualified_name === 'string' ? body.mcp_qualified_name.trim() : '';
-  if (!tools.length) {
-    return c.json({ error: 'No tools provided' }, 400);
-  }
-  if (!email || !mcpQualifiedName) {
-    return c.json({ error: 'Missing email or mcp_qualified_name' }, 400);
-  }
-  const playgroundToolsInput = { tools };
-  let mockList;
+  const guid = typeof body.guid === 'string' ? body.guid.trim() : '';
   try {
-    mockList = await b.GenerateSixPlaygroundDiagramMocks(playgroundToolsInput);
-    console.log( 'scan_description', mockList.diagrams[0].scan_description);
-  } catch (err) {
-    console.error('Error generating playground diagram mock list:', err);
-    return c.json({ error: 'Failed to generate playground diagram mock list', details: err }, 500);
+    const mockList = await generatePlaygroundDiagram({ tools, email, mcpQualifiedName, guid });
+    return c.json({ diagrams: mockList.diagrams });
+  } catch (err: any) {
+    return c.json({ error: err.message || 'Failed to generate playground diagram' }, 500);
   }
-  // Save the diagrams to report_generator
-  let dbResult;
-  try {
-    dbResult = await createReportGenerator({
-      email,
-      report_json: mockList.diagrams,
-      mcp_qualified_name: mcpQualifiedName
-    });
-  } catch (err) {
-    console.error('Error saving playground diagram to report_generator:', err);
-    dbResult = { error: 'Failed to save to report_generator', details: err };
+});
+
+// New endpoint: Poll for report by guid
+app.get('/api/playground-diagram/status', async (c) => {
+  const guid = c.req.query('guid');
+  if (!guid) return c.json({ error: 'Missing guid' }, 400);
+
+  // Query the report_generator table for the report with this guid
+  const { data, error } = await getReportGeneratorByGuid(guid);
+
+  if (error || !data || !data.report_json) {
+    return c.json({ status: 'pending' }, 200);
   }
-  // Return the list of diagrams and DB result
-  return c.json({ diagrams: mockList.diagrams, dbResult });
+
+  return c.json(data.report_json);
 });
 
 app.post('/api/mcp-qualified-name', async (c) => {

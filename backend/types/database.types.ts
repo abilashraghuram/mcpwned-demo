@@ -164,6 +164,7 @@ export type Database = {
           email: string
           report_json: Json
           mcp_qualified_name: string
+          guid: string
         }
         Insert: {
           id?: number
@@ -171,6 +172,7 @@ export type Database = {
           email: string
           report_json: Json
           mcp_qualified_name: string
+          guid: string
         }
         Update: {
           id?: number
@@ -178,6 +180,7 @@ export type Database = {
           email?: string
           report_json?: Json
           mcp_qualified_name?: string
+          guid?: string
         }
         Relationships: []
       },

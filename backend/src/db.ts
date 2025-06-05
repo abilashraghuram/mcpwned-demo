@@ -204,10 +204,20 @@ export const updateReportGeneration = async (id: string, report: Database["publi
 };
 
 // Report Generator functions
-export const createReportGenerator = async (entry: { email: string, report_json: any, mcp_qualified_name: string, created_at?: string }) => {
+export const createReportGenerator = async (entry: { email: string, report_json: any, mcp_qualified_name: string, guid: string, created_at?: string }) => {
   // Direct insert since this table is not in the Database type
   const client = supabaseClient();
   const { data, error } = await client.from('report_generator').insert([{ ...entry }]);
+  if (error) {
+    console.log(error);
+    return { error };
+  }
+  return { data };
+};
+
+export const getReportGeneratorByGuid = async (guid: string) => {
+  const client = supabaseClient();
+  const { data, error } = await client.from('report_generator').select().eq('guid', guid).single();
   if (error) {
     console.log(error);
     return { error };

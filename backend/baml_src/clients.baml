@@ -16,6 +16,14 @@ client<llm> CustomGPT4oMini {
     api_key env.OPENAI_API_KEY
   }
 }
+client<llm> CustomGPTo1 {
+  provider openai
+  retry_policy Exponential
+  options {
+    model "o1-2024-12-17"
+    api_key env.OPENAI_API_KEY
+  }
+}
 
 client<llm> CustomGPT41Mini {
   provider openai
@@ -30,6 +38,30 @@ client<llm> CustomGPT41 {
   retry_policy Exponential
   options {
     model "gpt-4.1"
+    api_key env.OPENAI_API_KEY
+  }
+}
+client<llm> CustomGPT41mini {
+  provider openai
+  retry_policy Exponential
+  options {
+    model "gpt-4.1-mini-2025-04-14"
+    api_key env.OPENAI_API_KEY
+  }
+}
+client<llm> CustomGPTo1mini {
+  provider openai
+  retry_policy Exponential
+  options {
+    model "o1-mini"
+    api_key env.OPENAI_API_KEY
+  }
+}
+client<llm> CustomGPTo4mini {
+  provider openai
+  retry_policy Exponential
+  options {
+    model "o4-mini-2025-04-16"
     api_key env.OPENAI_API_KEY
   }
 }

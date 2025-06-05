@@ -21,6 +21,14 @@ const MOCK_MCP_SERVERS = [
   { id: "mock3", name: "Mock MCP Server 3" },
 ];
 
+// Add GUID generator
+function generateGUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
 export default function PlaygroundPage() {
   const [selectedMcp, setSelectedMcp] = useState(MOCK_MCP_SERVERS[0].name);
   const [diagrams, setDiagrams] = useState<PlaygroundDiagram[]>([]);
@@ -60,7 +68,7 @@ export default function PlaygroundPage() {
     }
   }, []);
 
-  // New handler for Generate button
+  // Replace handleGenerate with polling logic
   const handleGenerate = async () => {
     if (!email.trim() || !EmailValidator.validate(email.trim())) {
       setEmailError(true);
@@ -76,12 +84,14 @@ export default function PlaygroundPage() {
       setLoading(false);
       return;
     }
+    const guid = generateGUID();
+    console.log("[handleGenerate] Generated GUID:", guid);
     try {
-      // Step 1: Get tools for MCP server
+      // Step 1: Get tools for MCP server and trigger diagram generation on backend
       const toolsRes = await fetch("/api/mcp-tools", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: qualifiedName }),
+        body: JSON.stringify({ name: qualifiedName, guid, email: email.trim() }),
       });
       const toolsData = await toolsRes.json();
       if (toolsRes.status !== 200 || !Array.isArray(toolsData.tools) || toolsData.tools.length === 0) {
@@ -89,30 +99,35 @@ export default function PlaygroundPage() {
         setLoading(false);
         return;
       }
-      // Step 2: Generate diagrams with tools
-      const diagramRes = await fetch("/api/playground-diagram", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          tools: toolsData.tools,
-          email: email.trim(),
-          mcp_qualified_name: qualifiedName
-        }),
-      });
-      const diagramData = await diagramRes.json();
-      if (diagramRes.status !== 200 || diagramData.error) {
-        setError("Error encountered, please try again");
-        setLoading(false);
-        return;
-      }
-      const diagramsArr = Array.isArray(diagramData.diagrams) ? diagramData.diagrams : [];
-      setDiagrams(diagramsArr);
-      setSelectedDiagramIdx(0);
-      setLoading(false);
-      // Save to cache
-      DiagramCache.save(diagramsArr, email.trim(), qualifiedName);
-      DiagramCache.saveByScanDescription(diagramsArr); // Save each by scan_description
-      // setSearch(diagramsArr[0]?.scan_description || ""); // Removed: Do not auto-populate search bar
+      // Step 2: Poll for result (start polling immediately after tools fetch succeeds)
+      const pollForResult = async () => {
+        console.log(`[pollForResult] Polling for GUID: ${guid}`);
+        try {
+          const statusRes = await fetch(`/api/playground-diagram/status?guid=${guid}`);
+          const statusData = await statusRes.json();
+          if (statusRes.status === 200 && Array.isArray(statusData.diagrams)) {
+            setDiagrams(statusData.diagrams);
+            setSelectedDiagramIdx(0);
+            setLoading(false);
+            clearInterval(pollInterval);
+            DiagramCache.save(statusData.diagrams, email.trim(), qualifiedName);
+            DiagramCache.saveByScanDescription(statusData.diagrams);
+          } else if (statusData.status === 'pending') {
+            // Do nothing, keep polling
+          } else if (statusData.error) {
+            setError("Error encountered, please try again");
+            setLoading(false);
+            clearInterval(pollInterval);
+          }
+          // else: keep polling if status is pending
+        } catch {
+          setError("Error encountered, please try again");
+          setLoading(false);
+          clearInterval(pollInterval);
+        }
+      };
+      const pollInterval = setInterval(pollForResult, 5000);
+      pollForResult();
     } catch {
       setError("Error encountered, please try again");
       setLoading(false);
