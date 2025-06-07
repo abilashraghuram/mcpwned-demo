@@ -107,3 +107,24 @@ export interface Resume {
   skills: string[]
   
 }
+
+export interface Rule {
+  nodes: PlaygroundNode[]
+  edges: PlaygroundEdge[]
+  guardrail_justification: string[]
+  guardrail_code: string[]
+  ruleJustification: string
+  scan_description: string
+  
+}
+
+export interface RuleInput {
+  tools: string[]
+  user_exploit_summary: string
+  
+}
+
+export interface RuleList {
+  diagrams: Rule[]
+  
+}

@@ -188,3 +188,41 @@ export const createReportGenerator = async (entry) => {
     }
     return { data };
 };
+export const createRuleGenerator = async (entry) => {
+    // Direct insert since this table is not in the Database type
+    const client = supabaseClient();
+    const { data, error } = await client.from('rules_generated').insert([{ ...entry }]);
+    if (error) {
+        console.log(error);
+        return { error };
+    }
+    return { data };
+};
+export const createRule = async (entry) => {
+    // Direct insert since this table is not in the Database type
+    const client = supabaseClient();
+    const { data, error } = await client.from('rules_generated').insert([{ ...entry }]);
+    if (error) {
+        console.log(error);
+        return { error };
+    }
+    return { data };
+};
+export const geGeneratedRuleByGuid = async (guid) => {
+    const client = supabaseClient();
+    const { data, error } = await client.from('rules_generated').select().eq('guid', guid).single();
+    if (error) {
+        console.log(error);
+        return { error };
+    }
+    return { data };
+};
+export const getReportGeneratorByGuid = async (guid) => {
+    const client = supabaseClient();
+    const { data, error } = await client.from('report_generator').select().eq('guid', guid).single();
+    if (error) {
+        console.log(error);
+        return { error };
+    }
+    return { data };
+};

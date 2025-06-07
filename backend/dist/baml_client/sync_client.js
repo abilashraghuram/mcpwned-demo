@@ -79,6 +79,19 @@ export class BamlSyncClient {
             throw toBamlError(error);
         }
     }
+    GenerateSingleRule(rawToolsInput, __baml_options__) {
+        try {
+            const options = { ...this.bamlOptions, ...(__baml_options__ || {}) };
+            const collector = options.collector ? (Array.isArray(options.collector) ? options.collector : [options.collector]) : [];
+            const raw = this.runtime.callFunctionSync("GenerateSingleRule", {
+                "rawToolsInput": rawToolsInput
+            }, this.ctxManager.cloneContext(), options.tb?.__tb(), options.clientRegistry, collector);
+            return raw.parsed(false);
+        }
+        catch (error) {
+            throw toBamlError(error);
+        }
+    }
     GenerateSixPlaygroundDiagramMocks(rawToolsInput, __baml_options__) {
         try {
             const options = { ...this.bamlOptions, ...(__baml_options__ || {}) };

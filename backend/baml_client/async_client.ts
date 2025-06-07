@@ -20,7 +20,7 @@ import { toBamlError, BamlStream, type HTTPRequest } from "@boundaryml/baml"
 import type { Checked, Check, RecursivePartialNull as MovedRecursivePartialNull } from "./types.js"
 import type { partial_types } from "./partial_types.js"
 import type * as types from "./types.js"
-import type {PlaygroundDiagramMock, PlaygroundDiagramMockList, PlaygroundEdge, PlaygroundEdgeStyle, PlaygroundNode, PlaygroundNodeData, PlaygroundPosition, PlaygroundToolsInput, Resume} from "./types.js"
+import type {PlaygroundDiagramMock, PlaygroundDiagramMockList, PlaygroundEdge, PlaygroundEdgeStyle, PlaygroundNode, PlaygroundNodeData, PlaygroundPosition, PlaygroundToolsInput, Resume, Rule, RuleInput, RuleList} from "./types.js"
 import type TypeBuilder from "./type_builder.js"
 import { AsyncHttpRequest, AsyncHttpStreamRequest } from "./async_request.js"
 import { LlmResponseParser, LlmStreamParser } from "./parser.js"
@@ -124,6 +124,29 @@ export class BamlAsyncClient {
         collector,
       )
       return raw.parsed(false) as PlaygroundDiagramMock
+    } catch (error) {
+      throw toBamlError(error);
+    }
+  }
+  
+  async GenerateSingleRule(
+      rawToolsInput: RuleInput,
+      __baml_options__?: BamlCallOptions
+  ): Promise<RuleList> {
+    try {
+      const options = { ...this.bamlOptions, ...(__baml_options__ || {}) }
+      const collector = options.collector ? (Array.isArray(options.collector) ? options.collector : [options.collector]) : [];
+      const raw = await this.runtime.callFunction(
+        "GenerateSingleRule",
+        {
+          "rawToolsInput": rawToolsInput
+        },
+        this.ctxManager.cloneContext(),
+        options.tb?.__tb(),
+        options.clientRegistry,
+        collector,
+      )
+      return raw.parsed(false) as RuleList
     } catch (error) {
       throw toBamlError(error);
     }
@@ -240,6 +263,35 @@ class BamlStreamClient {
         raw,
         (a): partial_types.PlaygroundDiagramMock => a,
         (a): PlaygroundDiagramMock => a,
+        this.ctxManager.cloneContext(),
+      )
+    } catch (error) {
+      throw toBamlError(error);
+    }
+  }
+  
+  GenerateSingleRule(
+      rawToolsInput: RuleInput,
+      __baml_options__?: { tb?: TypeBuilder, clientRegistry?: ClientRegistry, collector?: Collector | Collector[] }
+  ): BamlStream<partial_types.RuleList, RuleList> {
+    try {
+      const options = { ...this.bamlOptions, ...(__baml_options__ || {}) }
+      const collector = options.collector ? (Array.isArray(options.collector) ? options.collector : [options.collector]) : [];
+      const raw = this.runtime.streamFunction(
+        "GenerateSingleRule",
+        {
+          "rawToolsInput": rawToolsInput
+        },
+        undefined,
+        this.ctxManager.cloneContext(),
+        options.tb?.__tb(),
+        options.clientRegistry,
+        collector,
+      )
+      return new BamlStream<partial_types.RuleList, RuleList>(
+        raw,
+        (a): partial_types.RuleList => a,
+        (a): RuleList => a,
         this.ctxManager.cloneContext(),
       )
     } catch (error) {

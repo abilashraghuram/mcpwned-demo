@@ -40,12 +40,18 @@ export default class TypeBuilder {
     
     Resume: ClassViewer<'Resume', "name" | "email" | "experience" | "skills">;
     
+    Rule: ClassViewer<'Rule', "nodes" | "edges" | "guardrail_justification" | "guardrail_code" | "ruleJustification" | "scan_description">;
+    
+    RuleInput: ClassViewer<'RuleInput', "tools" | "user_exploit_summary">;
+    
+    RuleList: ClassViewer<'RuleList', "diagrams">;
+    
     
 
     constructor() {
         this.tb = new _TypeBuilder({
           classes: new Set([
-            "PlaygroundDiagramMock","PlaygroundDiagramMockList","PlaygroundEdge","PlaygroundEdgeStyle","PlaygroundNode","PlaygroundNodeData","PlaygroundPosition","PlaygroundToolsInput","Resume",
+            "PlaygroundDiagramMock","PlaygroundDiagramMockList","PlaygroundEdge","PlaygroundEdgeStyle","PlaygroundNode","PlaygroundNodeData","PlaygroundPosition","PlaygroundToolsInput","Resume","Rule","RuleInput","RuleList",
           ]),
           enums: new Set([
             
@@ -87,6 +93,18 @@ export default class TypeBuilder {
         
         this.Resume = this.tb.classViewer("Resume", [
           "name","email","experience","skills",
+        ]);
+        
+        this.Rule = this.tb.classViewer("Rule", [
+          "nodes","edges","guardrail_justification","guardrail_code","ruleJustification","scan_description",
+        ]);
+        
+        this.RuleInput = this.tb.classViewer("RuleInput", [
+          "tools","user_exploit_summary",
+        ]);
+        
+        this.RuleList = this.tb.classViewer("RuleList", [
+          "diagrams",
         ]);
         
         

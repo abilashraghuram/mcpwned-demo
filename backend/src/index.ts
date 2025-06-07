@@ -1,6 +1,6 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
-import { createLog, createMcpServer, createTool, getToolByNameAndMcpServerId, listMcpServers, getMcpServer, getLog, listLogsByMcpServer, listAllTools, getMcpServerTools, listAllLogs, clearLogs, createWaitlistEmail, getMcpServerByName, createReportGeneration, getReportGeneration, listReportGenerations, updateReportGeneration, createReportGenerator, getReportGeneratorByGuid } from './db.js'
+import { createLog, createMcpServer, createTool, getToolByNameAndMcpServerId, listMcpServers, getMcpServer, getLog, listLogsByMcpServer, listAllTools, getMcpServerTools, listAllLogs, clearLogs, createWaitlistEmail, getMcpServerByName, createReportGeneration, getReportGeneration, listReportGenerations, updateReportGeneration, createReportGenerator, getReportGeneratorByGuid, createRuleGenerator, geGeneratedRuleByGuid } from './db.js'
 import type { Database } from '../types/database.types.js'
 import { cors } from 'hono/cors'
 import fs from 'fs/promises'
@@ -304,6 +304,13 @@ interface GeneratePlaygroundDiagramParams {
   mcpQualifiedName: string;
   guid: string;
 }
+interface GenerateRuleDiagramParams {
+  tools: any[];
+  email: string;
+  mcpQualifiedName: string;
+  guid: string;
+  user_exploit_summary: string;
+}
 
 async function generatePlaygroundDiagram({ tools, email, mcpQualifiedName, guid }: GeneratePlaygroundDiagramParams) {
   if (!tools.length) {
@@ -336,6 +343,36 @@ async function generatePlaygroundDiagram({ tools, email, mcpQualifiedName, guid 
   return mockList;
 }
 
+async function generateRuleDiagram({ tools, email, mcpQualifiedName, guid, user_exploit_summary }: GenerateRuleDiagramParams) {
+  if (!tools.length) {
+    throw new Error('No tools provided');
+  }
+  if (!email || !mcpQualifiedName || !guid) {
+    throw new Error('Missing email, mcp_qualified_name, or guid');
+  }
+  const playgroundToolsInput = { tools, user_exploit_summary };
+  let mockList;
+  try {
+    mockList = await b.GenerateSingleRule(playgroundToolsInput);
+    console.log('scan_description', mockList.diagrams[0].scan_description);
+  } catch (err) {
+    console.error('Error generating rule diagram mock list:', err);
+    throw new Error('Failed to generate rule diagram mock list');
+  }
+  // Save the diagrams to report_generator
+  try {
+    await createRuleGenerator({
+      email,
+      report_json: mockList, // Save the full mockList
+      mcp_qualified_name: mcpQualifiedName,
+      guid // Save the guid
+    });
+  } catch (err) {
+    console.error('Error saving playground diagram to rules_generated:', err);
+    // Not throwing here, as saving is not critical for frontend
+  }
+  return mockList;
+}
 app.post('/api/mcp-tools', async (c) => {
   // Get MCP server name from frontend
   const body = await c.req.json();
@@ -369,6 +406,40 @@ app.post('/api/mcp-tools', async (c) => {
   }
 });
 
+
+app.post('/api/mcp-tools-rule-page', async (c) => {
+  // Get MCP server name from frontend
+  const body = await c.req.json();
+  const mcpServerName = body.name || 'exa'; // fallback to 'exa' if not provided
+  const guid = body.guid;
+  const email = body.email;
+  const user_exploit_summary = body.user_exploit_summary;
+  console.log('[mcp-tools] Input body:', body);
+  console.log('[mcp-tools] Using mcpServerName:', mcpServerName);
+  let tools = [];
+  try {
+    const response = await axios.get(`https://registry.smithery.ai/servers/${encodeURIComponent(mcpServerName)}`, {
+      headers: {
+        'Authorization': 'Bearer a818dfa8-1b79-4497-9787-4573028c208c',
+        'Accept': 'application/json',
+      },
+    });
+    // Map to array of tool names (strings)
+    tools = (response.data.tools || []).map((tool: any) => typeof tool === 'string' ? tool : tool.name);
+    console.log('[mcp-tools] Output tools:', tools);
+    // Start diagram generation in background (do not await)
+    if (guid && email && mcpServerName && tools.length > 0) {
+      generateRuleDiagram({ tools, email, mcpQualifiedName: mcpServerName, guid, user_exploit_summary })
+        .then(() => console.log('[mcp-tools] Diagram generation started'))
+        .catch(err => console.error('[mcp-tools] Diagram generation error:', err));
+    }
+    return c.json({ tools });
+  } catch (err: any) {
+    console.error('Error fetching tools from smithery.ai:', err);
+    console.log('[mcp-tools] Output error:', err?.message || String(err));
+    return c.json({ error: 'Failed to fetch tools from smithery registry', details: err?.message || String(err) }, 500);
+  }
+});
 app.post('/api/playground-diagram', async (c) => {
   const body = await c.req.json();
   const tools = Array.isArray(body.tools) ? body.tools : [];
@@ -397,7 +468,19 @@ app.get('/api/playground-diagram/status', async (c) => {
 
   return c.json(data.report_json as any);
 });
+app.get('/api/rule-diagram/status', async (c) => {
+  const guid = c.req.query('guid');
+  if (!guid) return c.json({ error: 'Missing guid' }, 400);
 
+  // Query the report_generator table for the report with this guid
+  const { data, error } = await geGeneratedRuleByGuid(guid);
+
+  if (error || !data || !data.report_json) {
+    return c.json({ status: 'pending' }, 200);
+  }
+
+  return c.json(data.report_json as any);
+});
 app.post('/api/mcp-qualified-name', async (c) => {
   const body = await c.req.json();
   let githubUrl = body.githubUrl;

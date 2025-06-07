@@ -19,7 +19,7 @@ import type { BamlRuntime, FunctionResult, BamlCtxManager, Image, Audio, ClientR
 import { toBamlError, type HTTPRequest } from "@boundaryml/baml"
 import type { Checked, Check, RecursivePartialNull as MovedRecursivePartialNull } from "./types.js"
 import type * as types from "./types.js"
-import type {PlaygroundDiagramMock, PlaygroundDiagramMockList, PlaygroundEdge, PlaygroundEdgeStyle, PlaygroundNode, PlaygroundNodeData, PlaygroundPosition, PlaygroundToolsInput, Resume} from "./types.js"
+import type {PlaygroundDiagramMock, PlaygroundDiagramMockList, PlaygroundEdge, PlaygroundEdgeStyle, PlaygroundNode, PlaygroundNodeData, PlaygroundPosition, PlaygroundToolsInput, Resume, Rule, RuleInput, RuleList} from "./types.js"
 import type TypeBuilder from "./type_builder.js"
 import { HttpRequest, HttpStreamRequest } from "./sync_request.js"
 import { LlmResponseParser, LlmStreamParser } from "./parser.js"
@@ -126,6 +126,29 @@ export class BamlSyncClient {
         collector,
       )
       return raw.parsed(false) as PlaygroundDiagramMock
+    } catch (error: any) {
+      throw toBamlError(error);
+    }
+  }
+  
+  GenerateSingleRule(
+      rawToolsInput: RuleInput,
+      __baml_options__?: BamlCallOptions
+  ): RuleList {
+    try {
+      const options = { ...this.bamlOptions, ...(__baml_options__ || {}) }
+      const collector = options.collector ? (Array.isArray(options.collector) ? options.collector : [options.collector]) : [];
+      const raw = this.runtime.callFunctionSync(
+        "GenerateSingleRule",
+        {
+          "rawToolsInput": rawToolsInput
+        },
+        this.ctxManager.cloneContext(),
+        options.tb?.__tb(),
+        options.clientRegistry,
+        collector,
+      )
+      return raw.parsed(false) as RuleList
     } catch (error: any) {
       throw toBamlError(error);
     }

@@ -74,6 +74,19 @@ export class BamlAsyncClient {
             throw toBamlError(error);
         }
     }
+    async GenerateSingleRule(rawToolsInput, __baml_options__) {
+        try {
+            const options = { ...this.bamlOptions, ...(__baml_options__ || {}) };
+            const collector = options.collector ? (Array.isArray(options.collector) ? options.collector : [options.collector]) : [];
+            const raw = await this.runtime.callFunction("GenerateSingleRule", {
+                "rawToolsInput": rawToolsInput
+            }, this.ctxManager.cloneContext(), options.tb?.__tb(), options.clientRegistry, collector);
+            return raw.parsed(false);
+        }
+        catch (error) {
+            throw toBamlError(error);
+        }
+    }
     async GenerateSixPlaygroundDiagramMocks(rawToolsInput, __baml_options__) {
         try {
             const options = { ...this.bamlOptions, ...(__baml_options__ || {}) };
@@ -128,6 +141,19 @@ class BamlStreamClient {
             const options = { ...this.bamlOptions, ...(__baml_options__ || {}) };
             const collector = options.collector ? (Array.isArray(options.collector) ? options.collector : [options.collector]) : [];
             const raw = this.runtime.streamFunction("GeneratePlaygroundDiagramMock", {
+                "rawToolsInput": rawToolsInput
+            }, undefined, this.ctxManager.cloneContext(), options.tb?.__tb(), options.clientRegistry, collector);
+            return new BamlStream(raw, (a) => a, (a) => a, this.ctxManager.cloneContext());
+        }
+        catch (error) {
+            throw toBamlError(error);
+        }
+    }
+    GenerateSingleRule(rawToolsInput, __baml_options__) {
+        try {
+            const options = { ...this.bamlOptions, ...(__baml_options__ || {}) };
+            const collector = options.collector ? (Array.isArray(options.collector) ? options.collector : [options.collector]) : [];
+            const raw = this.runtime.streamFunction("GenerateSingleRule", {
                 "rawToolsInput": rawToolsInput
             }, undefined, this.ctxManager.cloneContext(), options.tb?.__tb(), options.clientRegistry, collector);
             return new BamlStream(raw, (a) => a, (a) => a, this.ctxManager.cloneContext());

@@ -20,7 +20,7 @@ import { toBamlError } from "@boundaryml/baml"
 import type { Checked, Check } from "./types.js"
 import type { partial_types } from "./partial_types.js"
 import type * as types from "./types.js"
-import type {PlaygroundDiagramMock, PlaygroundDiagramMockList, PlaygroundEdge, PlaygroundEdgeStyle, PlaygroundNode, PlaygroundNodeData, PlaygroundPosition, PlaygroundToolsInput, Resume} from "./types.js"
+import type {PlaygroundDiagramMock, PlaygroundDiagramMockList, PlaygroundEdge, PlaygroundEdgeStyle, PlaygroundNode, PlaygroundNodeData, PlaygroundPosition, PlaygroundToolsInput, Resume, Rule, RuleInput, RuleList} from "./types.js"
 import type TypeBuilder from "./type_builder.js"
 
 export class LlmResponseParser {
@@ -58,6 +58,24 @@ export class LlmResponseParser {
         __baml_options__?.tb?.__tb(),
         __baml_options__?.clientRegistry,
       ) as PlaygroundDiagramMock
+    } catch (error) {
+      throw toBamlError(error);
+    }
+  }
+  
+  GenerateSingleRule(
+      llmResponse: string,
+      __baml_options__?: { tb?: TypeBuilder, clientRegistry?: ClientRegistry }
+  ): RuleList {
+    try {
+      return this.runtime.parseLlmResponse(
+        "GenerateSingleRule",
+        llmResponse,
+        false,
+        this.ctxManager.cloneContext(),
+        __baml_options__?.tb?.__tb(),
+        __baml_options__?.clientRegistry,
+      ) as RuleList
     } catch (error) {
       throw toBamlError(error);
     }
@@ -136,6 +154,24 @@ export class LlmStreamParser {
         __baml_options__?.tb?.__tb(),
         __baml_options__?.clientRegistry,
       ) as partial_types.PlaygroundDiagramMock
+    } catch (error) {
+      throw toBamlError(error);
+    }
+  }
+  
+  GenerateSingleRule(
+      llmResponse: string,
+      __baml_options__?: { tb?: TypeBuilder, clientRegistry?: ClientRegistry }
+  ): partial_types.RuleList {
+    try {
+      return this.runtime.parseLlmResponse(
+        "GenerateSingleRule",
+        llmResponse,
+        true,
+        this.ctxManager.cloneContext(),
+        __baml_options__?.tb?.__tb(),
+        __baml_options__?.clientRegistry,
+      ) as partial_types.RuleList
     } catch (error) {
       throw toBamlError(error);
     }

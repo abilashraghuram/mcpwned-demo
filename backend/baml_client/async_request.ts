@@ -19,7 +19,7 @@ import type { BamlRuntime, BamlCtxManager, ClientRegistry, Image, Audio } from "
 import { toBamlError, HTTPRequest } from "@boundaryml/baml"
 import type { Checked, Check } from "./types.js"
 import type * as types from "./types.js"
-import type {PlaygroundDiagramMock, PlaygroundDiagramMockList, PlaygroundEdge, PlaygroundEdgeStyle, PlaygroundNode, PlaygroundNodeData, PlaygroundPosition, PlaygroundToolsInput, Resume} from "./types.js"
+import type {PlaygroundDiagramMock, PlaygroundDiagramMockList, PlaygroundEdge, PlaygroundEdgeStyle, PlaygroundNode, PlaygroundNodeData, PlaygroundPosition, PlaygroundToolsInput, Resume, Rule, RuleInput, RuleList} from "./types.js"
 import type TypeBuilder from "./type_builder.js"
 
 type BamlCallOptions = {
@@ -58,6 +58,26 @@ export class AsyncHttpRequest {
     try {
       return await this.runtime.buildRequest(
         "GeneratePlaygroundDiagramMock",
+        {
+          "rawToolsInput": rawToolsInput
+        },
+        this.ctxManager.cloneContext(),
+        __baml_options__?.tb?.__tb(),
+        __baml_options__?.clientRegistry,
+        false,
+      )
+    } catch (error) {
+      throw toBamlError(error);
+    }
+  }
+  
+  async GenerateSingleRule(
+      rawToolsInput: RuleInput,
+      __baml_options__?: BamlCallOptions
+  ): Promise<HTTPRequest> {
+    try {
+      return await this.runtime.buildRequest(
+        "GenerateSingleRule",
         {
           "rawToolsInput": rawToolsInput
         },
@@ -144,6 +164,26 @@ export class AsyncHttpStreamRequest {
     try {
       return await this.runtime.buildRequest(
         "GeneratePlaygroundDiagramMock",
+        {
+          "rawToolsInput": rawToolsInput
+        },
+        this.ctxManager.cloneContext(),
+        __baml_options__?.tb?.__tb(),
+        __baml_options__?.clientRegistry,
+        true,
+      )
+    } catch (error) {
+      throw toBamlError(error);
+    }
+  }
+  
+  async GenerateSingleRule(
+      rawToolsInput: RuleInput,
+      __baml_options__?: BamlCallOptions
+  ): Promise<HTTPRequest> {
+    try {
+      return await this.runtime.buildRequest(
+        "GenerateSingleRule",
         {
           "rawToolsInput": rawToolsInput
         },

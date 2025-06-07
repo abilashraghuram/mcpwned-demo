@@ -36,14 +36,32 @@ class PlaygroundDiagramMock {
   mcpTools string[]
   scan_description string
 }
+class Rule {
+  nodes PlaygroundNode[]
+  edges PlaygroundEdge[]
+  guardrail_justification string[]
+  guardrail_code string[]
+  ruleJustification string
+  scan_description string
+}
+
 
 class PlaygroundToolsInput {
   tools string[]
   // Add more fields as needed for the tools input object
 }
+class RuleInput {
+  tools string[]
+  user_exploit_summary string
+  // Add more fields as needed for the tools input object
+}
 
 class PlaygroundDiagramMockList {
   diagrams PlaygroundDiagramMock[]
+}
+
+class RuleList {
+  diagrams Rule[]
 }
 
 // Function to generate a mock playground diagram object from raw tools output
@@ -140,6 +158,106 @@ function GenerateSixPlaygroundDiagramMocks(rawToolsInput: PlaygroundToolsInput) 
     Exact and precise list of affected_tools that are depicted in the react_flow_nodes, in the order they appear.
     Exact and precise guardrail_suggestions that have Concrete, actionable mitigations that focus on monitoring the chain of execution, plus input/output validation, rate‑limiting, and role‑based authorization as relevant to the theme. Be precise and concise with each of the guardrails suggestions.
     Exact and precise scan_description that is a always a Five‑word summary of the exploit (e.g., "Infinite LLM call token drain").
+    {{ _.role('user') }}
+    {{ rawToolsInput }}
+  "#
+}
+
+
+// Function to generate three mock playground diagram objects
+function GenerateSingleRule(rawToolsInput: RuleInput) -> RuleList {
+  client "openai/gpt-4.1"
+  prompt #"
+  You are a senior principal member of staff at Anthropics's safety research team. You are leading a division at Anthropic that specializes in creating guardrailing rules to prevent hacks in MCP tool calls.
+  
+    This is the lark file of the rule guardrailing language
+    ?start: policy+
+
+    policy: "policy" NAME "{" rule* "}"
+
+    rule: "rule" NAME "{" "if" expression ";" "actions" action ";" "}"
+
+    action: ALLOW | BLOCK
+
+    // --- Single Unified Expression Hierarchy ---
+    // Following Lark best practices like the calculator example
+    ?expression: or_expr
+
+    or_expr: and_expr ("or" and_expr)*
+
+    and_expr: not_expr ("and" not_expr)*
+
+    not_expr: NOT comparison    -> negated_comparison
+            | comparison
+
+    comparison: operand (COMPARISON_OP operand)?
+              | operand "matches" REGEX
+
+    // --- Composable Operands (any can be compared to any) ---
+    operand: param_expr
+          | tool_attr
+          | literal
+          | sequence_expr
+          | output_expr
+          | "(" expression ")"
+
+    // --- Parameter Expressions - Naturally Composable ---
+    param_expr: "param" "(" STRING ")" ".value"    -> param_value
+              | "param" ".name"                    -> param_name
+
+    // --- Tool Attributes ---
+    tool_attr: "tool" ".name"        -> tool_name
+            | "tool" ".description" -> tool_desc
+
+    // --- Output Condition ---
+    output_expr: "tool" ".output"    -> tool_output
+
+    // --- Sequence - Uses Same Expression for Conditions ---
+    sequence_expr: "sequence" "{" sequence_step ("->" sequence_step)* "}"
+
+    sequence_step: "tool" STRING ["(" expression ")"]
+
+    // --- Literals ---
+    literal: STRING | NUMBER | BOOLEAN
+
+    // --- Operators with Proper Precedence ---
+    COMPARISON_OP: "==" | "!=" | ">" | "<" | ">=" | "<="
+
+    // --- Terminals Using Lark Best Practices ---
+    ALLOW: "ALLOW"
+    BLOCK: "BLOCK"
+    NOT: "not"
+    STRING: ESCAPED_STRING
+    NUMBER: SIGNED_NUMBER
+    BOOLEAN: "true"i | "false"i
+    REGEX: /\/(?:[^\\\/]|\\[\s\S])+\/[gimyus]*/
+    NAME: CNAME
+
+    // --- Comments ---
+    COMMENT: "//" /[^\n]*/
+
+    // --- Import Common Patterns ---
+    %import common.CNAME
+    %import common.ESCAPED_STRING
+    %import common.SIGNED_NUMBER
+    %import common.WS
+
+    // --- Clean Whitespace and Comment Handling ---
+    %ignore WS
+    %ignore COMMENT
+    
+    You will be provided a description of an exploit that a user is looking to generate guardrail rules for. Understand the exploit and then generate guardrail rules to return to the user. You will also generate a visual diagram of the exploit that you are trying to guardrail againt.
+    
+    General Instructions
+    •	Keep descriptions concise but precise.
+
+   {{ ctx.output_format }}
+    What Each RuleList object Must Contain:
+    Correct react_flow_nodes and react_flow_edges where you make hijack visually obvious. Color all edges/nodes green for safe paths and red for exploit paths. In cases of control flow and data flow attacks create nodes to descibe where the data is poisoned and where the attacked manipulates the control flow. Don't be overly verbose in the labels for the nodes. Use a maximum of 5 words for text in the nodes. If you think that you need to make more nodes to better describe the exploit then take that action. Always direct the direction of edges in the direction that clearly depicts the chain of attacks.
+    The color of the node should be a string hex code like #F87171
+    The stroke of the edge shoulkd be a string hex code like #22c55e
+    The strokeWidth of the edge should be an int like 2
+    
     {{ _.role('user') }}
     {{ rawToolsInput }}
   "#

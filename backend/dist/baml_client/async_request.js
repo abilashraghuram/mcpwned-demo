@@ -35,6 +35,16 @@ export class AsyncHttpRequest {
             throw toBamlError(error);
         }
     }
+    async GenerateSingleRule(rawToolsInput, __baml_options__) {
+        try {
+            return await this.runtime.buildRequest("GenerateSingleRule", {
+                "rawToolsInput": rawToolsInput
+            }, this.ctxManager.cloneContext(), __baml_options__?.tb?.__tb(), __baml_options__?.clientRegistry, false);
+        }
+        catch (error) {
+            throw toBamlError(error);
+        }
+    }
     async GenerateSixPlaygroundDiagramMocks(rawToolsInput, __baml_options__) {
         try {
             return await this.runtime.buildRequest("GenerateSixPlaygroundDiagramMocks", {
@@ -76,6 +86,16 @@ export class AsyncHttpStreamRequest {
     async GeneratePlaygroundDiagramMock(rawToolsInput, __baml_options__) {
         try {
             return await this.runtime.buildRequest("GeneratePlaygroundDiagramMock", {
+                "rawToolsInput": rawToolsInput
+            }, this.ctxManager.cloneContext(), __baml_options__?.tb?.__tb(), __baml_options__?.clientRegistry, true);
+        }
+        catch (error) {
+            throw toBamlError(error);
+        }
+    }
+    async GenerateSingleRule(rawToolsInput, __baml_options__) {
+        try {
+            return await this.runtime.buildRequest("GenerateSingleRule", {
                 "rawToolsInput": rawToolsInput
             }, this.ctxManager.cloneContext(), __baml_options__?.tb?.__tb(), __baml_options__?.clientRegistry, true);
         }

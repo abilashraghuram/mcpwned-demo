@@ -31,6 +31,14 @@ export class LlmResponseParser {
             throw toBamlError(error);
         }
     }
+    GenerateSingleRule(llmResponse, __baml_options__) {
+        try {
+            return this.runtime.parseLlmResponse("GenerateSingleRule", llmResponse, false, this.ctxManager.cloneContext(), __baml_options__?.tb?.__tb(), __baml_options__?.clientRegistry);
+        }
+        catch (error) {
+            throw toBamlError(error);
+        }
+    }
     GenerateSixPlaygroundDiagramMocks(llmResponse, __baml_options__) {
         try {
             return this.runtime.parseLlmResponse("GenerateSixPlaygroundDiagramMocks", llmResponse, false, this.ctxManager.cloneContext(), __baml_options__?.tb?.__tb(), __baml_options__?.clientRegistry);
@@ -66,6 +74,14 @@ export class LlmStreamParser {
     GeneratePlaygroundDiagramMock(llmResponse, __baml_options__) {
         try {
             return this.runtime.parseLlmResponse("GeneratePlaygroundDiagramMock", llmResponse, true, this.ctxManager.cloneContext(), __baml_options__?.tb?.__tb(), __baml_options__?.clientRegistry);
+        }
+        catch (error) {
+            throw toBamlError(error);
+        }
+    }
+    GenerateSingleRule(llmResponse, __baml_options__) {
+        try {
+            return this.runtime.parseLlmResponse("GenerateSingleRule", llmResponse, true, this.ctxManager.cloneContext(), __baml_options__?.tb?.__tb(), __baml_options__?.clientRegistry);
         }
         catch (error) {
             throw toBamlError(error);

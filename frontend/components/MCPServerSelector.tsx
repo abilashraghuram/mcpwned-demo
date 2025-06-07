@@ -11,6 +11,8 @@ interface MCPServerSelectorProps {
   onEmailChange: (val: string) => void;
   emailError?: boolean;
   mcpServerError?: string | null;
+  userQuery?: string;
+  onUserQueryChange?: (val: string) => void;
 }
 
 const MCPServerSelector: React.FC<MCPServerSelectorProps> = ({
@@ -24,8 +26,10 @@ const MCPServerSelector: React.FC<MCPServerSelectorProps> = ({
   onEmailChange,
   emailError = false,
   mcpServerError = null,
+  userQuery,
+  onUserQueryChange,
 }) => (
-  <div className="w-full flex justify-center">
+  <div className="w-full flex flex-col items-center">
     <div className="flex flex-row items-end gap-6 w-full max-w-4xl mt-2 mb-2">
       {/* MCP Qualified Name */}
       <div className="flex flex-col w-full max-w-xs">
@@ -67,7 +71,19 @@ const MCPServerSelector: React.FC<MCPServerSelectorProps> = ({
         </button>
       </div>
     </div>
-    {/* Move the help text below the row */}
+    {/* User Query full row, only if props provided */}
+    {userQuery !== undefined && onUserQueryChange && (
+      <div className="flex flex-col w-full max-w-4xl mt-2">
+        <label className="mb-1 text-sm font-medium text-muted-foreground">Describe the rule you want to generate</label>
+        <input
+          type="text"
+          className="rounded-md border px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-primary bg-background w-full"
+          placeholder="Describe your scenario here"
+          value={userQuery}
+          onChange={e => onUserQueryChange(e.target.value)}
+        />
+      </div>
+    )}
   </div>
 );
 

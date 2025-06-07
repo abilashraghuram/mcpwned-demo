@@ -184,6 +184,33 @@ export type Database = {
         }
         Relationships: []
       },
+      rules_generated: {
+        Row: {
+          id: number
+          created_at: string
+          email: string
+          report_json: Json
+          mcp_qualified_name: string
+          guid: string
+        }
+        Insert: {
+          id?: number
+          created_at?: string
+          email: string
+          report_json: Json
+          mcp_qualified_name: string
+          guid: string
+        }
+        Update: {
+          id?: number
+          created_at?: string
+          email?: string
+          report_json?: Json
+          mcp_qualified_name?: string
+          guid?: string
+        }
+        Relationships: []
+      },
     }
     Views: {
       [_ in never]: never

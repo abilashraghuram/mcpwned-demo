@@ -43,6 +43,11 @@ export function DashboardNav({ isCollapsed }: NavProps) {
       href: "/dashboard/scanner",
       icon: SlidersHorizontal,
     },
+    {
+      title: "Rule Copilot (Beta)",
+      href: "/dashboard/rule-copilot",
+      icon: SlidersHorizontal,
+    },
   ]
 
   return (
