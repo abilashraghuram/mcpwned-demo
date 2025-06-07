@@ -102,6 +102,7 @@ export interface PlaygroundPosition {
 
 export interface PlaygroundToolsInput {
   tools: string[]
+  mcp_server_summary: string
   
 }
 

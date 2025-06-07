@@ -38,7 +38,7 @@ export default class TypeBuilder {
     
     PlaygroundPosition: ClassViewer<'PlaygroundPosition', "x" | "y">;
     
-    PlaygroundToolsInput: ClassViewer<'PlaygroundToolsInput', "tools">;
+    PlaygroundToolsInput: ClassViewer<'PlaygroundToolsInput', "tools" | "mcp_server_summary">;
     
     Resume: ClassViewer<'Resume', "name" | "email" | "experience" | "skills">;
     
@@ -96,7 +96,7 @@ export default class TypeBuilder {
         ]);
         
         this.PlaygroundToolsInput = this.tb.classViewer("PlaygroundToolsInput", [
-          "tools",
+          "tools","mcp_server_summary",
         ]);
         
         this.Resume = this.tb.classViewer("Resume", [

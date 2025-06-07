@@ -255,7 +255,7 @@ export default function PlaygroundPage() {
       )}
       <DashboardHeader
         heading="Scan for control flow, data flow exploits in popular MCP servers"
-        text="Scan any MCP server"
+        text="Scan any MCP server. Requires the GitHub README URL of the MCP server."
       />
       <div className="flex flex-col md:flex-row gap-0 md:gap-8 mt-4">
         {/* Sidebar for searching/selecting investigations, only if diagrams exist */}

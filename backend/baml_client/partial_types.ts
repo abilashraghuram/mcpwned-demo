@@ -82,6 +82,7 @@ export namespace partial_types {
     
     export interface PlaygroundToolsInput {
         tools?: (string | null)[]
+        mcp_server_summary?: (string | null)
     }
     
     export interface Resume {
