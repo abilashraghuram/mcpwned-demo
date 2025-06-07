@@ -303,6 +303,7 @@ interface GeneratePlaygroundDiagramParams {
   email: string;
   mcpQualifiedName: string;
   guid: string;
+  mcp_server_summary: string;
 }
 interface GenerateRuleDiagramParams {
   tools: any[];
@@ -310,16 +311,17 @@ interface GenerateRuleDiagramParams {
   mcpQualifiedName: string;
   guid: string;
   user_exploit_summary: string;
+  mcp_server_summary: string;
 }
 
-async function generatePlaygroundDiagram({ tools, email, mcpQualifiedName, guid }: GeneratePlaygroundDiagramParams) {
+async function generatePlaygroundDiagram({ tools, email, mcpQualifiedName, guid, mcp_server_summary }: GeneratePlaygroundDiagramParams) {
   if (!tools.length) {
     throw new Error('No tools provided');
   }
   if (!email || !mcpQualifiedName || !guid) {
     throw new Error('Missing email, mcp_qualified_name, or guid');
   }
-  const playgroundToolsInput = { tools };
+  const playgroundToolsInput = { tools, mcp_server_summary };
   let mockList;
   try {
     mockList = await b.GenerateSixPlaygroundDiagramMocks(playgroundToolsInput);
@@ -343,14 +345,14 @@ async function generatePlaygroundDiagram({ tools, email, mcpQualifiedName, guid 
   return mockList;
 }
 
-async function generateRuleDiagram({ tools, email, mcpQualifiedName, guid, user_exploit_summary }: GenerateRuleDiagramParams) {
+async function generateRuleDiagram({ tools, email, mcpQualifiedName, guid, user_exploit_summary, mcp_server_summary }: GenerateRuleDiagramParams) {
   if (!tools.length) {
     throw new Error('No tools provided');
   }
   if (!email || !mcpQualifiedName || !guid) {
     throw new Error('Missing email, mcp_qualified_name, or guid');
   }
-  const playgroundToolsInput = { tools, user_exploit_summary };
+  const playgroundToolsInput = { tools, user_exploit_summary, mcp_server_summary };
   let mockList;
   try {
     mockList = await b.GenerateSingleRule(playgroundToolsInput);
@@ -391,8 +393,14 @@ function toRawUrl(githubUrl: string): string | null {
   return null;
 }
 
+// Define RuleInputGithub locally
+interface RuleInputGithub {
+  tools: string[];
+  mcp_server_summary: string;
+}
+
 // Generalized function to get tools from a GitHub README string or URL
-async function getToolsFromGithubReadme(github_readme: string): Promise<string[]> {
+async function getToolsFromGithubReadme(github_readme: string): Promise<RuleInputGithub> {
   let readmeText = github_readme;
   // If the input looks like a URL, fetch it
   if (typeof github_readme === 'string' && github_readme.startsWith('http')) {
@@ -403,7 +411,7 @@ async function getToolsFromGithubReadme(github_readme: string): Promise<string[]
     console.log('[getToolsFromGithubReadme] Fetched readme text:', readmeText);
   }
   const ruleInput = await b.GenerateToolsList({ github_readme: readmeText });
-  return Array.isArray(ruleInput.tools) ? ruleInput.tools : [];
+  return ruleInput;
 }
 
 app.post('/api/mcp-tools', async (c) => {
@@ -413,16 +421,19 @@ app.post('/api/mcp-tools', async (c) => {
   const email = body.email;
   console.log('[mcp-tools] Input body:', body);
   let tools: string[] = [];
+  let mcp_server_summary = '';
   try {
-    tools = await getToolsFromGithubReadme(github_readme);
+    const ruleInput = await getToolsFromGithubReadme(github_readme);
+    tools = Array.isArray(ruleInput.tools) ? ruleInput.tools : [];
+    mcp_server_summary = ruleInput.mcp_server_summary || '';
     console.log('[mcp-tools] Output tools:', tools);
     // Start diagram generation in background (do not await)
     if (guid && email && github_readme && tools.length > 0) {
-      generatePlaygroundDiagram({ tools, email, mcpQualifiedName: github_readme, guid })
+      generatePlaygroundDiagram({ tools, email, mcpQualifiedName: github_readme, guid, mcp_server_summary })
         .then(() => console.log('[mcp-tools] Diagram generation started'))
         .catch(err => console.error('[mcp-tools] Diagram generation error:', err));
     }
-    return c.json({ tools });
+    return c.json({ tools, mcp_server_summary });
   } catch (err: any) {
     console.error('Error extracting tools from github_readme:', err);
     return c.json({ error: 'Failed to extract tools from github_readme', details: err?.message || String(err) }, 500);
@@ -437,16 +448,19 @@ app.post('/api/mcp-tools-rule-page', async (c) => {
   const user_exploit_summary = body.user_exploit_summary;
   console.log('[mcp-tools-rule-page] Input body:', body);
   let tools: string[] = [];
+  let mcp_server_summary = '';
   try {
-    tools = await getToolsFromGithubReadme(github_readme);
+    const ruleInput = await getToolsFromGithubReadme(github_readme);
+    tools = Array.isArray(ruleInput.tools) ? ruleInput.tools : [];
+    mcp_server_summary = ruleInput.mcp_server_summary || '';
     console.log('[mcp-tools-rule-page] Output tools:', tools);
     // Start diagram generation in background (do not await)
     if (guid && email && github_readme && tools.length > 0) {
-      generateRuleDiagram({ tools, email, mcpQualifiedName: github_readme, guid, user_exploit_summary })
+      generateRuleDiagram({ tools, email, mcpQualifiedName: github_readme, guid, user_exploit_summary, mcp_server_summary })
         .then(() => console.log('[mcp-tools-rule-page] Diagram generation started'))
         .catch(err => console.error('[mcp-tools-rule-page] Diagram generation error:', err));
     }
-    return c.json({ tools });
+    return c.json({ tools, mcp_server_summary });
   } catch (err: any) {
     console.error('Error extracting tools from github_readme:', err);
     return c.json({ error: 'Failed to extract tools from github_readme', details: err?.message || String(err) }, 500);
@@ -459,8 +473,9 @@ app.post('/api/playground-diagram', async (c) => {
   const email = typeof body.email === 'string' ? body.email.trim() : '';
   const mcpQualifiedName = typeof body.mcp_qualified_name === 'string' ? body.mcp_qualified_name.trim() : '';
   const guid = typeof body.guid === 'string' ? body.guid.trim() : '';
+  const mcp_server_summary = typeof body.mcp_server_summary === 'string' ? body.mcp_server_summary : '';
   try {
-    const mockList = await generatePlaygroundDiagram({ tools, email, mcpQualifiedName, guid });
+    const mockList = await generatePlaygroundDiagram({ tools, email, mcpQualifiedName, guid, mcp_server_summary });
     return c.json({ diagrams: mockList.diagrams });
   } catch (err: any) {
     return c.json({ error: err.message || 'Failed to generate playground diagram' }, 500);
@@ -577,8 +592,8 @@ app.post('/api/parse-github-file', async (c) => {
     return c.json({ error: 'Missing or invalid url' }, 400);
   }
   try {
-    const tools = await getToolsFromGithubReadme(url);
-    return c.json({ tools });
+    const ruleInput = await getToolsFromGithubReadme(url);
+    return c.json({ tools: ruleInput.tools, mcp_server_summary: ruleInput.mcp_server_summary });
   } catch (err: any) {
     return c.json({ error: 'Failed to extract tools from README', details: err?.message || String(err) }, 500);
   }

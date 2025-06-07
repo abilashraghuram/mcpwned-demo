@@ -44,7 +44,9 @@ export default class TypeBuilder {
     
     Rule: ClassViewer<'Rule', "nodes" | "edges" | "guardrail_justification" | "guardrail_code" | "ruleJustification" | "scan_description">;
     
-    RuleInput: ClassViewer<'RuleInput', "tools" | "user_exploit_summary">;
+    RuleInput: ClassViewer<'RuleInput', "tools" | "user_exploit_summary" | "mcp_server_summary">;
+    
+    RuleInputGithub: ClassViewer<'RuleInputGithub', "tools" | "mcp_server_summary">;
     
     RuleList: ClassViewer<'RuleList', "diagrams">;
     
@@ -53,7 +55,7 @@ export default class TypeBuilder {
     constructor() {
         this.tb = new _TypeBuilder({
           classes: new Set([
-            "ObtainRulesInput","PlaygroundDiagramMock","PlaygroundDiagramMockList","PlaygroundEdge","PlaygroundEdgeStyle","PlaygroundNode","PlaygroundNodeData","PlaygroundPosition","PlaygroundToolsInput","Resume","Rule","RuleInput","RuleList",
+            "ObtainRulesInput","PlaygroundDiagramMock","PlaygroundDiagramMockList","PlaygroundEdge","PlaygroundEdgeStyle","PlaygroundNode","PlaygroundNodeData","PlaygroundPosition","PlaygroundToolsInput","Resume","Rule","RuleInput","RuleInputGithub","RuleList",
           ]),
           enums: new Set([
             
@@ -106,7 +108,11 @@ export default class TypeBuilder {
         ]);
         
         this.RuleInput = this.tb.classViewer("RuleInput", [
-          "tools","user_exploit_summary",
+          "tools","user_exploit_summary","mcp_server_summary",
+        ]);
+        
+        this.RuleInputGithub = this.tb.classViewer("RuleInputGithub", [
+          "tools","mcp_server_summary",
         ]);
         
         this.RuleList = this.tb.classViewer("RuleList", [

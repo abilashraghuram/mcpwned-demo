@@ -20,7 +20,7 @@ import { toBamlError } from "@boundaryml/baml"
 import type { Checked, Check } from "./types.js"
 import type { partial_types } from "./partial_types.js"
 import type * as types from "./types.js"
-import type {ObtainRulesInput, PlaygroundDiagramMock, PlaygroundDiagramMockList, PlaygroundEdge, PlaygroundEdgeStyle, PlaygroundNode, PlaygroundNodeData, PlaygroundPosition, PlaygroundToolsInput, Resume, Rule, RuleInput, RuleList} from "./types.js"
+import type {ObtainRulesInput, PlaygroundDiagramMock, PlaygroundDiagramMockList, PlaygroundEdge, PlaygroundEdgeStyle, PlaygroundNode, PlaygroundNodeData, PlaygroundPosition, PlaygroundToolsInput, Resume, Rule, RuleInput, RuleInputGithub, RuleList} from "./types.js"
 import type TypeBuilder from "./type_builder.js"
 
 export class LlmResponseParser {
@@ -120,7 +120,7 @@ export class LlmResponseParser {
   GenerateToolsList(
       llmResponse: string,
       __baml_options__?: { tb?: TypeBuilder, clientRegistry?: ClientRegistry }
-  ): RuleInput {
+  ): RuleInputGithub {
     try {
       return this.runtime.parseLlmResponse(
         "GenerateToolsList",
@@ -129,7 +129,7 @@ export class LlmResponseParser {
         this.ctxManager.cloneContext(),
         __baml_options__?.tb?.__tb(),
         __baml_options__?.clientRegistry,
-      ) as RuleInput
+      ) as RuleInputGithub
     } catch (error) {
       throw toBamlError(error);
     }
@@ -234,7 +234,7 @@ export class LlmStreamParser {
   GenerateToolsList(
       llmResponse: string,
       __baml_options__?: { tb?: TypeBuilder, clientRegistry?: ClientRegistry }
-  ): partial_types.RuleInput {
+  ): partial_types.RuleInputGithub {
     try {
       return this.runtime.parseLlmResponse(
         "GenerateToolsList",
@@ -243,7 +243,7 @@ export class LlmStreamParser {
         this.ctxManager.cloneContext(),
         __baml_options__?.tb?.__tb(),
         __baml_options__?.clientRegistry,
-      ) as partial_types.RuleInput
+      ) as partial_types.RuleInputGithub
     } catch (error) {
       throw toBamlError(error);
     }

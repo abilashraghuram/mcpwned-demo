@@ -126,6 +126,13 @@ export interface Rule {
 export interface RuleInput {
   tools: string[]
   user_exploit_summary: string
+  mcp_server_summary: string
+  
+}
+
+export interface RuleInputGithub {
+  tools: string[]
+  mcp_server_summary: string
   
 }
 

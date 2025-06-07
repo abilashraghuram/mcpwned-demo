@@ -48,7 +48,7 @@ class Rule {
 
 class PlaygroundToolsInput {
   tools string[]
-  // Add more fields as needed for the tools input object
+  mcp_server_summary string
 }
 
 class ObtainRulesInput {
@@ -58,6 +58,12 @@ class ObtainRulesInput {
 class RuleInput {
   tools string[] 
   user_exploit_summary string
+  mcp_server_summary string
+}
+
+class RuleInputGithub {
+  tools string[] 
+  mcp_server_summary string
 }
 
 class PlaygroundDiagramMockList {
@@ -250,7 +256,7 @@ function GenerateSingleRule(rawToolsInput: RuleInput) -> RuleList {
     %ignore WS
     %ignore COMMENT
     
-    You will be provided a description of guardrails the user is trying to create. Understand exactly what the user is asking for and make use of the lark syntax provided to you to genenerate the exact guardrails. Never generate guardrails for anything the user is not asking for. You will also generate a visual diagram illustrating the expploit the guardrails you've created would prevent.
+    You will be provided a description of guardrails the user is trying to create. Understand exactly what the user is asking for and make use of the lark syntax provided to you to genenerate the exact guardrails. Never generate guardrails for anything the user is not asking for. You are also provided a detailed description of the MCP server, read this to thoroughly understand how the MCP server works before you generate the guardrails. You will also generate a visual diagram illustrating the expploit the guardrails you've created would prevent.
     General Instructions
     •	Keep descriptions concise but precise.
 
@@ -266,11 +272,12 @@ function GenerateSingleRule(rawToolsInput: RuleInput) -> RuleList {
   "#
 }
 
-function GenerateToolsList(githubReadMeInput: ObtainRulesInput ) -> RuleInput {
+function GenerateToolsList(githubReadMeInput: ObtainRulesInput ) -> RuleInputGithub {
   client "openai/gpt-4.1"
   prompt #"
     You are a senior staff engineer at OpenAI who has a deep understanding of MCP servers. You will be provided a github readme of an MCP server that contains information about all the tools that are part of that MCP server. Your job is to return the list of all the tools of the MCP server here along with a well wrtten description of what the tool does.
     Each tool string should be of the format tool_name: tool_description
+    Also you will return a detailed description of the MCP summary that inclueds a description of what it is, how it works and the goals it achieves.
     {{ ctx.output_format }}
     {{ _.role('user') }}
     {{ githubReadMeInput }}
