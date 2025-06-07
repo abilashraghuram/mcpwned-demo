@@ -20,7 +20,7 @@ import { toBamlError } from "@boundaryml/baml"
 import type { Checked, Check } from "./types.js"
 import type { partial_types } from "./partial_types.js"
 import type * as types from "./types.js"
-import type {PlaygroundDiagramMock, PlaygroundDiagramMockList, PlaygroundEdge, PlaygroundEdgeStyle, PlaygroundNode, PlaygroundNodeData, PlaygroundPosition, PlaygroundToolsInput, Resume, Rule, RuleInput, RuleList} from "./types.js"
+import type {ObtainRulesInput, PlaygroundDiagramMock, PlaygroundDiagramMockList, PlaygroundEdge, PlaygroundEdgeStyle, PlaygroundNode, PlaygroundNodeData, PlaygroundPosition, PlaygroundToolsInput, Resume, Rule, RuleInput, RuleList} from "./types.js"
 import type TypeBuilder from "./type_builder.js"
 
 export class LlmResponseParser {
@@ -117,6 +117,24 @@ export class LlmResponseParser {
     }
   }
   
+  GenerateToolsList(
+      llmResponse: string,
+      __baml_options__?: { tb?: TypeBuilder, clientRegistry?: ClientRegistry }
+  ): RuleInput {
+    try {
+      return this.runtime.parseLlmResponse(
+        "GenerateToolsList",
+        llmResponse,
+        false,
+        this.ctxManager.cloneContext(),
+        __baml_options__?.tb?.__tb(),
+        __baml_options__?.clientRegistry,
+      ) as RuleInput
+    } catch (error) {
+      throw toBamlError(error);
+    }
+  }
+  
 }
 
 export class LlmStreamParser {
@@ -208,6 +226,24 @@ export class LlmStreamParser {
         __baml_options__?.tb?.__tb(),
         __baml_options__?.clientRegistry,
       ) as partial_types.PlaygroundDiagramMockList
+    } catch (error) {
+      throw toBamlError(error);
+    }
+  }
+  
+  GenerateToolsList(
+      llmResponse: string,
+      __baml_options__?: { tb?: TypeBuilder, clientRegistry?: ClientRegistry }
+  ): partial_types.RuleInput {
+    try {
+      return this.runtime.parseLlmResponse(
+        "GenerateToolsList",
+        llmResponse,
+        true,
+        this.ctxManager.cloneContext(),
+        __baml_options__?.tb?.__tb(),
+        __baml_options__?.clientRegistry,
+      ) as partial_types.RuleInput
     } catch (error) {
       throw toBamlError(error);
     }

@@ -35,7 +35,7 @@ export default function PlaygroundPage() {
   const [selectedDiagramIdx, setSelectedDiagramIdx] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [customMcp, setCustomMcp] = useState("");
+  const [readmeUrl, setReadmeUrl] = useState("");
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [mcpServerError, setMcpServerError] = useState<string | null>(null);
@@ -62,7 +62,7 @@ export default function PlaygroundPage() {
       }));
       setDiagrams(diagramsTyped);
       setEmail(cached.email || "");
-      setCustomMcp(cached.mcpQualifiedName || "");
+      setReadmeUrl(cached.mcpQualifiedName || "");
       setSelectedDiagramIdx(0);
       // setSearch(diagramsTyped[0]?.scan_description || ""); // Removed: Do not auto-populate search bar
     }
@@ -78,9 +78,8 @@ export default function PlaygroundPage() {
     setLoading(true);
     setError(null);
     setMcpServerError(null);
-    const qualifiedName = customMcp.trim();
-    if (!qualifiedName) {
-      setMcpServerError('Please enter a qualified MCP name.');
+    if (!readmeUrl.trim()) {
+      setMcpServerError('Please enter the GitHub README URL.');
       setLoading(false);
       return;
     }
@@ -91,11 +90,11 @@ export default function PlaygroundPage() {
       const toolsRes = await fetch("/api/mcp-tools", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: qualifiedName, guid, email: email.trim() }),
+        body: JSON.stringify({ github_readme: readmeUrl.trim(), guid, email: email.trim() }),
       });
       const toolsData = await toolsRes.json();
       if (toolsRes.status !== 200 || !Array.isArray(toolsData.tools) || toolsData.tools.length === 0) {
-        setMcpServerError("Invalid MCP qualified name or no tools found. Please check and try again.");
+        setMcpServerError("Invalid README URL or no tools found. Please check and try again.");
         setLoading(false);
         return;
       }
@@ -110,7 +109,7 @@ export default function PlaygroundPage() {
             setSelectedDiagramIdx(0);
             setLoading(false);
             clearInterval(pollInterval);
-            DiagramCache.save(statusData.diagrams, email.trim(), qualifiedName);
+            DiagramCache.save(statusData.diagrams, email.trim(), readmeUrl.trim());
             DiagramCache.saveByScanDescription(statusData.diagrams);
           } else if (statusData.status === 'pending') {
             // Do nothing, keep polling
@@ -256,7 +255,7 @@ export default function PlaygroundPage() {
       )}
       <DashboardHeader
         heading="Scan for control flow, data flow exploits in popular MCP servers"
-        text="You can find the qualified name from the Smithery server page&rsquo;s url: https://smithery.ai/server/&lt;qualifiedName&gt;"
+        text="Scan any MCP server"
       />
       <div className="flex flex-col md:flex-row gap-0 md:gap-8 mt-4">
         {/* Sidebar for searching/selecting investigations, only if diagrams exist */}
@@ -300,10 +299,10 @@ export default function PlaygroundPage() {
             <MCPServerSelector
               servers={MOCK_MCP_SERVERS}
               selected={selectedMcp}
-              custom={customMcp}
+              custom={readmeUrl}
               onSelect={setSelectedMcp}
               onCustomChange={val => {
-                setCustomMcp(val);
+                setReadmeUrl(val);
                 if (mcpServerError) setMcpServerError(null);
               }}
               onGenerate={handleGenerate}

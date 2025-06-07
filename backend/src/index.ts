@@ -373,73 +373,86 @@ async function generateRuleDiagram({ tools, email, mcpQualifiedName, guid, user_
   }
   return mockList;
 }
+
+// Helper to convert github.com URL to raw.githubusercontent.com URL
+function toRawUrl(githubUrl: string): string | null {
+  // e.g. https://github.com/user/repo/blob/main/README.md
+  const match = githubUrl.match(
+    /^https:\/\/github\.com\/([^\/]+)\/([^\/]+)\/blob\/([^\/]+)\/(.+)$/
+  );
+  if (match) {
+    const [, owner, repo, branch, path] = match;
+    return `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}`;
+  }
+  // Already a raw.githubusercontent.com URL
+  if (githubUrl.startsWith('https://raw.githubusercontent.com/')) {
+    return githubUrl;
+  }
+  return null;
+}
+
+// Generalized function to get tools from a GitHub README string or URL
+async function getToolsFromGithubReadme(github_readme: string): Promise<string[]> {
+  let readmeText = github_readme;
+  // If the input looks like a URL, fetch it
+  if (typeof github_readme === 'string' && github_readme.startsWith('http')) {
+    const rawUrl = toRawUrl(github_readme);
+    if (!rawUrl) throw new Error('Invalid GitHub file URL format');
+    const response = await axios.get(rawUrl, { responseType: 'text' });
+    readmeText = response.data;
+    console.log('[getToolsFromGithubReadme] Fetched readme text:', readmeText);
+  }
+  const ruleInput = await b.GenerateToolsList({ github_readme: readmeText });
+  return Array.isArray(ruleInput.tools) ? ruleInput.tools : [];
+}
+
 app.post('/api/mcp-tools', async (c) => {
-  // Get MCP server name from frontend
   const body = await c.req.json();
-  const mcpServerName = body.name || 'exa'; // fallback to 'exa' if not provided
+  const github_readme = body.github_readme;
   const guid = body.guid;
   const email = body.email;
   console.log('[mcp-tools] Input body:', body);
-  console.log('[mcp-tools] Using mcpServerName:', mcpServerName);
-  let tools = [];
+  let tools: string[] = [];
   try {
-    const response = await axios.get(`https://registry.smithery.ai/servers/${encodeURIComponent(mcpServerName)}`, {
-      headers: {
-        'Authorization': 'Bearer a818dfa8-1b79-4497-9787-4573028c208c',
-        'Accept': 'application/json',
-      },
-    });
-    // Map to array of tool names (strings)
-    tools = (response.data.tools || []).map((tool: any) => typeof tool === 'string' ? tool : tool.name);
+    tools = await getToolsFromGithubReadme(github_readme);
     console.log('[mcp-tools] Output tools:', tools);
     // Start diagram generation in background (do not await)
-    if (guid && email && mcpServerName && tools.length > 0) {
-      generatePlaygroundDiagram({ tools, email, mcpQualifiedName: mcpServerName, guid })
+    if (guid && email && github_readme && tools.length > 0) {
+      generatePlaygroundDiagram({ tools, email, mcpQualifiedName: github_readme, guid })
         .then(() => console.log('[mcp-tools] Diagram generation started'))
         .catch(err => console.error('[mcp-tools] Diagram generation error:', err));
     }
     return c.json({ tools });
   } catch (err: any) {
-    console.error('Error fetching tools from smithery.ai:', err);
-    console.log('[mcp-tools] Output error:', err?.message || String(err));
-    return c.json({ error: 'Failed to fetch tools from smithery registry', details: err?.message || String(err) }, 500);
+    console.error('Error extracting tools from github_readme:', err);
+    return c.json({ error: 'Failed to extract tools from github_readme', details: err?.message || String(err) }, 500);
   }
 });
 
-
 app.post('/api/mcp-tools-rule-page', async (c) => {
-  // Get MCP server name from frontend
   const body = await c.req.json();
-  const mcpServerName = body.name || 'exa'; // fallback to 'exa' if not provided
+  const github_readme = body.github_readme;
   const guid = body.guid;
   const email = body.email;
   const user_exploit_summary = body.user_exploit_summary;
-  console.log('[mcp-tools] Input body:', body);
-  console.log('[mcp-tools] Using mcpServerName:', mcpServerName);
-  let tools = [];
+  console.log('[mcp-tools-rule-page] Input body:', body);
+  let tools: string[] = [];
   try {
-    const response = await axios.get(`https://registry.smithery.ai/servers/${encodeURIComponent(mcpServerName)}`, {
-      headers: {
-        'Authorization': 'Bearer a818dfa8-1b79-4497-9787-4573028c208c',
-        'Accept': 'application/json',
-      },
-    });
-    // Map to array of tool names (strings)
-    tools = (response.data.tools || []).map((tool: any) => typeof tool === 'string' ? tool : tool.name);
-    console.log('[mcp-tools] Output tools:', tools);
+    tools = await getToolsFromGithubReadme(github_readme);
+    console.log('[mcp-tools-rule-page] Output tools:', tools);
     // Start diagram generation in background (do not await)
-    if (guid && email && mcpServerName && tools.length > 0) {
-      generateRuleDiagram({ tools, email, mcpQualifiedName: mcpServerName, guid, user_exploit_summary })
-        .then(() => console.log('[mcp-tools] Diagram generation started'))
-        .catch(err => console.error('[mcp-tools] Diagram generation error:', err));
+    if (guid && email && github_readme && tools.length > 0) {
+      generateRuleDiagram({ tools, email, mcpQualifiedName: github_readme, guid, user_exploit_summary })
+        .then(() => console.log('[mcp-tools-rule-page] Diagram generation started'))
+        .catch(err => console.error('[mcp-tools-rule-page] Diagram generation error:', err));
     }
     return c.json({ tools });
   } catch (err: any) {
-    console.error('Error fetching tools from smithery.ai:', err);
-    console.log('[mcp-tools] Output error:', err?.message || String(err));
-    return c.json({ error: 'Failed to fetch tools from smithery registry', details: err?.message || String(err) }, 500);
+    console.error('Error extracting tools from github_readme:', err);
+    return c.json({ error: 'Failed to extract tools from github_readme', details: err?.message || String(err) }, 500);
   }
 });
+
 app.post('/api/playground-diagram', async (c) => {
   const body = await c.req.json();
   const tools = Array.isArray(body.tools) ? body.tools : [];
@@ -555,6 +568,20 @@ app.patch('/api/report-generation/:id', async (c) => {
   const body = await c.req.json();
   const result = await updateReportGeneration(id, body);
   return c.json(result);
+});
+
+app.post('/api/parse-github-file', async (c) => {
+  const body = await c.req.json();
+  const url = body.url;
+  if (!url || typeof url !== 'string') {
+    return c.json({ error: 'Missing or invalid url' }, 400);
+  }
+  try {
+    const tools = await getToolsFromGithubReadme(url);
+    return c.json({ tools });
+  } catch (err: any) {
+    return c.json({ error: 'Failed to extract tools from README', details: err?.message || String(err) }, 500);
+  }
 });
 
 serve({

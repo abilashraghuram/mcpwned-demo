@@ -22,6 +22,8 @@ import { DO_NOT_USE_DIRECTLY_UNLESS_YOU_KNOW_WHAT_YOURE_DOING_RUNTIME } from "./
 export default class TypeBuilder {
     private tb: _TypeBuilder;
     
+    ObtainRulesInput: ClassViewer<'ObtainRulesInput', "github_readme">;
+    
     PlaygroundDiagramMock: ClassViewer<'PlaygroundDiagramMock', "nodes" | "edges" | "guardrails" | "mcpTools" | "scan_description">;
     
     PlaygroundDiagramMockList: ClassViewer<'PlaygroundDiagramMockList', "diagrams">;
@@ -51,13 +53,17 @@ export default class TypeBuilder {
     constructor() {
         this.tb = new _TypeBuilder({
           classes: new Set([
-            "PlaygroundDiagramMock","PlaygroundDiagramMockList","PlaygroundEdge","PlaygroundEdgeStyle","PlaygroundNode","PlaygroundNodeData","PlaygroundPosition","PlaygroundToolsInput","Resume","Rule","RuleInput","RuleList",
+            "ObtainRulesInput","PlaygroundDiagramMock","PlaygroundDiagramMockList","PlaygroundEdge","PlaygroundEdgeStyle","PlaygroundNode","PlaygroundNodeData","PlaygroundPosition","PlaygroundToolsInput","Resume","Rule","RuleInput","RuleList",
           ]),
           enums: new Set([
             
           ]),
           runtime: DO_NOT_USE_DIRECTLY_UNLESS_YOU_KNOW_WHAT_YOURE_DOING_RUNTIME
         });
+        
+        this.ObtainRulesInput = this.tb.classViewer("ObtainRulesInput", [
+          "github_readme",
+        ]);
         
         this.PlaygroundDiagramMock = this.tb.classViewer("PlaygroundDiagramMock", [
           "nodes","edges","guardrails","mcpTools","scan_description",

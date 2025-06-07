@@ -50,10 +50,14 @@ class PlaygroundToolsInput {
   tools string[]
   // Add more fields as needed for the tools input object
 }
+
+class ObtainRulesInput {
+  github_readme string
+}
+
 class RuleInput {
-  tools string[]
+  tools string[] 
   user_exploit_summary string
-  // Add more fields as needed for the tools input object
 }
 
 class PlaygroundDiagramMockList {
@@ -170,7 +174,7 @@ function GenerateSingleRule(rawToolsInput: RuleInput) -> RuleList {
   prompt #"
   You are a senior principal member of staff at Anthropics's safety research team. You are leading a division at Anthropic that specializes in creating guardrailing rules to prevent hacks in MCP tool calls.
   
-    This is the lark file of the rule guardrailing language
+    This is the lark file of the rule guardrailing language you use
     ?start: policy+
 
     policy: "policy" NAME "{" rule* "}"
@@ -246,8 +250,7 @@ function GenerateSingleRule(rawToolsInput: RuleInput) -> RuleList {
     %ignore WS
     %ignore COMMENT
     
-    You will be provided a description of an exploit that a user is looking to generate guardrail rules for. Understand the exploit and then generate guardrail rules to return to the user. You will also generate a visual diagram of the exploit that you are trying to guardrail againt.
-    
+    You will be provided a description of guardrails the user is trying to create. Understand exactly what the user is asking for and make use of the lark syntax provided to you to genenerate the exact guardrails. Never generate guardrails for anything the user is not asking for. You will also generate a visual diagram illustrating the expploit the guardrails you've created would prevent.
     General Instructions
     •	Keep descriptions concise but precise.
 
@@ -260,5 +263,16 @@ function GenerateSingleRule(rawToolsInput: RuleInput) -> RuleList {
     
     {{ _.role('user') }}
     {{ rawToolsInput }}
+  "#
+}
+
+function GenerateToolsList(githubReadMeInput: ObtainRulesInput ) -> RuleInput {
+  client "openai/gpt-4.1"
+  prompt #"
+    You are a senior staff engineer at OpenAI who has a deep understanding of MCP servers. You will be provided a github readme of an MCP server that contains information about all the tools that are part of that MCP server. Your job is to return the list of all the tools of the MCP server here along with a well wrtten description of what the tool does.
+    Each tool string should be of the format tool_name: tool_description
+    {{ ctx.output_format }}
+    {{ _.role('user') }}
+    {{ githubReadMeInput }}
   "#
 }

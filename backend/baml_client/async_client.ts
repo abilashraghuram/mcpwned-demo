@@ -20,7 +20,7 @@ import { toBamlError, BamlStream, type HTTPRequest } from "@boundaryml/baml"
 import type { Checked, Check, RecursivePartialNull as MovedRecursivePartialNull } from "./types.js"
 import type { partial_types } from "./partial_types.js"
 import type * as types from "./types.js"
-import type {PlaygroundDiagramMock, PlaygroundDiagramMockList, PlaygroundEdge, PlaygroundEdgeStyle, PlaygroundNode, PlaygroundNodeData, PlaygroundPosition, PlaygroundToolsInput, Resume, Rule, RuleInput, RuleList} from "./types.js"
+import type {ObtainRulesInput, PlaygroundDiagramMock, PlaygroundDiagramMockList, PlaygroundEdge, PlaygroundEdgeStyle, PlaygroundNode, PlaygroundNodeData, PlaygroundPosition, PlaygroundToolsInput, Resume, Rule, RuleInput, RuleList} from "./types.js"
 import type TypeBuilder from "./type_builder.js"
 import { AsyncHttpRequest, AsyncHttpStreamRequest } from "./async_request.js"
 import { LlmResponseParser, LlmStreamParser } from "./parser.js"
@@ -198,6 +198,29 @@ export class BamlAsyncClient {
     }
   }
   
+  async GenerateToolsList(
+      githubReadMeInput: ObtainRulesInput,
+      __baml_options__?: BamlCallOptions
+  ): Promise<RuleInput> {
+    try {
+      const options = { ...this.bamlOptions, ...(__baml_options__ || {}) }
+      const collector = options.collector ? (Array.isArray(options.collector) ? options.collector : [options.collector]) : [];
+      const raw = await this.runtime.callFunction(
+        "GenerateToolsList",
+        {
+          "githubReadMeInput": githubReadMeInput
+        },
+        this.ctxManager.cloneContext(),
+        options.tb?.__tb(),
+        options.clientRegistry,
+        collector,
+      )
+      return raw.parsed(false) as RuleInput
+    } catch (error) {
+      throw toBamlError(error);
+    }
+  }
+  
 }
 
 class BamlStreamClient {
@@ -350,6 +373,35 @@ class BamlStreamClient {
         raw,
         (a): partial_types.PlaygroundDiagramMockList => a,
         (a): PlaygroundDiagramMockList => a,
+        this.ctxManager.cloneContext(),
+      )
+    } catch (error) {
+      throw toBamlError(error);
+    }
+  }
+  
+  GenerateToolsList(
+      githubReadMeInput: ObtainRulesInput,
+      __baml_options__?: { tb?: TypeBuilder, clientRegistry?: ClientRegistry, collector?: Collector | Collector[] }
+  ): BamlStream<partial_types.RuleInput, RuleInput> {
+    try {
+      const options = { ...this.bamlOptions, ...(__baml_options__ || {}) }
+      const collector = options.collector ? (Array.isArray(options.collector) ? options.collector : [options.collector]) : [];
+      const raw = this.runtime.streamFunction(
+        "GenerateToolsList",
+        {
+          "githubReadMeInput": githubReadMeInput
+        },
+        undefined,
+        this.ctxManager.cloneContext(),
+        options.tb?.__tb(),
+        options.clientRegistry,
+        collector,
+      )
+      return new BamlStream<partial_types.RuleInput, RuleInput>(
+        raw,
+        (a): partial_types.RuleInput => a,
+        (a): RuleInput => a,
         this.ctxManager.cloneContext(),
       )
     } catch (error) {

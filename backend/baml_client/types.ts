@@ -46,6 +46,11 @@ export function all_succeeded<CheckName extends string>(checks: Record<CheckName
 export function get_checks<CheckName extends string>(checks: Record<CheckName, Check>): Check[] {
     return Object.values(checks)
 }
+export interface ObtainRulesInput {
+  github_readme: string
+  
+}
+
 export interface PlaygroundDiagramMock {
   nodes: PlaygroundNode[]
   edges: PlaygroundEdge[]
