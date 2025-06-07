@@ -33,7 +33,7 @@ const MCPServerSelector: React.FC<MCPServerSelectorProps> = ({
     <div className="flex flex-row items-end gap-6 w-full max-w-4xl mt-2 mb-2">
       {/* GitHub README URL */}
       <div className="flex flex-col w-full max-w-xs">
-        <label className="mb-1 text-sm font-medium text-muted-foreground">GitHub README URL</label>
+        <label className="mb-1 text-sm font-medium text-muted-foreground">GitHub README URL of MCP server</label>
         <input
           type="text"
           className="rounded-md border px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-primary bg-background w-full"
